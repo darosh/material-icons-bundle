@@ -6,7 +6,7 @@ _Material Design SVG icons as ES modules_
 
 Visit [Icon Browser](https://darosh.github.io/material-icons-bundle/) featuring:
 
-- Visually similar icons (per pixel compare)
+- **Visually similar icons** (using per pixel compare)
 - Simple bundle (icon selection) copy/paste editor
 - Various view, filtering and grouping options
 - Large preview on 24&times;24 checkerboard grid
@@ -44,6 +44,8 @@ where most of values are `<path>` `d` attribute data. Some data starting with `<
 Icon aliases points to same `*.js` file for minimal build. 
 
 Tree-shaking [rollup.js](https://rollupjs.org/#tree-shaking) or [webpack](https://webpack.js.org/guides/tree-shaking/) recommended.
+
+_Here is some real usage [example](https://github.com/darosh/oax/commit/9856e4a2583871fc91ea6b62d2ec991b19b4cfa5#diff-72b3431e98e067995f113fd82497deae) (and previous _re-exporting version_ using another icon package.)_
 
 ## Sources
 
