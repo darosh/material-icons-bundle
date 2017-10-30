@@ -1,12 +1,15 @@
 const fs = require('fs')
 const _ = require('lodash')
+const compact = require('json-stringify-pretty-compact')
 const meta = require('../meta/_meta.json')
 const patch = require('./patch.conf')
 const duplicates = require('./duplicates.conf')
 let similar = require('../meta/_similar.json')
 
+console.log('Adding IDs')
 meta.forEach((m, i) => (m.id = i))
 
+console.log('Linking duplicates')
 let reducedSimilar = []
 
 let count = 0
@@ -15,9 +18,13 @@ similar.forEach(d => {
   const b = meta[d[1]]
 
   if (d[2] === 0 || duplicates(a, b, d[2])) {
-    console.log(`${++count}. ${a.name} (${a.source}) === ${b.name} (${b.source})`)
-
-    if (a.source === b.source || a.source === 'Community') {
+    if(a.source === b.source) {
+      if(b.name.length <= a.name.length) {
+        link(a, b)
+      } else {
+        link(b, a)
+      }
+    } else if (a.source === 'Community') {
       link(a, b)
     } else {
       link(b, a)
@@ -97,13 +104,23 @@ bundle.forEach((d, i) => {
   })
 })
 
+console.log('Writing meta/meta.json')
+fs.writeFileSync('meta/meta.json', compact(bundle, {maxLength: 4096}))
+
+console.log('Writing meta/similar.json')
 fs.writeFileSync('meta/similar.json', JSON.stringify(similar))
-fs.writeFileSync('meta/meta.json', JSON.stringify(bundle))
 
 function link (a, b) {
   while (b.link) {
     b = meta[b.link]
   }
+
+  if(a.link >= 0 && (meta[a.link].name === a.name)) {
+    console.log(`Skipping: ${a.name} (${a.source}) --> ${b.name} (${b.source})`)
+    return
+  }
+
+  console.log(`Linking: ${++count}. ${a.name} (${a.source}) --> ${b.name} (${b.source})`)
 
   a.link = b.id
 }
