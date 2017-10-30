@@ -9,6 +9,7 @@ Visit [Icon Browser](https://darosh.github.io/material-icons-bundle/) featuring:
 - Visually similar icons (per pixel compare)
 - Simple bundle (icon selection) copy/paste editor
 - Various view, filtering and grouping options
+- Large preview on 24&times;24 checkerboard grid
 - Instant search
 
 ## Install
