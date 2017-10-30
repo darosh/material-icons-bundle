@@ -1,307 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Material Icons Bundle</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-    <link rel="stylesheet" href="https://unpkg.com/vuetify@0.16.9/dist/vuetify.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.css">
-    <!--<link rel="stylesheet" href="https://unpkg.com/mdi@2.0.46/css/materialdesignicons.min.css">-->
-    <style>
-        svg.icon {
-            fill: rgba(0, 0, 0, .54);
-        }
+  <meta charset="UTF-8">
+  <title>Material Icons Bundle</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/vuetify@0.16.9/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.css">
+  <!--<link rel="stylesheet" href="https://unpkg.com/mdi@2.0.46/css/materialdesignicons.min.css">-->
+  <style>
+    svg.icon {
+      fill: rgba(0, 0, 0, .54);
+    }
 
-        .application--dark svg.icon {
-            fill: rgba(255, 255, 255, .70);
-        }
+    .application--dark svg.icon {
+      fill: rgba(255, 255, 255, .70);
+    }
 
-        svg.icon.active {
-            fill: rgba(25, 118, 210, .87);
-        }
+    svg.icon.active {
+      fill: rgba(25, 118, 210, .87);
+    }
 
-        .application--dark svg.icon.active {
-            fill: rgba(25, 118, 210, 1);
-        }
+    .application--dark svg.icon.active {
+      fill: rgba(25, 118, 210, 1);
+    }
 
-        .application--dark .input-group--solo {
-            background-color: #212121;
-        }
+    .application--dark .input-group--solo {
+      background-color: #212121;
+    }
 
-        .scroller {
-            height: calc(100vh - 48px);
-        }
+    .scroller {
+      height: calc(100vh - 48px);
+    }
 
-        html {
-            overflow: hidden;
-        }
+    html {
+      overflow: hidden;
+    }
 
-        .gpu {
-            transform: translate3d(0, 0, 0);
-            backface-visibility: hidden;
-        }
+    .gpu {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
 
-        [v-cloak] {
-            display: none;
-        }
+    [v-cloak] {
+      display: none;
+    }
 
-        :focus {
-            outline: none;
-        }
+    :focus {
+      outline: none;
+    }
 
-        .no {
-            transition: none;
-        }
+    .no {
+      transition: none;
+    }
 
-        .click {
-            cursor: pointer;
-        }
+    .click {
+      cursor: pointer;
+    }
 
-        .click:hover {
-            background-color: rgba(127, 127, 127, .5);
-        }
+    .click:hover {
+      background-color: rgba(127, 127, 127, .5);
+    }
 
-        .checker {
-            background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.08);
-            background-position: 0 0, 10px 10px;
-            background-origin: padding-box;
-            background-clip: border-box;
-            background-size: 20px 20px;
-        }
+    .checker {
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.08);
+      background-position: 0 0, 10px 10px;
+      background-origin: padding-box;
+      background-clip: border-box;
+      background-size: 20px 20px;
+    }
 
-        .application--dark .checker {
-            background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.5);
-            background-position: 0 0, 10px 10px;
-            background-origin: padding-box;
-            background-clip: border-box;
-            background-size: 20px 20px;
-        }
+    .application--dark .checker {
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.5);
+      background-position: 0 0, 10px 10px;
+      background-origin: padding-box;
+      background-clip: border-box;
+      background-size: 20px 20px;
+    }
 
-        .scrollbar-measure {
-            width: 100px;
-            height: 100px;
-            overflow: scroll;
-            position: absolute;
-            top: -9999px;
-        }
+    .scrollbar-measure {
+      width: 100px;
+      height: 100px;
+      overflow: scroll;
+      position: absolute;
+      top: -9999px;
+    }
 
-        .expansion-panel__header {
-            padding: 12px 16px;
-        }
+    .expansion-panel__header {
+      padding: 12px 16px;
+    }
 
-        .navigation-drawer__border {
-            display: none;
-        }
+    .navigation-drawer__border {
+      display: none;
+    }
 
-        .light {
-            opacity: .5;
-        }
+    .light {
+      opacity: .5;
+    }
 
-        .link:hover {
-            text-decoration: underline;
-            cursor: pointer;
-        }
+    .link:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
 
-        .highlight svg.community {
-            fill: rgba(255, 145, 0, .87)
-        }
+    .highlight svg.community {
+      fill: rgba(255, 145, 0, .87)
+    }
 
-        .highlight .community {
-            color: rgba(255, 145, 0, .87)
-        }
+    .highlight .community {
+      color: rgba(255, 145, 0, .87)
+    }
 
-        .highlight .application--dark svg.community {
-            fill: rgba(255, 145, 0, .7)
-        }
+    .highlight .application--dark svg.community {
+      fill: rgba(255, 145, 0, .7)
+    }
 
-        .checkbox label {
-            margin-left: 8px;
-        }
-    </style>
+    .checkbox label {
+      margin-left: 8px;
+    }
+  </style>
 </head>
 <body>
 <div id="app" class="gpu">
-    <v-app v-cloak :dark="theme.includes('Dark')" v-show="icons">
-        <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1" enable-resize-watcher
-                             persistent
-                             v-model="drawer">
-            <v-toolbar v-if="icon" dense class="transparent elevation-0">
-                <v-toolbar-title class="title" style="line-height: 24px !important;"><span>
+  <v-app v-cloak :dark="theme.includes('Dark')" v-show="icons">
+    <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1" enable-resize-watcher
+                         persistent
+                         v-model="drawer">
+      <v-toolbar v-if="icon" dense class="transparent elevation-0">
+        <v-toolbar-title class="title" style="line-height: 24px !important;"><span>
                     <!--<small class="light"
                            style="font-weight: normal">#{{meta.id}}</small>--> {{meta.name}}</span>
-                </v-toolbar-title>
-            </v-toolbar>
-            <v-card v-if="icon" class="elevation-0">
-                <div class="text-xs-center">
-                    <app-icon class="checker" :name="icon" :size="240"></app-icon>
-                </div>
-                <!--<v-divider></v-divider>-->
-            </v-card>
-            <v-card v-if="icon" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
-                <!--
-                                <div class="pl-3">
-                                    <v-icon class="mr-2" style="display: inline-block; width: 24px; height: 24px; overflow: hidden">
-                                        {{google}}
-                                    </v-icon>
-                                    <span>Google</span>
-                                </div>
-                                <div class="pl-3">
-                                    <i style="line-height: 20px; display: inline-block; width: 24px; height: 24px; overflow: hidden"
-                                       class="mr-2 icon mdi mdi-24px"
-                                       :class="(theme.includes('Dark') ? 'mdi-light' : 'mdi-dark') + ' mdi-' + community"></i>
-                                    <span>Community</span>
-                                </div>
-                -->
-                <div class="pl-3 pr-3">
-                    <div>Name: <span
-                            :class="{'orange--text text--accent-3': linked.source !== 'Google'}">{{google}}</span></div>
+        </v-toolbar-title>
+      </v-toolbar>
+      <div v-if="icon" class="elevation-0">
+        <div class="text-xs-center">
+          <app-icon class="checker" :name="icon" :size="240"></app-icon>
+        </div>
+        <!--<v-divider></v-divider>-->
+      </div>
+      <div v-if="icon" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
+        <!--
+                        <div class="pl-3">
+                            <v-icon class="mr-2" style="display: inline-block; width: 24px; height: 24px; overflow: hidden">
+                                {{google}}
+                            </v-icon>
+                            <span>Google</span>
+                        </div>
+                        <div class="pl-3">
+                            <i style="line-height: 20px; display: inline-block; width: 24px; height: 24px; overflow: hidden"
+                               class="mr-2 icon mdi mdi-24px"
+                               :class="(theme.includes('Dark') ? 'mdi-light' : 'mdi-dark') + ' mdi-' + community"></i>
+                            <span>Community</span>
+                        </div>
+        -->
+        <div class="pl-3 pr-3">
+          <div>Name: <span
+            :class="{'orange--text text--accent-3': linked.source !== 'Google'}">{{google}}</span></div>
 
-                    <div>Author: <span>{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
-                                                                   class="link primary--text">{{meta.author}}</a></div>
-                    <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
-                            @click="icon = linked.id"
-                            class="link primary--text"><b>{{linkedGoogle}}</b></a>
-                    </div>
-                    <div v-if="alternatives && alternatives.length">Alternatives: <span
-                            v-for="(t, i) in alternatives"><span
-                            v-if="i">, </span> <a
-                            @click="icon = t.id" class="link primary--text">{{t.name}}</a></span></div>
-                    <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
-                            @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
-                    <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
-                </div>
-                <div class="pl-3 pr-3 pb-2" :class="{highlight: highlight}">
+          <div>Author: <span>{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
+                                                         class="link primary--text">{{meta.author}}</a></div>
+          <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
+            @click="icon = linked.id"
+            class="link primary--text"><b>{{linkedGoogle}}</b></a>
+          </div>
+          <div v-if="alternatives && alternatives.length">Alternatives: <span
+            v-for="(t, i) in alternatives"><span
+            v-if="i">, </span> <a
+            @click="icon = t.id" class="link primary--text">{{t.name}}</a></span></div>
+          <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
+            @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
+          <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
+        </div>
+        <div class="pl-3 pr-3" :class="{highlight: highlight}">
                     <span style="display: inline-block; width: 36px; height: 36px; padding: 2px"
                           class="list__tile--link" @click="icon = i[0]" v-for="i in similarIcons">
                         <app-icon class="no" size="32" :name="i[0]"
                                   :class="{community: communityShape(i[0])}"></app-icon>
                     </span>
-                </div>
-            </v-card>
-            <v-divider></v-divider>
-            <v-text-field class="elevation-0" solo v-model="search" prepend-icon="search"
-                          :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
-            <v-divider></v-divider>
-            <v-select class="elevation-0" v-ripple="true" solo :items="['All', 'Community', 'Google']" v-model="source"
-                      prepend-icon="people_outline"></v-select>
-            <v-divider></v-divider>
-            <v-select class="elevation-0" v-ripple="true" solo
-                      :items="['All', 'Authors', 'Tags', 'Distance', 'Duplicates?']"
-                      v-model="groupBy"
-                      prepend-icon="folder_open"></v-select>
-            <v-divider></v-divider>
-            <!--<v-select class="elevation-0" v-ripple="true" solo :items="['ID', 'Name', 'Shape']" v-model="sortBy"-->
-            <!--prepend-icon="sort"></v-select>-->
-            <!--<v-divider></v-divider>-->
-            <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
-                      prepend-icon="aspect_ratio"></v-select>
-            <v-divider></v-divider>
-            <v-select class="elevation-0" v-ripple="true" solo
-                      :items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"
-                      prepend-icon="tonality"></v-select>
-            <v-divider></v-divider>
-            <div class="pl-3 pt-2 pb-2">
-                <v-checkbox color="orange accent-3" hide-details label="Highlight community"
-                            v-model="highlight"></v-checkbox>
+        </div>
+      </div>
+      <!--<v-divider v-if="icon"></v-divider>-->
+      <div class="pa-3">
+        <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
+                      :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
+      </div>
+      <v-divider></v-divider>
+      <v-select class="elevation-0" v-ripple="true" solo :items="['All', 'Community', 'Google']" v-model="source"
+                prepend-icon="people_outline"></v-select>
+      <v-divider></v-divider>
+      <v-select class="elevation-0" v-ripple="true" solo
+                :items="['All', 'Authors', 'Tags', 'Distance', 'Duplicates?']"
+                v-model="groupBy"
+                prepend-icon="folder_open"></v-select>
+      <v-divider></v-divider>
+      <!--<v-select class="elevation-0" v-ripple="true" solo :items="['ID', 'Name', 'Shape']" v-model="sortBy"-->
+      <!--prepend-icon="sort"></v-select>-->
+      <!--<v-divider></v-divider>-->
+      <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
+                prepend-icon="aspect_ratio"></v-select>
+      <v-divider></v-divider>
+      <v-select class="elevation-0" v-ripple="true" solo
+                :items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"
+                prepend-icon="tonality"></v-select>
+      <v-divider></v-divider>
+      <div class="pl-3 pt-2 pb-2">
+        <v-checkbox color="orange accent-3" hide-details label="Highlight community"
+                    v-model="highlight"></v-checkbox>
+      </div>
+      <v-divider></v-divider>
+      <v-expansion-panel expand class="elevation-0">
+        <v-expansion-panel-content ripple>
+          <div slot="header">
+            <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
+          </div>
+          <v-card :class="{highlight: highlight}">
+            <div v-ripple="true" @click="icon = i.id" v-for="i in selectedIcons"
+                 class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
+              <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id" size="24"></app-icon>
+              {{i.name}}
+              <span style="float: right" class="pr-3"><v-icon @click.stop="deselect(i)">close</v-icon></span>
             </div>
-            <v-divider></v-divider>
-            <v-expansion-panel expand class="elevation-0">
-                <v-expansion-panel-content ripple>
-                    <div slot="header">
-                        <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
-                    </div>
-                    <v-card :class="{highlight: highlight}">
-                        <div v-ripple="true" @click="icon = i.id" v-for="i in selectedIcons"
-                             class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
-                            <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id" size="24"></app-icon>
-                            {{i.name}}
-                            <span style="float: right" class="pr-3"><v-icon @click.stop="deselect(i)">close</v-icon></span>
-                        </div>
-                        <div class="pl-3 pr-3">
-                            <v-text-field
-                                    solo
-                                    class="mb-3 mt-3"
-                                    name="input-bundle"
-                                    label="Selected icons"
-                                    multi-line
-                                    auto-grow
-                                    rows="3"
-                                    v-model="selectedText"
-                                    hide-details></v-text-field>
-                        </div>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-divider></v-divider>
-            <v-expansion-panel expand class="elevation-0">
-                <v-expansion-panel-content ripple>
-                    <div slot="header">
-                        <span><app-icon v-if="icons" size="24" name="folder multiple outline" class="mr-3"></app-icon>Groups</span>
-                    </div>
-                    <v-card>
-                        <div v-for="(s, i) in sorted">
-                            <div @click="scroll(s.name)" style="padding-left: 56px"
-                                 class="body-2 list__tile--link pt-2 pb-2"
-                                 v-ripple="true">{{s.name}}
-                                <small class="body-1 mr-4" style="float: right; margin-top: 2px">({{s.value.length}})
-                                </small>
-                            </div>
-                        </div>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-divider></v-divider>
+            <div class="pl-3 pr-3">
+              <v-text-field
+                solo
+                class="mb-3 mt-3 toolbar"
+                name="input-bundle"
+                label="Selected icons"
+                multi-line
+                auto-grow
+                rows="3"
+                v-model="selectedText"
+                hide-details></v-text-field>
+            </div>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-divider></v-divider>
+      <v-expansion-panel expand class="elevation-0">
+        <v-expansion-panel-content ripple>
+          <div slot="header">
+            <span><app-icon v-if="icons" size="24" name="folder multiple outline" class="mr-3"></app-icon>Groups</span>
+          </div>
+          <v-card>
+            <div v-for="(s, i) in sorted">
+              <div @click="scroll(s.name)" style="padding-left: 56px"
+                   class="body-2 list__tile--link pt-2 pb-2"
+                   v-ripple="true">{{s.name}}
+                <small class="body-1 mr-4" style="float: right; margin-top: 2px">({{s.value.length}})
+                </small>
+              </div>
+            </div>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-divider></v-divider>
 
-        </v-navigation-drawer>
-        <v-toolbar fixed dense app class="elevation-1 no">
-            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title class="ml-0">Material Icons Bundle
-                <small style="font-weight: normal" v-if="filtered">({{unique}})</small>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank" rel="noopener">
-                <app-icon name="github circle" size="24"></app-icon>
-            </v-btn>
-        </v-toolbar>
-        <main :class="{highlight : highlight}">
-            <v-content class="no">
-                <v-layout row v-if="!filtered">
-                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                </v-layout>
-                <virtual-scroller ref="scroller" tabindex="1" v-else buffer="64" pool-size="64" class="scroller"
-                                  :items="lines"
-                                  :style="{'margin-left': margin + 'px'}"
-                                  :item-height="grid">
-                    <template slot-scope="props">
-                        <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
-                            <div v-if="props.item.name" class="headline pl-3 pt-3 pr-3">
-                                <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
-                                    <small>({{props.item.length}})</small>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <div :class="{'pl-3 pr-3': grid > 64}"
-                                     :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
-                                     :key="i"
-                                     v-for="i in props.item">
-                                    <div @click="icon = i" v-ripple="true" class="no click">
-                                        <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
-                                                  class="no"
-                                                  :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
-                                                  :class="{active: icon === i}"></app-icon>
-                                    </div>
-                                    <div v-if="grid >= 128"
-                                         :class="{'pt-1': grid > 128, 'primary--text': icon === i, community: communityShape(i)}">
-                                        {{icons[i].name}}
-                                    </div>
-                                </div>
-                            </div>
-                        </v-layout>
-                    </template>
-                </virtual-scroller>
-            </v-content>
-        </main>
-    </v-app>
+    </v-navigation-drawer>
+    <v-toolbar fixed dense app class="elevation-1 no">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title class="ml-0">Material Icons Bundle
+        <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
+             rel="noopener">
+        <app-icon name="github circle" size="24"></app-icon>
+      </v-btn>
+    </v-toolbar>
+    <main :class="{highlight : highlight}">
+      <v-content class="no">
+        <v-layout row v-if="!filtered">
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </v-layout>
+        <virtual-scroller ref="scroller" tabindex="1" v-else buffer="64" pool-size="64" class="scroller"
+                          :items="lines"
+                          :style="{'margin-left': margin + 'px'}"
+                          :item-height="grid">
+          <template slot-scope="props">
+            <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
+              <div v-if="props.item.name" class="headline pl-3 pt-3 pr-3">
+                <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
+                  <small>({{props.item.length}})</small>
+                </div>
+              </div>
+              <div v-else>
+                <div :class="{'pl-3 pr-3': grid > 64}"
+                     :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
+                     :key="i"
+                     v-for="i in props.item">
+                  <div @click="icon = i" v-ripple="true" class="no click">
+                    <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
+                              class="no"
+                              :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
+                              :class="{active: icon === i}"></app-icon>
+                  </div>
+                  <div v-if="grid >= 128"
+                       :class="{'pt-1': grid > 128, 'primary--text': icon === i, community: communityShape(i)}">
+                    {{icons[i].name}}
+                  </div>
+                </div>
+              </div>
+            </v-layout>
+          </template>
+        </virtual-scroller>
+      </v-content>
+    </main>
+  </v-app>
 </div>
 <script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
 <!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
@@ -311,7 +314,7 @@
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
 <!--<script src="../build/duplicates.js"></script>-->
 <script>
-  Vue.use(VueSmoothScroll);
+  Vue.use(VueSmoothScroll)
 
   Vue.component('app-icon', {
     template: '<svg class="icon" :width="size || 24" :height="size || 24" viewBox="0 0 24 24" v-html="code"></svg>',
