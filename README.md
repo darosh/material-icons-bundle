@@ -4,7 +4,12 @@ _Material Design SVG icons as ES modules_
 
 ## Browse Icons
 
-[darosh.github.io/material-icons-bundle](https://darosh.github.io/material-icons-bundle/)
+Visit [Icon Browser](https://darosh.github.io/material-icons-bundle/) featuring:
+
+- Visually similar icons (per pixel compare)
+- Simple bundle copy/paste editor
+- Various view, filtering and grouping options
+- Instant search
 
 ## Install
 
@@ -35,7 +40,13 @@ will produce object like:
 
 where most of values are `<path>` `d` attribute data. Some data starting with `<` are svg inner elements, such icons are tagged as `multi-shape` in the [browser](https://darosh.github.io/material-icons-bundle/).
 
+Icon aliases points to same `*.js` file for minimal build. 
+
+Tree-shaking [rollup.js](https://rollupjs.org/#tree-shaking) or [webpack](https://webpack.js.org/guides/tree-shaking/) recommended.
+
 ## Sources
 
 - Google icons [material.io/icons](https://material.io/icons/) from [google/material-design-icons](https://github.com/google/material-design-icons/)
 - Community icons [materialdesignicons.com](https://materialdesignicons.com/) from [Templarian/MaterialDesign-SVG](https://github.com/Templarian/MaterialDesign-SVG) and [API](https://github.com/Templarian/MaterialDesign-Site/blob/master/src/content/api.md)
+
+Sources are merged comparing rendered pixel with some additional auto tagging.
