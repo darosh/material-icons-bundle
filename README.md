@@ -1,1 +1,1 @@
-# material-icons-bundle
+# Material Icons Bundle
