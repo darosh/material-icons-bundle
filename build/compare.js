@@ -1,18 +1,22 @@
 const meta = require('../meta/_meta.json')
 const fs = require('fs')
-const base = 24
-const limit = base * base / 6
+const conf = require('./icon.conf')
+const limit = conf.distance
 
 let similar = []
 let l = meta.length
 
 for (let x = 0; x < l; x++) {
   for (let y = x + 1; y < l; y++) {
-    similar.push([x, y, getDelta(meta[x].hash, meta[y].hash)])
+    const d = getDelta(meta[x].hash, meta[y].hash)
+
+    if(d < limit) {
+      similar.push([x, y, d])
+    }
   }
 }
 
-similar = similar.filter(d => d[2] < limit).sort((a, b) => {
+similar.sort((a, b) => {
   return a[2] - b[2]
 })
 
@@ -27,6 +31,10 @@ function getDelta (a, b) {
 
   for (let i = 0; i < a.length; i++) {
     d += getSubDelta(a[i], b[i])
+
+    if(d >= limit) {
+      return d
+    }
   }
 
   return d
