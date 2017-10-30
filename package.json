@@ -13,6 +13,7 @@
     "recursive-readdir": "^2.2.1",
     "rimraf": "^2.6.2",
     "sharp": "^0.18.4",
+    "shelljs": "^0.7.8",
     "xml2js": "^0.4.19"
   },
   "license": "MIT",
@@ -27,8 +28,5 @@
     "build:unique": "node build/unique.js",
     "clean": "rimraf index.js icons meta/*.json",
     "deploy": "cpy meta/*.* !meta/_*.* demo && deploy-to-gh-pages --local demo"
-  },
-  "dependencies": {
-    "shelljs": "^0.7.8"
   }
 }
