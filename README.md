@@ -7,7 +7,7 @@ _Material Design SVG icons as ES modules_
 Visit [Icon Browser](https://darosh.github.io/material-icons-bundle/) featuring:
 
 - Visually similar icons (per pixel compare)
-- Simple bundle copy/paste editor
+- Simple bundle (icon selection) copy/paste editor
 - Various view, filtering and grouping options
 - Instant search
 
