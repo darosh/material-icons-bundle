@@ -125,19 +125,19 @@
     <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1" enable-resize-watcher
                          persistent
                          v-model="drawer">
-      <v-toolbar v-if="icon" dense class="transparent elevation-0">
+      <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
         <v-toolbar-title class="title" style="line-height: 24px !important;"><span>
                     <!--<small class="light"
                            style="font-weight: normal">#{{meta.id}}</small>--> {{meta.name}}</span>
         </v-toolbar-title>
       </v-toolbar>
-      <div v-if="icon" class="elevation-0">
+      <div v-if="icon !== null" class="elevation-0">
         <div class="text-xs-center">
           <app-icon class="checker" :name="icon" :size="240"></app-icon>
         </div>
         <!--<v-divider></v-divider>-->
       </div>
-      <div v-if="icon" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
+      <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
         <!--
                         <div class="pl-3">
                             <v-icon class="mr-2" style="display: inline-block; width: 24px; height: 24px; overflow: hidden">
