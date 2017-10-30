@@ -210,10 +210,10 @@
                     <div slot="header">
                         <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
                     </div>
-                    <v-card>
+                    <v-card :class="{highlight: highlight}">
                         <div v-ripple="true" @click="icon = i.id" v-for="i in selectedIcons"
                              class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
-                            <app-icon class="ml-3 mr-3" :name="i.id" size="24"></app-icon>
+                            <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id" size="24"></app-icon>
                             {{i.name}}
                             <span style="float: right" class="pr-3"><v-icon @click.stop="deselect(i)">close</v-icon></span>
                         </div>
