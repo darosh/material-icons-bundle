@@ -445,7 +445,7 @@
           return icons
         }
 
-        const s = this.search.toLowerCase()
+        const s = this.search.toLowerCase().replace(/[_]/g, ' ')
 
         return icons.filter(d => {
           return d.name.includes(s)
