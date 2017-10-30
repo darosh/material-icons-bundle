@@ -22,3 +22,8 @@ export {
   keyboard_arrow_down
 } from 'material-icons-bundle'
 ```
+
+## Sources
+
+- Google icons [material.io/icons](https://material.io/icons/) from [google/material-design-icons](https://github.com/google/material-design-icons/)
+- Community icons [materialdesignicons.com](https://materialdesignicons.com/) from [Templarian/MaterialDesign-SVG](https://github.com/Templarian/MaterialDesign-SVG) and [API](https://github.com/Templarian/MaterialDesign-Site/blob/master/src/content/api.md)
