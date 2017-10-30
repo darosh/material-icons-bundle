@@ -1,0 +1,1 @@
+export {default} from './signal_cellular_no_sim'

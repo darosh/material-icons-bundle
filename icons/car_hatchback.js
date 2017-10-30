@@ -1,0 +1,1 @@
+export {default} from './car_side'

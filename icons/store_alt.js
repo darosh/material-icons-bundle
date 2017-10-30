@@ -1,0 +1,1 @@
+export {default} from './store_mall_directory'

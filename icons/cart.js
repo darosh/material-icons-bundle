@@ -1,0 +1,1 @@
+export {default} from './local_grocery_store'
