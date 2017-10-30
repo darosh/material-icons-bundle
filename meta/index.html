@@ -445,12 +445,14 @@
           return icons
         }
 
+        const s = this.search.toLowerCase()
+
         return icons.filter(d => {
-          return d.name.includes(this.search)
-            || (d.category && d.category.includes(this.search))
-            || (!d.category && !d.tags && (this.search === 'other'))
-            || (d.tags && d.tags.filter(d => d.includes(this.search)).length)
-            || (d.aliases && d.aliases.filter(d => d.includes(this.search)).length)
+          return d.name.includes(s)
+            || (d.category && d.category.includes(s))
+            || (!d.category && !d.tags && (s === 'other'))
+            || (d.tags && d.tags.filter(d => d.includes(s)).length)
+            || (d.aliases && d.aliases.filter(d => d.includes(s)).length)
         })
       },
       categories () {
