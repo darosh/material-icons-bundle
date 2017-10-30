@@ -1,5 +1,7 @@
 # Material Icons Bundle
 
+_Material Design SVG icons as ES modules_
+
 ## Browse Icons
 
 [darosh.github.io/material-icons-bundle](https://darosh.github.io/material-icons-bundle/)
