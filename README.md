@@ -15,7 +15,7 @@ Visit [Icon Browser](https://darosh.github.io/material-icons-bundle/) featuring:
 ## Install
 
 ```bash
-$ yarn add gitub:darosh/material-icons-bundle
+$ yarn add github:darosh/material-icons-bundle
 ```
 
 ## Usage
