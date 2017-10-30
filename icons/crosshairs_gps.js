@@ -1,1 +1,1 @@
-export {default} from './my_location'
+export {default} from './gps_fixed'

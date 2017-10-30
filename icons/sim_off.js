@@ -1,1 +1,1 @@
-export {default} from './signal_cellular_no_sim'
+export {default} from './no_sim'

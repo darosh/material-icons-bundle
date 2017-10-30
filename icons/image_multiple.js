@@ -1,1 +1,1 @@
-export {default} from './photo_library'
+export {default} from './collections'

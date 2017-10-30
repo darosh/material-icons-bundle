@@ -1,1 +1,1 @@
-export {default} from './do_not_disturb_alt'
+export {default} from './block'

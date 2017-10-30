@@ -1,1 +1,1 @@
-export {default} from './local_phone'
+export {default} from './call'

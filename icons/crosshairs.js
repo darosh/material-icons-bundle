@@ -1,1 +1,1 @@
-export {default} from './location_searching'
+export {default} from './gps_not_fixed'

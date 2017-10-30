@@ -1,1 +1,1 @@
-export {default} from './local_movies'
+export {default} from './theaters'

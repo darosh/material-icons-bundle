@@ -1,1 +1,1 @@
-export {default} from './insert_invitation'
+export {default} from './event'

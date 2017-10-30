@@ -1,1 +1,1 @@
-export {default} from './add_to_photos'
+export {default} from './queue'

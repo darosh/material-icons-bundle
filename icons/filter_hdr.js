@@ -1,1 +1,1 @@
-export {default} from './landscape'
+export {default} from './terrain'

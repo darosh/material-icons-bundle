@@ -1,1 +1,1 @@
-export {default} from './person_outline'
+export {default} from './perm_identity'

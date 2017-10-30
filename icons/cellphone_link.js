@@ -1,1 +1,1 @@
-export {default} from './phonelink'
+export {default} from './devices'

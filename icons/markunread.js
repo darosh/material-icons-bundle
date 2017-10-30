@@ -1,1 +1,1 @@
-export {default} from './local_post_office'
+export {default} from './mail'

@@ -1,1 +1,1 @@
-export {default} from './report_problem'
+export {default} from './warning'

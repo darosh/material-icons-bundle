@@ -1,1 +1,1 @@
-export {default} from './people'
+export {default} from './group'

@@ -1,1 +1,1 @@
-export {default} from './directions_transit'
+export {default} from './directions_subway'

@@ -1,1 +1,1 @@
-export {default} from './do_not_disturb_on'
+export {default} from './remove_circle'

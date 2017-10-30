@@ -1,1 +1,1 @@
-export {default} from './photo_camera'
+export {default} from './local_see'

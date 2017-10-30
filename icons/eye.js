@@ -1,1 +1,1 @@
-export {default} from './remove_red_eye'
+export {default} from './visibility'

@@ -1,1 +1,1 @@
-export {default} from './place'
+export {default} from './room'

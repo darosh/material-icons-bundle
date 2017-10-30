@@ -1,1 +1,1 @@
-export {default} from './restaurant_menu'
+export {default} from './local_dining'

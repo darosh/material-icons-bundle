@@ -1,1 +1,1 @@
-export {default} from './local_airport'
+export {default} from './flight'

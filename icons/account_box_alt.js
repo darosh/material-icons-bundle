@@ -1,1 +1,0 @@
-export {default} from './perm_contact_calendar'

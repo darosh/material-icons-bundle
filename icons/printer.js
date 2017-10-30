@@ -1,1 +1,1 @@
-export {default} from './local_printshop'
+export {default} from './print'

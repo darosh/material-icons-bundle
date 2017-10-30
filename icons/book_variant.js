@@ -1,1 +1,1 @@
-export {default} from './class'
+export {default} from './book'

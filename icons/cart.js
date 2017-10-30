@@ -1,1 +1,1 @@
-export {default} from './local_grocery_store'
+export {default} from './shopping_cart'
