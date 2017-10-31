@@ -299,8 +299,8 @@
                               :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
                               :class="{active: icon === i}"></app-icon>
                   </div>
-                  <div v-if="grid >= 128"
-                       :class="{'pt-1': grid > 128, 'primary--text': icon === i, community: communityShape(i)}">
+                  <div v-if="grid >= 128" style="font-size: 13px"
+                       :class="{'pt-1': grid > 128, 'pt-2': grid === 128, 'primary--text': icon === i, community: communityShape(i)}">
                     {{icons[i].name}}
                   </div>
                 </div>
