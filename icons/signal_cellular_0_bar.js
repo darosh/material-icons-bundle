@@ -1,1 +1,1 @@
-export {default} from './signal_wifi_0_bar'
+export default "<path fill-opacity=\".3\" d=\"M2 22h20V2z\"/>"

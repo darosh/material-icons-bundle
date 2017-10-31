@@ -9,7 +9,7 @@ let count = 0
 console.log('Merging same linked names')
 
 meta = meta.filter(m => {
-  if (m.link >= 0 && m.name === meta[m.link].name) {
+  if (m.link >= 0 && (m.name === meta[m.link].name || (m.name + ' alt') === meta[m.link].name)) {
     console.log(`Merging: ${++count}. ${m.name}`)
     const t = meta[m.link]
     merge(m, t)
@@ -20,6 +20,16 @@ meta = meta.filter(m => {
 })
 
 update()
+
+meta.filter(m => m.link >= 0).forEach(m => {
+  const sameShape = meta.filter(n => n.link === m.link && n.id !== m.id)
+  const alt = sameShape.find(n => n.name === m.name + ' alt')
+
+  if(alt) {
+    console.log(`Merging alt: ${alt.name}`)
+    merge(m, alt)
+  }
+})
 
 const grouped = _.groupBy(meta, 'name')
 Object.keys(grouped).filter(d => grouped[d].length > 1).forEach(d => {

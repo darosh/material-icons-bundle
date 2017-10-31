@@ -1,1 +1,1 @@
-export {default} from './sentiment_satisfied'
+export {default} from './mood'

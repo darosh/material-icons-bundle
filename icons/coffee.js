@@ -1,1 +1,1 @@
-export {default} from './free_breakfast'
+export {default} from './local_cafe'

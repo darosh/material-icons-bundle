@@ -1,1 +1,1 @@
-export {default} from './announcement'
+export {default} from './feedback'
