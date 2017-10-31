@@ -17,7 +17,7 @@ module.exports = function (svg, resolve) {
     .then(buf => {
       const gray = sharp(buf)
         .resize(iconConf.size)
-        .threshold()
+        // .threshold()
         .grayscale()
       resolve(gray)
     })

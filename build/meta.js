@@ -6,6 +6,7 @@ const parseString = require('xml2js').parseString
 const render = require('./render.conf')
 const data = []
 const meta = require('mdi-svg/meta.json')
+const size = require('./icon.conf').size
 
 require('../meta/_community.json').icons.forEach(d => {
   const m = {
@@ -55,6 +56,7 @@ readDir('node_modules/material-design-icons',
         data[i].data = f.data
         // data[i].optimized = optimized
         data[i].hash = f.hash
+        data[i].pixels = f.pixels
       })
 
       fs.writeFileSync('meta/_meta.json', compactJSON(data, {maxLength: 1024}))
@@ -80,8 +82,14 @@ function readFileAsync (filename, path) {
 function parseSvg (svg, resolve) {
   svg = svg.replace(/ fill="[^"]+"/gi, '')
 
+  const opacity = svg.includes('opacity')
+
   parseString(svg, (err, parsed) => {
     render(svg, (sharp) => {
+      if(!opacity) {
+        sharp = sharp.threshold(223)
+      }
+
       sharp
         .raw()
         .toBuffer()
@@ -102,7 +110,8 @@ function parseSvg (svg, resolve) {
 
           resolve({
             data,
-            hash
+            hash,
+            pixels: density(buf)
           })
         })
     })
@@ -111,10 +120,25 @@ function parseSvg (svg, resolve) {
 
 function lineToHex (buf, start) {
   let v = 0
+  let x = Math.floor(start / size)
 
   for (let i = 0; i < 4; i++) {
-    v += buf[start + i] ? Math.pow(2, i) : 0
+    v += buf[start + i] && (buf[start + i] === 255 || (i ^ x) % 2) ? 0 : Math.pow(2, i)
   }
 
   return v.toString(16)
+}
+
+function density (buf) {
+  let v = 0
+  let i = 0
+
+  for (let x = 0; x < size; x++) {
+    for (let y = 0; y < size; y++) {
+      v += buf[i] && (buf[i] === 255 || (x ^ y) % 2) ? 0 : 1
+      i++
+    }
+  }
+
+  return v
 }
