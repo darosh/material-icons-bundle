@@ -1,14 +1,21 @@
 const meta = require('../meta/_meta.json')
 const fs = require('fs')
 const conf = require('./icon.conf')
-const limit = conf.distance
+const maxLimit = conf.distance
 
 let similar = []
 let l = meta.length
 
 for (let x = 0; x < l; x++) {
   for (let y = x + 1; y < l; y++) {
-    const d = getDelta(meta[x].hash, meta[y].hash)
+    const limit = Math.min(maxLimit, Math.min(meta[x].pixels, meta[y].pixels))
+    const diff = Math.abs(meta[x].pixels - meta[y].pixels)
+
+    if(diff > limit) {
+      continue
+    }
+
+    const d = getDelta(meta[x].hash, meta[y].hash, limit)
 
     if(d < limit) {
       similar.push([x, y, d])
@@ -22,7 +29,7 @@ similar.sort((a, b) => {
 
 fs.writeFileSync('meta/_similar.json', JSON.stringify(similar))
 
-function getDelta (a, b) {
+function getDelta (a, b, limit) {
   if (a === b) {
     return 0
   }
