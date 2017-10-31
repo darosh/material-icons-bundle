@@ -4,6 +4,7 @@ const compact = require('json-stringify-pretty-compact')
 const meta = require('../meta/_meta.json')
 const patch = require('./patch.conf')
 const duplicates = require('./duplicates.conf')
+// const duplicates = null
 let similar = require('../meta/_similar.json')
 
 console.log('Adding IDs')
@@ -17,9 +18,9 @@ similar.forEach(d => {
   const a = meta[d[0]]
   const b = meta[d[1]]
 
-  if (d[2] === 0 || duplicates(a, b, d[2])) {
-    if(a.source === b.source) {
-      if(b.name.length <= a.name.length) {
+  if (d[2] === 0 || duplicates && duplicates(a, b, d[2])) {
+    if (a.source === b.source) {
+      if (b.name.length <= a.name.length) {
         link(a, b)
       } else {
         link(b, a)
@@ -47,6 +48,7 @@ const bundle = meta.map(m => {
   b.aliases = m.aliases
   b.author = m.author
   b.tags = m.tags
+  b.pixels = m.pixels
 
   if (b.tags) {
     b.tags = b.tags.map(d => (patch.tags[d] === null ? false : (patch.tags[d] || d))).filter(d => d)
@@ -72,7 +74,7 @@ similar = similar.filter(d => d[2] > 0).filter(d => !(meta[d[0]].link >= 0) && !
 bundle.forEach((d, i) => {
   d.name = d.name.replace(/^(\d)/, ' $1')
 
-  if(d.source === 'Community' && d.author === 'Google') {
+  if (d.source === 'Community' && d.author === 'Google') {
     d.author = 'Google legacy'
   }
 
@@ -93,12 +95,19 @@ bundle.forEach((d, i) => {
   patch.extract['*'].forEach(p => {
     const t = Array.isArray(p) ? p[0] : p
     const v = Array.isArray(p) ? p[1] : p
+    let s = null
 
-    if (d.name.includes(t)) {
+    if (typeof t === 'function') {
+      s = t(d.name)
+    } else if (d.name.includes(t)) {
+      s = v
+    }
+
+    if (s) {
       bundle[i].tags = d.tags || []
 
-      if (d.tags.indexOf(v) === -1) {
-        d.tags.push(v)
+      if (d.tags.indexOf(s) === -1) {
+        d.tags.push(s)
       }
     }
   })
@@ -115,7 +124,7 @@ function link (a, b) {
     b = meta[b.link]
   }
 
-  if(a.link >= 0 && (meta[a.link].name === a.name)) {
+  if (a.link >= 0 && (meta[a.link].name === a.name)) {
     console.log(`Skipping: ${a.name} (${a.source}) --> ${b.name} (${b.source})`)
     return
   }
