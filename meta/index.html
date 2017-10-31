@@ -190,13 +190,13 @@
                 prepend-icon="people_outline"></v-select>
       <v-divider></v-divider>
       <v-select class="elevation-0" v-ripple="true" solo
-                :items="['All', 'Authors', 'Tags', 'Distance', 'Duplicates?']"
+                :items="groups"
                 v-model="groupBy"
                 prepend-icon="folder_open"></v-select>
       <v-divider></v-divider>
-      <!--<v-select class="elevation-0" v-ripple="true" solo :items="['ID', 'Name', 'Shape']" v-model="sortBy"-->
-      <!--prepend-icon="sort"></v-select>-->
-      <!--<v-divider></v-divider>-->
+      <v-select class="elevation-0" v-ripple="true" solo :items="['Name', 'Shape', 'Density']" v-model="sortBy"
+                prepend-icon="sort"></v-select>
+      <v-divider></v-divider>
       <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
                 prepend-icon="aspect_ratio"></v-select>
       <v-divider></v-divider>
@@ -278,6 +278,7 @@
                           :style="{'margin-left': margin + 'px'}"
                           :item-height="grid">
           <template slot-scope="props">
+            <div v-if="!props.itemKey" :key="props.itemKey"></div>
             <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
               <div v-if="props.item.name" class="headline pl-3 pt-3 pr-3">
                 <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
@@ -314,7 +315,7 @@
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
 <script src="https://unpkg.com/axios@0.17.0/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
-<!--<script src="../build/duplicates.js"></script>-->
+<!--<script src="../build/duplicates.conf.js"></script>-->
 <script>
   Vue.use(VueSmoothScroll)
 
@@ -343,9 +344,16 @@
   new Vue({
     el: '#app',
     data () {
+      const groups = ['All', 'Authors', 'Tags', 'Distance', 'Density', 'Shapes']
+
+      if (window.IconDuplicates) {
+        groups.push('Duplicates?')
+      }
+
       return {
         icons: null,
         similar: null,
+        lines: [],
         icon: null,
         search: '',
         groupBy: 'Tags',
@@ -357,9 +365,30 @@
         drawer: true,
         bar: 0,
         selectedText: '',
+        groups,
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
-        ]
+        ],
+        sorter: {
+          ID: (a, b) => a - b,
+          Name: (a, b) => this.icons[a].name.localeCompare(this.icons[b].name),
+          Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id)
+            - (this.icons[b].link >= 0 ? this.icons[b].link : this.icons[b].id),
+          Density: (a, b) => {
+            let aa = (this.icons[a].link >= 0 ? this.icons[this.icons[a].link] : this.icons[a])
+            let bb = (this.icons[b].link >= 0 ? this.icons[this.icons[b].link] : this.icons[b])
+
+            if (aa === bb) {
+              return 0
+            }
+
+            if (aa.pixels >= bb.pixels) {
+              return 1 + (aa.pixels - bb.pixels)
+            }
+
+            return (aa.pixels - bb.pixels)
+          }
+        }
       }
     },
     created () {
@@ -395,6 +424,29 @@
         let items = this.selectedText.split(/[\n,]/).map(d => d.trim()).filter(d => d)
         items.splice(items.indexOf(this.underscored(i.name)), 1)
         this.selectedText = items.join(',\n')
+      },
+      getLines () {
+        const lines = this.sorted.reduce((r, group) => {
+          r.push({name: group.name, length: group.value.length, id: group.name})
+
+          for (let i = 0; i < group.value.length; i += this.columns) {
+            const v = group.value.slice(i, Math.min(i + this.columns, group.value.length))
+            v.id = group.name + i
+            r.push(v)
+          }
+
+          return r
+        }, [])
+
+        // if (this.lines.length === lines.length) {
+        this.lines = []
+
+        Vue.nextTick(() => {
+          this.lines = lines
+        })
+        // } else {
+        //   this.lines = lines
+        // }
       }
     },
     computed: {
@@ -476,7 +528,7 @@
         }, {})
 
         Object.keys(reduced).forEach((c) => {
-          reduced[c].sort((a, b) => this.icons[a].name.localeCompare(this.icons[b].name))
+          reduced[c].sort(this.sorter[this.sortBy])
         })
 
         return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
@@ -497,10 +549,55 @@
         }, {})
 
         Object.keys(reduced).forEach((c) => {
-          reduced[c].sort((a, b) => this.icons[a].name.localeCompare(this.icons[b].name))
+          reduced[c].sort(this.sorter[this.sortBy])
         })
 
         return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
+      },
+      density () {
+        if (!this.icons) {
+          return null
+        }
+
+        const reduced = this.filtered.reduce((r, icon) => {
+          const i = icon.link >= 0 ? this.icons[icon.link] : icon
+          const c = i.pixels
+
+          r[c] = r[c] || []
+          r[c].push(icon.id)
+
+          return r
+        }, {})
+
+        Object.keys(reduced).forEach((c) => {
+          reduced[c].sort(this.sorter[this.sortBy])
+        })
+
+        return Object.keys(reduced).sort((a, b) => parseInt(a) - parseInt(b)).map(key => ({
+          name: key,
+          value: reduced[key]
+        }))
+      },
+      shapes () {
+        if (!this.icons) {
+          return null
+        }
+
+        const reduced = this.filtered.reduce((r, icon) => {
+          if (!(icon.link >= 0)) {
+            r['Shapes'].push(icon.id)
+          }
+          return r
+        }, {'Shapes': []})
+
+        Object.keys(reduced).forEach((c) => {
+          reduced[c].sort(this.sorter[this.sortBy])
+        })
+
+        return Object.keys(reduced).map(key => ({
+          name: key,
+          value: reduced[key]
+        }))
       },
       distance () {
         if (!this.icons || !this.similar) {
@@ -529,7 +626,7 @@
           const a = this.icons[item[0]]
           const b = this.icons[item[1]]
 
-          if (window.IconDuplicates ? window.IconDuplicates(a, b, c) : (a.source !== b.source && a.author === b.author && a.author.startsWith('Google'))) {
+          if (window.IconDuplicates ? window.IconDuplicates(a, b, c) : (a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google'))) {
             r[c] = r[c] || []
             r[c].push(item[0])
             r[c].push(item[1])
@@ -553,7 +650,7 @@
         }, {})
 
         Object.keys(reduced).forEach((c) => {
-          reduced[c].sort((a, b) => this.icons[a].name.localeCompare(this.icons[b].name))
+          reduced[c].sort(this.sorter[this.sortBy])
         })
 
         return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
@@ -564,21 +661,10 @@
           'Authors': this.authors,
           'All': this.all,
           'Distance': this.distance,
+          'Density': this.density,
+          'Shapes': this.shapes,
           'Duplicates?': this.duplicates
         }[this.groupBy]
-      },
-      lines () {
-        return Object.freeze(this.sorted.reduce((r, group) => {
-          r.push({name: group.name, length: group.value.length, id: group.name})
-
-          for (let i = 0; i < group.value.length; i += this.columns) {
-            const v = group.value.slice(i, Math.min(i + this.columns, group.value.length))
-            v.id = group.name + i
-            r.push(v)
-          }
-
-          return r
-        }, []))
       },
       similarIcons () {
         if (!this.icon || !this.similar) {
@@ -591,6 +677,7 @@
           .filter(d => d[0] === i || d[1] === i)
           .map(d => d[0] === i ? [d[1], d[2]] : [d[0], d[2]])
           .sort((a, b) => a[1] - b[1])
+          .filter((d, i) => i < 21)
       },
       alternatives () {
         if (!this.linked) {
@@ -624,10 +711,16 @@
 
           Vue.nextTick(() => {
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
-            // this.$refs.drawer.$el.scrollTo(0, 0)
           })
         }
-      }
+      },
+      groupBy () {this.getLines()},
+      sortBy () {this.getLines()},
+      source () {this.getLines()},
+      size () {this.getLines()},
+      search () {this.getLines()},
+      icons () {this.getLines()},
+      similar () {this.getLines()}
     }
   })
 </script>
