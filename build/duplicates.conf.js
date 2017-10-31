@@ -50,10 +50,14 @@
       return false
     }
 
-    if (c > 10 && a.name !== b.name) {
+    if ((a.name + b.name).includes('free')) {
       return false
     }
 
-    return a.source !== b.source && a.author === b.author && a.author.startsWith('Google');
+    if (c > 5 && a.name !== b.name) {
+      return false
+    }
+
+    return a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google');
   }
 }))
