@@ -456,21 +456,25 @@
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
-<script src="https://unpkg.com/axios@0.17.0/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
 <!--<script src="../build/duplicates.conf.js"></script>-->
-<script>
+<script async>
   const START = Date.now()
-  const ICONS = axios.get('./meta.json')
-  const SIMILAR = axios.get('./similar.json')
+  const ICONS = fetch('./meta.json')
+  const SIMILAR = fetch('./similar.json')
+  const BAR = getBarWidth()
 
-  // Based on: https://davidwalsh.name/detect-scrollbar-width
-  const scrollDiv = document.createElement('div')
-  scrollDiv.className = 'scrollbar-measure'
-  document.body.appendChild(scrollDiv)
-  const BAR = scrollDiv.offsetWidth - scrollDiv.clientWidth
-  document.body.removeChild(scrollDiv)
-
+  function getBarWidth () {
+    // Based on: https://davidwalsh.name/detect-scrollbar-width
+    const scrollDiv = document.createElement('div')
+    scrollDiv.className = 'scrollbar-measure'
+    document.body.appendChild(scrollDiv)
+    const bar = scrollDiv.offsetWidth - scrollDiv.clientWidth
+    document.body.removeChild(scrollDiv)
+    return bar
+  }
+</script>
+<script>
   Vue.use(VueSmoothScroll)
 
   const router = new VueRouter({
@@ -573,16 +577,16 @@
       this.scrolling()
     },
     mounted () {
-      ICONS.then(res => {
+      ICONS.then(res => res.json()).then(data => {
         setTimeout(() => {
-          res.data.forEach(d => Object.freeze(d))
-          Vue.$icons = this.icons = Object.freeze(res.data)
+          data.forEach(d => Object.freeze(d))
+          Vue.$icons = this.icons = Object.freeze(data)
         }, Math.max(0, 800 - (Date.now() - START)))
       })
 
-      SIMILAR.then(res => {
+      SIMILAR.then(res => res.json()).then(data => {
         setTimeout(() => {
-          this.similar = Object.freeze(res.data)
+          this.similar = Object.freeze(data)
         }, Math.max(0, 800 - (Date.now() - START)))
       })
     },
