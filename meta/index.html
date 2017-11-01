@@ -155,6 +155,35 @@
     .translate-fade-leave-active {
       transition: none;
     }
+
+    .swap-wrap {
+      position: relative;
+      width: 240px;
+      height: 240px;
+    }
+
+    .swap-item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .swap-item * {
+      transition: all 0.5s ease-out;
+    }
+
+    .swap-enter,
+    .swap-leave-to,
+    .swap-leave-to {
+      opacity: 0;
+    }
+
+    .swap-leave-to *,
+    .swap-leave-to-active * {
+      fill: #1976d2 !important;
+      fill-opacity: 0.5 !important;
+    }
   </style>
 </head>
 <body>
@@ -170,10 +199,10 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class=" text-xs-center">
-          <div style="display: inline-block;" class="checker">
-            <transition name="translate-fade" mode="out-in">
-                <app-icon :key="icon" :name="icon" :size="240"></app-icon>
-            </transition>
+          <div style="display: inline-block;" class="checker swap-wrap">
+            <transition-group name="swap" mode="out-in">
+                <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
+            </transition-group>
           </div>
         </div>
       </div>
@@ -702,6 +731,9 @@
       }
     },
     computed: {
+      iconSwap() {
+        return [this.icon]
+      },
       columns () {
         return Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left - this.bar) / this.grid)
       },
