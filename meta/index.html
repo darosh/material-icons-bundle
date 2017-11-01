@@ -358,7 +358,7 @@
           <template slot="items" slot-scope="props">
             <tr>
               <td style="padding: 0 0 0 2px"
-                @click="props.expanded = props.item.googleData && props.item.communityData ? props.expanded : !props.expanded">
+                  @click="props.expanded = props.item.googleData && props.item.communityData ? props.expanded : !props.expanded">
                 <v-btn class="ma-0" small @click="props.expanded = !props.expanded" icon
                        v-if="props.item.googleData && props.item.communityData">
                   <v-icon>arrow_drop_down</v-icon>
@@ -411,6 +411,7 @@
 </v-app>
 <!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>-->
 <script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
 <script src="https://unpkg.com/axios@0.17.0/dist/axios.min.js"></script>
