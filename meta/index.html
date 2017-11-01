@@ -320,20 +320,20 @@
     </v-container>
 
   </v-navigation-drawer>
-  <v-toolbar fixed dense app class="elevation-1" :class="{no: no}" v-show="!no">
-    <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-    <v-toolbar-title class="ml-0">Material Icons Bundle
+  <v-toolbar fixed dense app class="elevation-1" :class="{no: no}">
+    <v-toolbar-side-icon v-show="!no" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar-title v-show="!no" class="ml-0">Material Icons Bundle
       <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon tag="a" :to="{path: '/'}" exact>
+    <v-btn icon tag="a" :to="{path: '/'}" exact v-show="!no">
       <v-icon>home</v-icon>
     </v-btn>
-    <v-btn icon tag="a" :to="{path: '/compare'}">
+    <v-btn icon tag="a" :to="{path: '/compare'}" v-show="!no">
       <v-icon>compare_arrows</v-icon>
     </v-btn>
     <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
-           rel="noopener">
+           rel="noopener" v-show="!no">
       <app-icon name="github circle" size="24"></app-icon>
     </v-btn>
   </v-toolbar>
@@ -575,6 +575,97 @@
 
             return (aa.pixels - bb.pixels)
           }
+        },
+        reducer: {
+          'Tags': (r, icon) => {
+            [].concat(icon.category ? [icon.category] : [])
+              .concat(icon.tags || [])
+              .concat(!icon.tags && !icon.category ? ['other'] : [])
+              .forEach(c => {
+                r[c] = r[c] || []
+
+                if (r[c].indexOf(icon.id) === -1) {
+                  r[c].push(icon.id)
+                }
+              })
+
+            return r
+          },
+          'Authors': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.author
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Versions': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.version
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Density': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.pixels
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Shapes': (r, icon) => {
+            r['Shapes'] = r['Shapes'] || []
+            if (!(icon.link >= 0)) {
+              r['Shapes'].push(icon.id)
+            }
+            return r
+          },
+          'Distance': (r, item) => {
+            const c = item[2]
+
+            r[c] = r[c] || []
+            r[c].push(item[0])
+            r[c].push(item[1])
+
+            return r
+          },
+          'Duplicates': (r, item) => {
+            const c = item[2]
+            const a = this.icons[item[0]]
+            const b = this.icons[item[1]]
+
+            if (window.IconDuplicates ? window.IconDuplicates(a, b, c) : (a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google'))) {
+              r[c] = r[c] || []
+              r[c].push(item[0])
+              r[c].push(item[1])
+            }
+
+            return r
+          },
+          'All': (r, icon) => {
+            r['All'] = r['All'] || []
+            r['All'].push(icon.id)
+
+            return r
+          }
+        },
+        groupSort: {
+          'All': (d) => d.sort(),
+          'Tags': (d) => d.sort(),
+          'Authors': (d) => d.sort(),
+          'Versions': (d) => d.sort().reverse(),
+          'Density': (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
+          'Shapes': (d) => d,
+          'Distance': (d) => d,
+          'Duplicates': (d) => d
+        },
+        reduceSource: {
+          'Distance': 'similar'
         }
       }
     },
@@ -804,186 +895,29 @@
             || (d.aliases && d.aliases.filter(d => d.includes(s)).length)
         })
       },
-      categories () {
-        if (!this.icons) {
-          return null
-        }
-
-        const reduced = this.filtered.reduce((r, icon) => {
-          [].concat(icon.category ? [icon.category] : [])
-            .concat(icon.tags || [])
-            .concat(!icon.tags && !icon.category ? ['other'] : [])
-            .forEach(c => {
-              r[c] = r[c] || []
-
-              if (r[c].indexOf(icon.id) === -1) {
-                r[c].push(icon.id)
-              }
-            })
-
-          return r
-        }, {})
-
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
-
-        return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
-      },
-      authors () {
-        if (!this.icons) {
-          return null
-        }
-
-        const reduced = this.filtered.reduce((r, icon) => {
-          const i = icon.link >= 0 ? this.icons[icon.link] : icon
-          const c = i.author
-
-          r[c] = r[c] || []
-          r[c].push(icon.id)
-
-          return r
-        }, {})
-
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
-
-        return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
-      },
-      versions () {
-        if (!this.icons) {
-          return null
-        }
-
-        const reduced = this.filtered.reduce((r, icon) => {
-          const i = icon.link >= 0 ? this.icons[icon.link] : icon
-          const c = i.version
-
-          r[c] = r[c] || []
-          r[c].push(icon.id)
-
-          return r
-        }, {})
-
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
-
-        return Object.keys(reduced).sort().reverse().map(key => ({name: key, value: reduced[key]}))
-      },
-      density () {
-        if (!this.icons) {
-          return null
-        }
-
-        const reduced = this.filtered.reduce((r, icon) => {
-          const i = icon.link >= 0 ? this.icons[icon.link] : icon
-          const c = i.pixels
-
-          r[c] = r[c] || []
-          r[c].push(icon.id)
-
-          return r
-        }, {})
-
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
-
-        return Object.keys(reduced).sort((a, b) => parseInt(a) - parseInt(b)).map(key => ({
-          name: key,
-          value: reduced[key]
-        }))
-      },
-      shapes () {
-        if (!this.icons) {
-          return null
-        }
-
-        const reduced = this.filtered.reduce((r, icon) => {
-          if (!(icon.link >= 0)) {
-            r['Shapes'].push(icon.id)
-          }
-          return r
-        }, {'Shapes': []})
-
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
-
-        return Object.keys(reduced).map(key => ({
-          name: key,
-          value: reduced[key]
-        }))
-      },
-      distance () {
-        if (!this.icons || !this.similar) {
-          return null
-        }
-
-        const reduced = this.similar.reduce((r, item) => {
-          const c = item[2]
-
-          r[c] = r[c] || []
-          r[c].push(item[0])
-          r[c].push(item[1])
-
-          return r
-        }, {})
-
-        return Object.keys(reduced).map(key => ({name: key, value: reduced[key]}))
-      },
-      duplicates () {
-        if (!this.icons || !this.similar) {
-          return null
-        }
-
-        const reduced = this.similar.reduce((r, item) => {
-          const c = item[2]
-          const a = this.icons[item[0]]
-          const b = this.icons[item[1]]
-
-          if (window.IconDuplicates ? window.IconDuplicates(a, b, c) : (a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google'))) {
-            r[c] = r[c] || []
-            r[c].push(item[0])
-            r[c].push(item[1])
-          }
-
-          return r
-        }, {})
-
-        return Object.keys(reduced).map(key => ({name: key, value: reduced[key]}))
-      },
-      all () {
-        if (!this.icons) {
-          return null
-        }
-
-        const reduced = this.filtered.reduce((r, icon) => {
-          r['All'] = r['All'] || []
-          r['All'].push(icon.id)
-
-          return r
-        }, {})
-
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
-
-        return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
-      },
       sorted () {
-        return {
-          'Tags': this.categories,
-          'Authors': this.authors,
-          'All': this.all,
-          'Distance': this.distance,
-          'Versions': this.versions,
-          'Density': this.density,
-          'Shapes': this.shapes,
-          'Duplicates?': this.duplicates
-        }[this.groupBy]
+        if (!this.icons) {
+          return null
+        }
+
+        let s
+        if (this.reduceSource[this.groupBy]) {
+          s = this[this.reduceSource[this.groupBy]]
+
+          if (!s) {
+            return null
+          }
+        } else {
+          s = this.filtered
+        }
+
+        const reduced = s.reduce(this.reducer[this.groupBy], {})
+
+        Object.keys(reduced).forEach((c) => {
+          reduced[c].sort(this.sorter[this.sortBy])
+        })
+
+        return this.groupSort[this.groupBy](Object.keys(reduced)).map(key => ({name: key, value: reduced[key]}))
       },
       similarIcons () {
         if (!this.icon || !this.similar) {
