@@ -190,6 +190,8 @@
 <v-app id="app" v-cloak :dark="theme.includes('Dark')">
   <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1"
                        fixed
+                       disable-route-watcher
+                       mobile-break-point="800"
                        persistent
                        v-model="drawer">
     <div v-if="icons && similar">
@@ -201,7 +203,7 @@
         <div class=" text-xs-center">
           <div style="display: inline-block;" class="checker swap-wrap">
             <transition-group name="swap" mode="out-in">
-                <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
+              <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
             </transition-group>
           </div>
         </div>
@@ -731,7 +733,7 @@
       }
     },
     computed: {
-      iconSwap() {
+      iconSwap () {
         return [this.icon]
       },
       columns () {
@@ -1014,6 +1016,11 @@
       showCompare () {
         this.scrolling()
         this.getCompare()
+        console.log(this.$vuetify.breakpoint.width)
+      },
+      $vuetify: {
+        handler () {this.getLines()},
+        deep: true
       }
     }
   })
