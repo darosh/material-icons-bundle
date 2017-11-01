@@ -143,6 +143,18 @@
       table-layout: fixed;
       width: auto !important;
     }
+
+    .translate-fade-enter-active {
+      transition: all 0.12s linear;
+    }
+
+    .translate-fade-enter {
+      opacity: 0.12;
+    }
+
+    .translate-fade-leave-active {
+      transition: none;
+    }
   </style>
 </head>
 <body>
@@ -157,8 +169,12 @@
         </v-toolbar-title>
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
-        <div class="text-xs-center">
-          <app-icon class="checker" :name="icon" :size="240"></app-icon>
+        <div class=" text-xs-center">
+          <div style="display: inline-block;" class="checker">
+            <transition name="translate-fade" mode="out-in">
+                <app-icon :key="icon" :name="icon" :size="240"></app-icon>
+            </transition>
+          </div>
         </div>
       </div>
       <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
@@ -188,7 +204,6 @@
                     </span>
         </div>
       </div>
-      <!--<v-divider v-if="icon"></v-divider>-->
       <div class="pa-3">
         <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
                       :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
@@ -531,13 +546,13 @@
         setTimeout(() => {
           res.data.forEach(d => Object.freeze(d))
           Vue.$icons = this.icons = Object.freeze(res.data)
-        }, Math.max(0, 500 - (Date.now() - START)))
+        }, Math.max(0, 800 - (Date.now() - START)))
       })
 
       SIMILAR.then(res => {
         setTimeout(() => {
           this.similar = Object.freeze(res.data)
-        }, Math.max(0, 500 - (Date.now() - START)))
+        }, Math.max(0, 800 - (Date.now() - START)))
       })
     },
     methods: {
