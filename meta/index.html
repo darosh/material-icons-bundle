@@ -190,9 +190,12 @@
 <v-app id="app" v-cloak :dark="theme.includes('Dark')">
   <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1"
                        fixed
+                       :class="{no: no}"
                        disable-route-watcher
                        mobile-break-point="800"
-                       persistent
+                       hide-overlay
+                       :persistent="($vuetify.breakpoint.width || width) > 800"
+                       :temporary="($vuetify.breakpoint.width || width) <= 800"
                        v-model="drawer">
     <div v-if="icons && similar">
       <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
@@ -317,7 +320,7 @@
     </v-container>
 
   </v-navigation-drawer>
-  <v-toolbar fixed dense app class="elevation-1">
+  <v-toolbar fixed dense app class="elevation-1" :class="{no: no}" v-show="!no">
     <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     <v-toolbar-title class="ml-0">Material Icons Bundle
       <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
@@ -533,7 +536,9 @@
         theme: 'Light',
         size: 'Medium',
         highlight: false,
-        drawer: true,
+        no: true,
+        drawer: window.innerWidth > 800,
+        width: window.innerWidth,
         bar: BAR,
         selectedText: '',
         groups,
@@ -577,17 +582,19 @@
       this.scrolling()
     },
     mounted () {
-      ICONS.then(res => res.json()).then(data => {
+      Vue.nextTick(() => {
         setTimeout(() => {
-          data.forEach(d => Object.freeze(d))
-          Vue.$icons = this.icons = Object.freeze(data)
-        }, Math.max(0, 800 - (Date.now() - START)))
+          this.no = false
+        }, 300)
+      })
+
+      ICONS.then(res => res.json()).then(data => {
+        data.forEach(d => Object.freeze(d))
+        Vue.$icons = this.icons = Object.freeze(data)
       })
 
       SIMILAR.then(res => res.json()).then(data => {
-        setTimeout(() => {
-          this.similar = Object.freeze(data)
-        }, Math.max(0, 800 - (Date.now() - START)))
+        this.similar = Object.freeze(data)
       })
     },
     methods: {
