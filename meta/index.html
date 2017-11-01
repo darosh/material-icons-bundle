@@ -151,32 +151,15 @@
                        persistent
                        v-model="drawer">
     <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
-      <v-toolbar-title class="title" style="line-height: 24px !important;"><span>
-                    <!--<small class="light"
-                           style="font-weight: normal">#{{meta.id}}</small>--> {{meta.name}}</span>
+      <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
       </v-toolbar-title>
     </v-toolbar>
     <div v-if="icon !== null" class="elevation-0">
       <div class="text-xs-center">
         <app-icon class="checker" :name="icon" :size="240"></app-icon>
       </div>
-      <!--<v-divider></v-divider>-->
     </div>
     <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
-      <!--
-                      <div class="pl-3">
-                          <v-icon class="mr-2" style="display: inline-block; width: 24px; height: 24px; overflow: hidden">
-                              {{google}}
-                          </v-icon>
-                          <span>Google</span>
-                      </div>
-                      <div class="pl-3">
-                          <i style="line-height: 20px; display: inline-block; width: 24px; height: 24px; overflow: hidden"
-                             class="mr-2 icon mdi mdi-24px"
-                             :class="(theme.includes('Dark') ? 'mdi-light' : 'mdi-dark') + ' mdi-' + community"></i>
-                          <span>Community</span>
-                      </div>
-      -->
       <div class="pl-3 pr-3">
         <div>Name: <span
           :class="{'orange--text text--accent-3': linked.source !== 'Google'}">{{google}}</span></div>
@@ -579,15 +562,11 @@
           return r
         }, [])
 
-        // if (this.lines.length === lines.length) {
         this.lines = []
 
         Vue.nextTick(() => {
           this.lines = lines
         })
-        // } else {
-        //   this.lines = lines
-        // }
       },
       getCompare () {
         if (!this.icons || !this.showCompare) {
@@ -950,7 +929,7 @@
       search () {this.getLines()},
       icons () {this.getLines()},
       similar () {this.getLines()},
-      showCompare (value) {
+      showCompare () {
         this.scrolling()
         this.getCompare()
       }
