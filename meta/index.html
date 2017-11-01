@@ -335,6 +335,8 @@
     <v-container fill-height fluid>
       <v-card class="ma-4">
         <v-data-table
+          expand
+          class="gpu"
           :headers="headers"
           :items="compare"
           :pagination.sync="pagination"
