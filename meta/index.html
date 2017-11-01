@@ -7,10 +7,9 @@
   <title>Material Icons Bundle</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-  <link rel="stylesheet" href="https://unpkg.com/vuetify@0.16.9/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.css">
   <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.css">
   <!--<link rel="stylesheet" href="https://unpkg.com/mdi@2.0.46/css/materialdesignicons.min.css">-->
-
 
   <style>
     svg.icon {
@@ -37,7 +36,7 @@
       height: calc(100vh - 48px);
     }
 
-    html {
+    .no-scroll {
       overflow: hidden;
     }
 
@@ -102,6 +101,14 @@
       opacity: .5;
     }
 
+    a {
+      text-decoration: none;
+    }
+
+    a.black--text:hover {
+      text-decoration: underline;
+    }
+
     .link:hover {
       text-decoration: underline;
       cursor: pointer;
@@ -122,199 +129,287 @@
     .checkbox label {
       margin-left: 8px;
     }
+
+    table.table tbody td, table.table tbody th {
+      height: 32px;
+    }
+
+    table.table tbody td:first-child, table.table tbody td:not(:first-child), table.table tbody th:first-child, table.table tbody th:not(:first-child), table.table thead td:first-child, table.table thead td:not(:first-child), table.table thead th:first-child, table.table thead th:not(:first-child) {
+      padding: 0 8px;
+    }
+
+    table {
+      table-layout: fixed;
+      width: auto !important;
+    }
   </style>
 </head>
 <body>
-<div id="app" class="gpu">
-  <v-app v-cloak :dark="theme.includes('Dark')" v-show="icons">
-    <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1"
-                         persistent
-                         v-model="drawer">
-      <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
-        <v-toolbar-title class="title" style="line-height: 24px !important;"><span>
+<v-app id="app" v-cloak :dark="theme.includes('Dark')" v-show="icons">
+  <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1"
+                       fixed
+                       persistent
+                       v-model="drawer">
+    <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
+      <v-toolbar-title class="title" style="line-height: 24px !important;"><span>
                     <!--<small class="light"
                            style="font-weight: normal">#{{meta.id}}</small>--> {{meta.name}}</span>
-        </v-toolbar-title>
-      </v-toolbar>
-      <div v-if="icon !== null" class="elevation-0">
-        <div class="text-xs-center">
-          <app-icon class="checker" :name="icon" :size="240"></app-icon>
-        </div>
-        <!--<v-divider></v-divider>-->
+      </v-toolbar-title>
+    </v-toolbar>
+    <div v-if="icon !== null" class="elevation-0">
+      <div class="text-xs-center">
+        <app-icon class="checker" :name="icon" :size="240"></app-icon>
       </div>
-      <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
-        <!--
-                        <div class="pl-3">
-                            <v-icon class="mr-2" style="display: inline-block; width: 24px; height: 24px; overflow: hidden">
-                                {{google}}
-                            </v-icon>
-                            <span>Google</span>
-                        </div>
-                        <div class="pl-3">
-                            <i style="line-height: 20px; display: inline-block; width: 24px; height: 24px; overflow: hidden"
-                               class="mr-2 icon mdi mdi-24px"
-                               :class="(theme.includes('Dark') ? 'mdi-light' : 'mdi-dark') + ' mdi-' + community"></i>
-                            <span>Community</span>
-                        </div>
-        -->
-        <div class="pl-3 pr-3">
-          <div>Name: <span
-            :class="{'orange--text text--accent-3': linked.source !== 'Google'}">{{google}}</span></div>
+      <!--<v-divider></v-divider>-->
+    </div>
+    <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
+      <!--
+                      <div class="pl-3">
+                          <v-icon class="mr-2" style="display: inline-block; width: 24px; height: 24px; overflow: hidden">
+                              {{google}}
+                          </v-icon>
+                          <span>Google</span>
+                      </div>
+                      <div class="pl-3">
+                          <i style="line-height: 20px; display: inline-block; width: 24px; height: 24px; overflow: hidden"
+                             class="mr-2 icon mdi mdi-24px"
+                             :class="(theme.includes('Dark') ? 'mdi-light' : 'mdi-dark') + ' mdi-' + community"></i>
+                          <span>Community</span>
+                      </div>
+      -->
+      <div class="pl-3 pr-3">
+        <div>Name: <span
+          :class="{'orange--text text--accent-3': linked.source !== 'Google'}">{{google}}</span></div>
 
-          <div>Author: <span>{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
-                                                         class="link primary--text">{{meta.author}}</a></div>
-          <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
-            @click="icon = linked.id"
-            class="link primary--text"><b>{{linkedGoogle}}</b></a>
-          </div>
-          <div v-if="alternatives && alternatives.length">Alternatives: <span
-            v-for="(t, i) in alternatives"><span
-            v-if="i">, </span> <a
-            @click="icon = t.id" class="link primary--text">{{t.name}}</a></span></div>
-          <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
-            @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
-          <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
+        <div>Author: <span>{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
+                                                       class="link primary--text">{{meta.author}}</a></div>
+        <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
+          @click="icon = linked.id"
+          class="link primary--text"><b>{{linkedGoogle}}</b></a>
         </div>
-        <div class="pl-3 pr-3" :class="{highlight: highlight}">
+        <div v-if="alternatives && alternatives.length">Alternatives: <span
+          v-for="(t, i) in alternatives"><span
+          v-if="i">, </span> <a
+          @click="icon = t.id" class="link primary--text">{{t.name}}</a></span></div>
+        <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
+          @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
+        <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
+      </div>
+      <div class="pl-3 pr-3" :class="{highlight: highlight}">
                     <span style="display: inline-block; width: 36px; height: 36px; padding: 2px"
                           class="list__tile--link" @click="icon = i[0]" v-for="i in similarIcons">
                         <app-icon class="no" size="32" :name="i[0]"
                                   :class="{community: communityShape(i[0])}"></app-icon>
                     </span>
+      </div>
+    </div>
+    <!--<v-divider v-if="icon"></v-divider>-->
+    <div class="pa-3">
+      <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
+                    :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
+    </div>
+    <v-divider></v-divider>
+    <v-select class="elevation-0" v-ripple="true" solo :items="['All', 'Community', 'Google']" v-model="source"
+              prepend-icon="people_outline"></v-select>
+    <v-divider></v-divider>
+    <v-select class="elevation-0" v-ripple="true" solo
+              :items="groups"
+              v-model="groupBy"
+              prepend-icon="folder_open"></v-select>
+    <v-divider></v-divider>
+    <v-select class="elevation-0" v-ripple="true" solo :items="['Name', 'Shape', 'Density']" v-model="sortBy"
+              prepend-icon="sort"></v-select>
+    <v-divider></v-divider>
+    <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
+              prepend-icon="aspect_ratio"></v-select>
+    <v-divider></v-divider>
+    <v-select class="elevation-0" v-ripple="true" solo
+              :items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"
+              prepend-icon="tonality"></v-select>
+    <v-divider></v-divider>
+    <div class="pl-3 pt-2 pb-2">
+      <v-checkbox color="orange accent-3" hide-details label="Highlight community"
+                  v-model="highlight"></v-checkbox>
+    </div>
+    <v-divider></v-divider>
+    <v-expansion-panel expand class="elevation-0">
+      <v-expansion-panel-content ripple>
+        <div slot="header">
+          <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
         </div>
-      </div>
-      <!--<v-divider v-if="icon"></v-divider>-->
-      <div class="pa-3">
-        <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
-                      :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
-      </div>
-      <v-divider></v-divider>
-      <v-select class="elevation-0" v-ripple="true" solo :items="['All', 'Community', 'Google']" v-model="source"
-                prepend-icon="people_outline"></v-select>
-      <v-divider></v-divider>
-      <v-select class="elevation-0" v-ripple="true" solo
-                :items="groups"
-                v-model="groupBy"
-                prepend-icon="folder_open"></v-select>
-      <v-divider></v-divider>
-      <v-select class="elevation-0" v-ripple="true" solo :items="['Name', 'Shape', 'Density']" v-model="sortBy"
-                prepend-icon="sort"></v-select>
-      <v-divider></v-divider>
-      <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
-                prepend-icon="aspect_ratio"></v-select>
-      <v-divider></v-divider>
-      <v-select class="elevation-0" v-ripple="true" solo
-                :items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"
-                prepend-icon="tonality"></v-select>
-      <v-divider></v-divider>
-      <div class="pl-3 pt-2 pb-2">
-        <v-checkbox color="orange accent-3" hide-details label="Highlight community"
-                    v-model="highlight"></v-checkbox>
-      </div>
-      <v-divider></v-divider>
-      <v-expansion-panel expand class="elevation-0">
-        <v-expansion-panel-content ripple>
-          <div slot="header">
-            <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
+        <v-card :class="{highlight: highlight}">
+          <div v-ripple="true" @click="icon = i.id" v-for="i in selectedIcons"
+               class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
+            <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id" size="24"></app-icon>
+            {{i.name}}
+            <span style="float: right" class="pr-3"><v-icon @click.stop="deselect(i)">close</v-icon></span>
           </div>
-          <v-card :class="{highlight: highlight}">
-            <div v-ripple="true" @click="icon = i.id" v-for="i in selectedIcons"
-                 class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
-              <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id" size="24"></app-icon>
-              {{i.name}}
-              <span style="float: right" class="pr-3"><v-icon @click.stop="deselect(i)">close</v-icon></span>
-            </div>
-            <div class="pl-3 pr-3">
-              <v-text-field
-                solo
-                class="mb-3 mt-3 toolbar"
-                name="input-bundle"
-                label="Selected icons"
-                multi-line
-                auto-grow
-                rows="3"
-                v-model="selectedText"
-                hide-details></v-text-field>
-            </div>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <v-divider></v-divider>
-      <v-expansion-panel expand class="elevation-0">
-        <v-expansion-panel-content ripple>
-          <div slot="header">
-            <span><app-icon v-if="icons" size="24" name="folder multiple outline" class="mr-3"></app-icon>Groups</span>
+          <div class="pl-3 pr-3">
+            <v-text-field
+              solo
+              class="mb-3 mt-3 toolbar"
+              name="input-bundle"
+              label="Selected icons"
+              multi-line
+              auto-grow
+              rows="3"
+              v-model="selectedText"
+              hide-details></v-text-field>
           </div>
-          <v-card>
-            <div v-for="(s, i) in sorted">
-              <div @click="scroll(s.name)" style="padding-left: 56px"
-                   class="body-2 list__tile--link pt-2 pb-2"
-                   v-ripple="true">{{s.name}}
-                <small class="body-1 mr-4" style="float: right; margin-top: 2px">({{s.value.length}})
-                </small>
-              </div>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-divider></v-divider>
+    <v-expansion-panel expand class="elevation-0">
+      <v-expansion-panel-content ripple>
+        <div slot="header">
+          <span><app-icon v-if="icons" size="24" name="folder multiple outline" class="mr-3"></app-icon>Groups</span>
+        </div>
+        <v-card>
+          <div v-for="(s, i) in sorted">
+            <div @click="scroll(s.name)" style="padding-left: 56px"
+                 class="body-2 list__tile--link pt-2 pb-2"
+                 v-ripple="true">{{s.name}}
+              <small class="body-1 mr-4" style="float: right; margin-top: 2px">({{s.value.length}})
+              </small>
             </div>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <v-divider></v-divider>
+          </div>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-divider></v-divider>
 
-    </v-navigation-drawer>
-    <v-toolbar fixed dense app class="elevation-1 no">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title class="ml-0">Material Icons Bundle
-        <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
-             rel="noopener">
-        <app-icon name="github circle" size="24"></app-icon>
-      </v-btn>
-    </v-toolbar>
-    <main :class="{highlight : highlight}">
-      <v-content class="no">
-        <v-layout row v-if="!filtered">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+  </v-navigation-drawer>
+  <v-toolbar fixed dense app class="elevation-1 no">
+    <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar-title class="ml-0">Material Icons Bundle
+      <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn icon @click="showCompare = !showCompare">
+      <v-icon>compare_arrows</v-icon>
+    </v-btn>
+    <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
+           rel="noopener">
+      <app-icon name="github circle" size="24"></app-icon>
+    </v-btn>
+  </v-toolbar>
+  <v-content :class="{highlight : highlight}" v-if="!showCompare" class="no">
+    <v-layout row v-if="!filtered">
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </v-layout>
+    <virtual-scroller ref="scroller" tabindex="1" v-else buffer="64" pool-size="64" class="gpu scroller"
+                      :items="lines"
+                      :style="{'margin-left': margin + 'px'}"
+                      :item-height="grid">
+      <template slot-scope="props">
+        <div v-if="!props.itemKey" :key="props.itemKey"></div>
+        <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
+          <div v-if="props.item.name" class="headline pl-3 pt-3 pr-3">
+            <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
+              <small>({{props.item.length}})</small>
+            </div>
+          </div>
+          <div v-else>
+            <div :class="{'pl-3 pr-3': grid > 64}"
+                 :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
+                 :key="i"
+                 v-for="i in props.item">
+              <div @click="icon = i" v-ripple="true" class="no click">
+                <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
+                          class="no"
+                          :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
+                          :class="{active: icon === i}"></app-icon>
+              </div>
+              <div v-if="grid >= 128" style="font-size: 13px"
+                   :class="{'pt-1': grid > 128, 'pt-2': grid === 128, 'primary--text': icon === i, community: communityShape(i)}">
+                {{icons[i].name}}
+              </div>
+            </div>
+          </div>
         </v-layout>
-        <virtual-scroller ref="scroller" tabindex="1" v-else buffer="64" pool-size="64" class="scroller"
-                          :items="lines"
-                          :style="{'margin-left': margin + 'px'}"
-                          :item-height="grid">
-          <template slot-scope="props">
-            <div v-if="!props.itemKey" :key="props.itemKey"></div>
-            <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
-              <div v-if="props.item.name" class="headline pl-3 pt-3 pr-3">
-                <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
-                  <small>({{props.item.length}})</small>
-                </div>
-              </div>
-              <div v-else>
-                <div :class="{'pl-3 pr-3': grid > 64}"
-                     :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
-                     :key="i"
-                     v-for="i in props.item">
-                  <div @click="icon = i" v-ripple="true" class="no click">
-                    <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
-                              class="no"
-                              :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
-                              :class="{active: icon === i}"></app-icon>
-                  </div>
-                  <div v-if="grid >= 128" style="font-size: 13px"
-                       :class="{'pt-1': grid > 128, 'pt-2': grid === 128, 'primary--text': icon === i, community: communityShape(i)}">
-                    {{icons[i].name}}
-                  </div>
-                </div>
-              </div>
-            </v-layout>
+      </template>
+    </virtual-scroller>
+  </v-content>
+  <v-content v-else-if="compare">
+    <v-container fill-height fluid>
+      <v-card class="ma-4">
+        <v-data-table
+          :headers="headers"
+          :items="compare"
+          :pagination.sync="pagination"
+          :rows-per-page-items="rowsPerPage"
+          item-key="bundle">
+          <template slot="headers" scope="props">
+            <tr>
+              <th v-for="header in props.headers"
+                  :key="header.text"
+                  :style="{width: header.width}"
+                  class="text-xs-left"
+                  :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                  @click="changeSort(header.value)">
+                <v-icon>arrow_upward</v-icon>
+                {{ header.text }}
+              </th>
+            </tr>
           </template>
-        </virtual-scroller>
-      </v-content>
-    </main>
-  </v-app>
-</div>
-<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
-<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
-<script src="https://unpkg.com/vuetify@0.16.9/dist/vuetify.min.js"></script>
+          <template slot="items" slot-scope="props">
+            <tr>
+              <td style="padding: 0 0 0 2px"
+                @click="props.expanded = props.item.googleData && props.item.communityData ? props.expanded : !props.expanded">
+                <v-btn class="ma-0" small @click="props.expanded = !props.expanded" icon
+                       v-if="props.item.googleData && props.item.communityData">
+                  <v-icon>arrow_drop_down</v-icon>
+                </v-btn>
+              </td>
+              <td :class="props.item.googleClass">
+                <app-icon :svg="props.item.googleData" v-if="props.item.googleData" size="24"></app-icon>
+              </td>
+              <td :class="props.item.googleClass">
+                <a class="black--text"
+                   :href="'https://github.com/google/material-design-icons/blob/master/' + props.item.googleFolder + '/svg/production/ic_' + props.item.google + '_24px.svg'"
+                   target="_blank" role="noopener">{{props.item.google}}</a>
+              </td>
+              <td :class="props.item.communityClass">
+                <app-icon :svg="props.item.communityData" v-if="props.item.communityData" size="24"></app-icon>
+              </td>
+              <td :class="props.item.communityClass">
+                <a class="black--text" :href="'https://materialdesignicons.com/icon/' + props.item.community"
+                   target="_blank" role="noopener">{{props.item.community}}</a>
+              </td>
+              <td>
+                {{props.item.note}}
+              </td>
+              <td @click="icon = props.item.icon" class="click">
+                {{props.item.bundle}}
+              </td>
+            </tr>
+          </template>
+          <template slot="expand" slot-scope="props">
+            <v-card flat v-if="props.expanded">
+              <v-card flat style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
+                      class="checker">
+                <svg v-if="props.item.googleData" viewBox="0 0 24 24" width="240" height="240"
+                     style="position: absolute; fill: #00d; fill-opacity: 0.4">
+                  <g v-if="props.item.googleData[0] === '<'" v-html="props.item.googleData"></g>
+                  <path v-else :d="props.item.googleData"></path>
+                </svg>
+                <svg v-if="props.item.communityData" viewBox="0 0 24 24" width="240" height="240"
+                     style="position: absolute; fill: #d00; fill-opacity: 0.4">
+                  <g v-if="props.item.communityData[0] === '<'" v-html="props.item.communityData"></g>
+                  <path v-else :d="props.item.communityData"></path>
+                </svg>
+              </v-card>
+            </v-card>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-container>
+  </v-content>
+</v-app>
+<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>-->
+<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
+<script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
 <script src="https://unpkg.com/axios@0.17.0/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
@@ -324,20 +419,25 @@
 
   Vue.component('app-icon', {
     template: '<svg class="icon" :width="size || 24" :height="size || 24" viewBox="0 0 24 24" v-html="code"></svg>',
-    props: ['name', 'size'],
+    props: ['name', 'svg', 'size'],
     computed: {
       code () {
-        const i = !Vue.$icons[this.name]
-          ? Vue.$icons.find(d => d.name === this.name)
-          : Vue.$icons[this.name]
+        let d
 
-        if (!i) {
-          return ''
+        if (!this.svg) {
+          const i = !Vue.$icons[this.name]
+            ? Vue.$icons.find(d => d.name === this.name)
+            : Vue.$icons[this.name]
+
+          if (!i) {
+            return ''
+          }
+          d = i.link >= 0
+            ? Vue.$icons[i.link].data
+            : i.data
+        } else {
+          d = this.svg
         }
-
-        const d = i.link >= 0
-          ? Vue.$icons[i.link].data
-          : i.data
 
         return d[0] === '<' ? d : `<path d="${d}"/>`
       }
@@ -369,9 +469,24 @@
         bar: 0,
         selectedText: '',
         groups,
+        showCompare: false,
+        compareShapes: false,
+        compareShapesData: [],
+        compare: [],
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
         ],
+        headers: [
+          {width: '32px', align: 'left', text: '', value: 'detail'},
+          {width: '32px', align: 'left', text: '', value: 'googleData'},
+          {width: '280px', align: 'left', text: 'Google', value: 'google'},
+          {width: '32px', align: 'left', text: '', value: 'communityData'},
+          {width: '280px', align: 'left', text: 'Community', value: 'community'},
+          {width: '80px', align: 'left', text: 'Status', value: 'status'},
+          {width: '280px', align: 'left', text: 'Bundle', value: 'bundle'}
+        ],
+        pagination: {sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false},
+        rowsPerPage: [100, 500, {text: 'All', value: -1}],
         sorter: {
           ID: (a, b) => a - b,
           Name: (a, b) => this.icons[a].name.localeCompare(this.icons[b].name),
@@ -395,6 +510,8 @@
       }
     },
     created () {
+      this.scrolling()
+
       axios.get('./meta.json').then(res => {
         res.data.forEach(d => Object.freeze(d))
         Vue.$icons = this.icons = Object.freeze(res.data)
@@ -409,6 +526,17 @@
       document.body.removeChild(scrollDiv)
     },
     methods: {
+      changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
+      },
+      scrolling () {
+        document.getElementsByTagName('html')[0].className = this.showCompare ? '' : 'no-scroll'
+      },
       scroll (name) {
         this.$refs.scroller.scrollToItem(this.lines.indexOf(this.lines.find(d => d.name === name)))
       },
@@ -423,12 +551,19 @@
       underscored (t) {
         return t.replace(/ /g, '_')
       },
+      dashed (t) {
+        return t.replace(/ /g, '-')
+      },
       deselect (i) {
         let items = this.selectedText.split(/[\n,]/).map(d => d.trim()).filter(d => d)
         items.splice(items.indexOf(this.underscored(i.name)), 1)
         this.selectedText = items.join(',\n')
       },
       getLines () {
+        if (!this.icons || !this.similar) {
+          return []
+        }
+
         const lines = this.sorted.reduce((r, group) => {
           r.push({name: group.name, length: group.value.length, id: group.name})
 
@@ -450,6 +585,94 @@
         // } else {
         //   this.lines = lines
         // }
+      },
+      getCompare () {
+        if (!this.icons || !this.showCompare) {
+          this.compare = []
+          return null
+        }
+
+        this.compare = []
+
+        Vue.nextTick(() => {
+          setTimeout(() => {
+            const google = this.icons.filter(d => {
+              return d.author.startsWith('Google') && d.data
+            })
+
+            const compare = google.map(d => {
+              const r = {
+                bundle: this.underscored(d.name),
+                icon: d.id
+              }
+
+              if (d.source === 'Google') {
+                r.google = this.underscored(d.name.trim())
+                r.googleData = d.data
+                r.googleFolder = d.tags[0]
+
+                if (d.merged) {
+                  r.community = this.dashed(d.merged.name.trim())
+                  r.communityData = d.merged.data
+                  r.exact = d.merged.exact
+                } else {
+                  const f = this.icons.find(v => v.link === d.id)
+
+                  if (f && (f.source !== 'Google')) {
+                    r.community = this.dashed((f.original || f.name).trim())
+                    r.exact = f.exact
+                    r.communityData = f.data
+                  }
+                }
+              } else {
+                if (d.exact) {
+                  return null
+                }
+
+                r.community = this.dashed((d.original || d.name).trim())
+                r.communityData = d.data
+              }
+
+              r.googleClass = {
+                'green lighten-4': r.exact === true,
+                'amber lighten-4': r.exact === 1,
+                'red lighten-4': r.exact === -1,
+                'grey lighten-4': r.community && !r.google,
+                'blue lighten-4': !r.community && r.google
+              }
+
+              r.communityClass = {
+                'green lighten-4': r.exact === true,
+                'amber lighten-4': r.exact === 1,
+                'red lighten-4': r.exact === -1,
+                'grey lighten-4': !r.community && r.google,
+                'purple lighten-4': r.community && !r.google
+              }
+
+              r.status = r.exact === true
+                ? 4
+                : r.exact === 1
+                  ? 1
+                  : r.exact === -1
+                    ? 0
+                    : !r.community && r.google
+                      ? 2
+                      : 3
+
+              r.note = {
+                4: 'exact',
+                1: 'similar',
+                0: 'manual',
+                2: 'missing',
+                3: 'added'
+              }[r.status]
+
+              return r
+            }).filter(d => d)
+
+            this.compare = Object.freeze(compare)
+          })
+        })
       }
     },
     computed: {
@@ -723,7 +946,11 @@
       size () {this.getLines()},
       search () {this.getLines()},
       icons () {this.getLines()},
-      similar () {this.getLines()}
+      similar () {this.getLines()},
+      showCompare (value) {
+        this.scrolling()
+        this.getCompare()
+      }
     }
   })
 </script>

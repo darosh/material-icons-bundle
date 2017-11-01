@@ -87,7 +87,7 @@ function parseSvg (svg, resolve) {
   parseString(svg, (err, parsed) => {
     render(svg, (sharp) => {
       if(!opacity) {
-        sharp = sharp.threshold(223)
+        sharp = sharp.threshold(224)
       }
 
       sharp

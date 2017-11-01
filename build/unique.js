@@ -69,6 +69,8 @@ meta.forEach(m => {
       m.name += ' alt'
     }
 
+    m.original = original
+
     console.log(`Renaming: (${m.source}) ${original} --> ${m.name}`)
   }
 
@@ -110,6 +112,12 @@ function merge (m, t) {
       t.category = m.category
     }
   }
+
+  if(t.merged) {
+    throw '!!!!'
+  }
+
+  t.merged = {name: m.name, author: m.author, source: m.source, data: m.name === t.name ? m.data : undefined, exact: m.exact}
 }
 
 function update () {

@@ -27,6 +27,7 @@
     "build:meta": "node build/meta.js",
     "build:unique": "node build/unique.js",
     "clean": "rimraf index.js icons meta/*.json",
-    "deploy": "cpy meta/*.* !meta/_*.* demo && deploy-to-gh-pages --local demo"
+    "deploy": "cpy meta/*.* !meta/_*.* demo && deploy-to-gh-pages --local demo",
+    "update": "npm run build:bundle && npm run build:unique"
   }
 }

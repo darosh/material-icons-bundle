@@ -5,59 +5,60 @@
     root.IconDuplicates = factory(root.b)
   }
 }(typeof self !== 'undefined' ? self : this, function () {
-  return function (a, b, c) {
-    if (c > 23) {
+  const matches = {
+    'airplanemode inactive': 'airplane off',
+    'arrow drop down circle': 'arrow down drop circle',
+    'arrow drop up': 'menu up',
+    'attachment': 'attachment',
+    'directions bike': 'bike',
+    'directions walk': 'walk',
+    'find replace': 'find replace',
+    'fingerprint': 'fingerprint',
+    'grid off': 'grid off',
+    'local bar': 'martini',
+    'notifications active': 'bell ring',
+    'notifications none': 'bell outline',
+    'notifications off': 'bell off',
+    'notifications paused': 'bell sleep',
+    'notifications': 'bell',
+    'power settings new': 'power',
+    'rowing': 'rowing',
+    'strikethrough s': 'format strikethrough variant',
+    'tab unselected': 'tab unselected',
+    'tab': 'tab',
+    'thumbs up down': 'thumbs up down',
+    'touch app': 'gesture tap',
+    'view headline': 'view headline',
+    'work': 'briefcase'
+    // 'sort by alpha': 'sort alphabetical', // for num sort consistency
+  }
+
+  dups.matches = matches
+
+  return dups
+
+  function dups (a, b, c) {
+    if(a.source === 'Community') {
+      const t = a
+      a = b
+      b = t
+    }
+
+    if (matches[a.name] === b.name) {
+      return -1
+    }
+
+    if (c > 3) {
       return false
     }
 
+    // number must match
     const num = /\d/.exec(a.name)
 
-    // number must match
     if (num && !b.name.includes(num)) {
       return false
     }
 
-    // do not close
-    if (a.name.includes('open') && !b.name.includes('open')) {
-      return false
-    }
-
-    if (b.name.includes('open') && !a.name.includes('open')) {
-      return false
-    }
-
-    if (a.name.includes('minus') || b.name.includes('minus')) {
-      return false
-    }
-
-    if (a.name.includes('plus') || b.name.includes('plus')) {
-      return false
-    }
-
-    if (a.name.includes(' out') || b.name.includes(' out')) {
-      return false
-    }
-
-    if (a.name.endsWith(' in') || b.name.endsWith(' in')) {
-      return false
-    }
-
-    if (a.name.includes('party') && !b.name.includes('party')) {
-      return false
-    }
-
-    if (b.name.includes('party') && !a.name.includes('party')) {
-      return false
-    }
-
-    if ((a.name + b.name).includes('free')) {
-      return false
-    }
-
-    if (c > 5 && a.name !== b.name) {
-      return false
-    }
-
-    return a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google');
+    return (a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google')) && 1
   }
 }))
