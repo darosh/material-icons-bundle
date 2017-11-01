@@ -511,7 +511,7 @@
     el: '#app',
     router,
     data () {
-      const groups = ['All', 'Authors', 'Tags', 'Distance', 'Density', 'Shapes']
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Distance', 'Density', 'Shapes']
 
       if (window.IconDuplicates) {
         groups.push('Duplicates?')
@@ -840,6 +840,27 @@
 
         return Object.keys(reduced).sort().map(key => ({name: key, value: reduced[key]}))
       },
+      versions () {
+        if (!this.icons) {
+          return null
+        }
+
+        const reduced = this.filtered.reduce((r, icon) => {
+          const i = icon.link >= 0 ? this.icons[icon.link] : icon
+          const c = i.version
+
+          r[c] = r[c] || []
+          r[c].push(icon.id)
+
+          return r
+        }, {})
+
+        Object.keys(reduced).forEach((c) => {
+          reduced[c].sort(this.sorter[this.sortBy])
+        })
+
+        return Object.keys(reduced).sort().reverse().map(key => ({name: key, value: reduced[key]}))
+      },
       density () {
         if (!this.icons) {
           return null
@@ -947,6 +968,7 @@
           'Authors': this.authors,
           'All': this.all,
           'Distance': this.distance,
+          'Versions': this.versions,
           'Density': this.density,
           'Shapes': this.shapes,
           'Duplicates?': this.duplicates

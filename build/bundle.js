@@ -70,6 +70,7 @@ const bundle = meta.map(m => {
   b.aliases = m.aliases
   b.author = m.author
   b.tags = m.tags
+  b.version = m.version
   b.pixels = b.link >= 0 ? undefined : m.pixels
   b.exact = m.exact
 

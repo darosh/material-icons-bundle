@@ -9,10 +9,12 @@ const meta = require('mdi-svg/meta.json')
 const size = require('./icon.conf').size
 
 require('../meta/_community.json').icons.forEach(d => {
+  const f = meta.find(m => d.name === m.name) || {}
+
   const m = {
     author: d.user.name,
     aliases: d.aliases,
-    tags: (meta.find(m => d.name === m.name) || {}).tags
+    tags: f.tags
   }
 
   data.push({
@@ -21,7 +23,8 @@ require('../meta/_community.json').icons.forEach(d => {
     name: d.name.replace(/[-_]/g, ' '),
     author: m.author,
     aliases: m.aliases && m.aliases.length ? m.aliases : undefined,
-    tags: m.tags && m.tags.length ? m.tags : undefined
+    tags: m.tags && m.tags.length ? m.tags : undefined,
+    version: f.version || '?'
   })
 })
 
@@ -45,6 +48,7 @@ readDir('node_modules/material-design-icons',
         category: segments[segments.length - 4],
         source: 'Google',
         author: 'Google',
+        version: 'Google ' + require('material-design-icons/package.json').version,
         name: segments[segments.length - 1].replace(/^ic_/, '').replace(/_24px\.svg$/, '').replace(/[-_]/g, ' ')
       })
     })
