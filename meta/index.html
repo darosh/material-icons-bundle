@@ -322,7 +322,7 @@
   </v-navigation-drawer>
   <v-toolbar fixed dense app class="elevation-1" :class="{no: no}">
     <v-toolbar-side-icon v-show="!no" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-    <v-toolbar-title v-show="!no" class="ml-0">Material Icons Bundle
+    <v-toolbar-title v-show="!no" class="ml-0"><span class="hidden-xs-only">Material Icons Bundle</span>
       <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
     </v-toolbar-title>
     <v-spacer></v-spacer>
