@@ -269,7 +269,10 @@
       <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon @click="showCompare = !showCompare">
+    <v-btn icon tag="a" :to="{path: '/'}" exact>
+      <v-icon>home</v-icon>
+    </v-btn>
+    <v-btn icon tag="a" :to="{path: '/compare'}">
       <v-icon>compare_arrows</v-icon>
     </v-btn>
     <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
@@ -325,7 +328,7 @@
           :pagination.sync="pagination"
           :rows-per-page-items="rowsPerPage"
           item-key="bundle">
-          <template slot="headers" scope="props">
+          <template slot="headers" slot-scope="props">
             <tr>
               <th v-for="header in props.headers"
                   :key="header.text"
@@ -403,6 +406,13 @@
 <script>
   Vue.use(VueSmoothScroll)
 
+  const router = new VueRouter({
+    routes: [
+      {path: '/'},
+      {path: '/compare'}
+    ]
+  })
+
   Vue.component('app-icon', {
     template: '<svg class="icon" :width="size || 24" :height="size || 24" viewBox="0 0 24 24" v-html="code"></svg>',
     props: ['name', 'svg', 'size'],
@@ -432,6 +442,7 @@
 
   new Vue({
     el: '#app',
+    router,
     data () {
       const groups = ['All', 'Authors', 'Tags', 'Distance', 'Density', 'Shapes']
 
@@ -455,10 +466,7 @@
         bar: 0,
         selectedText: '',
         groups,
-        showCompare: false,
-        compareShapes: false,
-        compareShapesData: [],
-        compare: [],
+        compare: null,
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
         ],
@@ -474,7 +482,6 @@
         pagination: {sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false},
         rowsPerPage: [100, 500, {text: 'All', value: -1}],
         sorter: {
-          ID: (a, b) => a - b,
           Name: (a, b) => this.icons[a].name.localeCompare(this.icons[b].name),
           Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id)
             - (this.icons[b].link >= 0 ? this.icons[b].link : this.icons[b].id),
@@ -570,11 +577,11 @@
       },
       getCompare () {
         if (!this.icons || !this.showCompare) {
-          this.compare = []
+          this.compare = null
           return null
         }
 
-        this.compare = []
+        this.compare = null
 
         Vue.nextTick(() => {
           setTimeout(() => {
@@ -906,6 +913,9 @@
           .map(d => this.spaced(d.trim()))
           .filter(d => d)
           .map(d => this.icons.find(i => i.name === d))
+      },
+      showCompare () {
+        return this.$route.path === '/compare'
       }
     },
     watch: {
@@ -927,7 +937,10 @@
       source () {this.getLines()},
       size () {this.getLines()},
       search () {this.getLines()},
-      icons () {this.getLines()},
+      icons () {
+        this.getLines()
+        this.getCompare()
+      },
       similar () {this.getLines()},
       showCompare () {
         this.scrolling()
