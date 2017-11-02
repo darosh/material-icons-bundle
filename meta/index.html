@@ -398,7 +398,8 @@
       <app-icon name="github circle" size="24"></app-icon>
     </v-btn>
   </v-toolbar>
-  <v-content :class="{highlight : highlight}" class="no" style="display: flex">
+  <v-content :class="{highlight : highlight}" class="no"
+             :style="{display: !compare && !(!showCompare && icons && similar) ? 'flex' : ''}">
     <virtual-scroller v-if="!showCompare && icons && similar"
                       ref="scroller" tabindex="1" buffer="64" pool-size="64" class="gpu scroller"
                       :items="lines"
@@ -433,87 +434,101 @@
       </template>
     </virtual-scroller>
     <v-container v-else-if="compare" fill-height fluid>
-      <v-card class="ma-4">
-        <v-data-table
-          expand
-          class="gpu"
-          :headers="headers"
-          :items="compare"
-          :pagination.sync="pagination"
-          :rows-per-page-items="rowsPerPage"
-          item-key="bundle">
-          <template slot="headers" slot-scope="props">
-            <tr>
-              <th v-for="header in props.headers"
-                  :key="header.text"
-                  :style="{width: header.width}"
-                  class="text-xs-left"
-                  :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                  @click="changeSort(header.value)">
-                <v-icon>arrow_upward</v-icon>
-                {{ header.text }}
-              </th>
-            </tr>
-          </template>
-          <template slot="items" slot-scope="props">
-            <tr>
-              <td style="padding: 0 0 0 2px"
-                  @click="props.expanded = props.item.googleData && props.item.communityData ? props.expanded : !props.expanded">
-                <v-btn class="ma-0" small @click="props.expanded = !props.expanded" icon
-                       v-if="props.item.googleData && props.item.communityData">
-                  <v-icon>arrow_drop_down</v-icon>
-                </v-btn>
-              </td>
-              <td :class="props.item.googleClass">
-                <app-icon :svg="props.item.googleData" v-if="props.item.googleData" size="24"></app-icon>
-              </td>
-              <td :class="props.item.googleClass">
-                <a class="black--text"
-                   :href="'https://github.com/google/material-design-icons/blob/master/' + props.item.googleFolder + '/svg/production/ic_' + props.item.google + '_24px.svg'"
-                   target="_blank" role="noopener">{{props.item.google}}</a>
-              </td>
-              <td :class="props.item.communityClass">
-                <app-icon :svg="props.item.communityData" v-if="props.item.communityData" size="24"></app-icon>
-              </td>
-              <td :class="props.item.communityClass">
-                <a class="black--text" :href="'https://materialdesignicons.com/icon/' + props.item.community"
-                   target="_blank" role="noopener">{{props.item.community}}</a>
-              </td>
-              <td>
-                {{props.item.note}}
-              </td>
-              <td>
-                <a @click="icon = props.item.icon" class="link">{{props.item.bundle}}</a>
-                <span v-if="props.item.potential">, </span>
-                <a v-if="props.item.potential" @click="icon = props.item.potential[0]" class="black--text link">{{props.item.community}}</a>
-              </td>
-              <td>
-                <span v-if="props.item.potential && props.item.potential[1]">{{props.item.potential[1]}}</span>
-              </td>
-            </tr>
-          </template>
-          <template slot="expand" slot-scope="props">
-            <v-card flat v-if="props.expanded">
-              <v-card flat style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
-                      :class="{checker: gridType === 1}" @click.native="gridType = (gridType + 1) % 5">
-                <svg v-if="gridType > 1" viewBox="0 0 24 24" width="240" height="240"
-                     v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
-                     class="grid"></svg>
-                <svg v-if="props.item.googleData" viewBox="0 0 24 24" width="240" height="240"
-                     style="position: absolute; fill: #00d; fill-opacity: 0.4">
-                  <g v-if="props.item.googleData[0] === '<'" v-html="props.item.googleData"></g>
-                  <path v-else :d="props.item.googleData"></path>
-                </svg>
-                <svg v-if="props.item.communityData" viewBox="0 0 24 24" width="240" height="240"
-                     style="position: absolute; fill: #d00; fill-opacity: 0.4">
-                  <g v-if="props.item.communityData[0] === '<'" v-html="props.item.communityData"></g>
-                  <path v-else :d="props.item.communityData"></path>
-                </svg>
-              </v-card>
-            </v-card>
-          </template>
-        </v-data-table>
-      </v-card>
+      <v-layout column>
+        <v-layout row>
+          <v-card class="mt-4 ml-4 mr-4 mb-0">
+            <v-card-text>
+            <span v-for="(i, k) in compareStats">
+              <span v-if="k">, </span>
+              <a class="link" @click="compareFilter = i.name">{{i.name}}</a>: {{i.count}}
+            </span>
+            </v-card-text>
+          </v-card>
+        </v-layout>
+        <v-layout row>
+          <v-card class="ma-4">
+            <v-data-table
+              expand
+              class="gpu"
+              :headers="headers"
+              :items="compareFiltered"
+              :pagination.sync="pagination"
+              :rows-per-page-items="rowsPerPage"
+              item-key="bundle">
+              <template slot="headers" slot-scope="props">
+                <tr>
+                  <th v-for="header in props.headers"
+                      :key="header.text"
+                      :style="{width: header.width}"
+                      class="text-xs-left"
+                      :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                      @click="changeSort(header.value)">
+                    <v-icon>arrow_upward</v-icon>
+                    {{ header.text }}
+                  </th>
+                </tr>
+              </template>
+              <template slot="items" slot-scope="props">
+                <tr>
+                  <td style="padding: 0 0 0 2px"
+                      @click="props.expanded = props.item.googleData && props.item.communityData ? props.expanded : !props.expanded">
+                    <v-btn class="ma-0" small @click="props.expanded = !props.expanded" icon
+                           v-if="props.item.googleData && props.item.communityData">
+                      <v-icon>arrow_drop_down</v-icon>
+                    </v-btn>
+                  </td>
+                  <td :class="props.item.googleClass">
+                    <app-icon :svg="props.item.googleData" v-if="props.item.googleData" size="24"></app-icon>
+                  </td>
+                  <td :class="props.item.googleClass">
+                    <a class="black--text"
+                       :href="'https://github.com/google/material-design-icons/blob/master/' + props.item.googleFolder + '/svg/production/ic_' + props.item.google + '_24px.svg'"
+                       target="_blank" role="noopener">{{props.item.google}}</a>
+                  </td>
+                  <td :class="props.item.communityClass">
+                    <app-icon :svg="props.item.communityData" v-if="props.item.communityData" size="24"></app-icon>
+                  </td>
+                  <td :class="props.item.communityClass">
+                    <a class="black--text" :href="'https://materialdesignicons.com/icon/' + props.item.community"
+                       target="_blank" role="noopener">{{props.item.community}}</a>
+                  </td>
+                  <td>
+                    {{props.item.note}}
+                  </td>
+                  <td>
+                    <a @click="icon = props.item.icon" class="link">{{props.item.bundle}}</a>
+                    <span v-if="props.item.potential">, </span>
+                    <a v-if="props.item.potential" @click="icon = props.item.potential[0]" class="black--text link">{{props.item.community}}</a>
+                  </td>
+                  <td>
+                    <span v-if="props.item.potential && props.item.potential[1]">{{props.item.potential[1]}}</span>
+                  </td>
+                </tr>
+              </template>
+              <template slot="expand" slot-scope="props">
+                <v-card flat v-if="props.expanded">
+                  <v-card flat style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
+                          :class="{checker: gridType === 1}" @click.native="gridType = (gridType + 1) % 5">
+                    <svg v-if="gridType > 1" viewBox="0 0 24 24" width="240" height="240"
+                         v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
+                         class="grid"></svg>
+                    <svg v-if="props.item.googleData" viewBox="0 0 24 24" width="240" height="240"
+                         style="position: absolute; fill: #00d; fill-opacity: 0.4">
+                      <g v-if="props.item.googleData[0] === '<'" v-html="props.item.googleData"></g>
+                      <path v-else :d="props.item.googleData"></path>
+                    </svg>
+                    <svg v-if="props.item.communityData" viewBox="0 0 24 24" width="240" height="240"
+                         style="position: absolute; fill: #d00; fill-opacity: 0.4">
+                      <g v-if="props.item.communityData[0] === '<'" v-html="props.item.communityData"></g>
+                      <path v-else :d="props.item.communityData"></path>
+                    </svg>
+                  </v-card>
+                </v-card>
+              </template>
+            </v-data-table>
+          </v-card>
+        </v-layout>
+      </v-layout>
     </v-container>
     <v-container v-else fluid fill-height>
       <v-layout justify-center align-center>
@@ -617,6 +632,7 @@
         lines: [],
         icon: null,
         search: '',
+        compareFilter: 'all',
         groupBy: 'Tags',
         sortBy: 'Name',
         source: 'All',
@@ -872,8 +888,8 @@
 
         Vue.nextTick(() => {
           setTimeout(() => {
-            const google = this.icons.filter(d => {
-              return d.author.startsWith('Google') && d.data
+            const google = this.filtered.filter(d => {
+              return d.author.startsWith('Google') && d.data && !(d.link >= 0)
             })
 
             const compare = google.map(d => {
@@ -891,18 +907,19 @@
                   r.community = this.dashed(d.merged.name.trim())
                   r.communityData = d.merged.data
                   r.exact = d.merged.exact
-                } else if (d.potential) {
-                  const i = this.icons[d.potential[0]]
-                  r.community = this.dashed(i.name.trim())
-                  r.communityData = i.data || this.icons[i.link].data
-                  r.potential = d.potential
                 } else {
-                  const f = this.icons.find(v => v.link === d.id)
+                  let f = this.icons.find(v => v.link === d.id && ((v.source !== 'Google') || v.merged))
+                  let m = f ? f.merged || f : null
 
-                  if (f && (f.source !== 'Google')) {
-                    r.community = this.dashed((f.original || f.name).trim())
+                  if (m) {
+                    r.community = this.dashed(m.name.trim())
                     r.exact = f.exact
                     r.communityData = f.data
+                  } else if (d.potential) {
+                    const i = this.icons[d.potential[0]]
+                    r.community = this.dashed(i.name.trim())
+                    r.communityData = i.data || this.icons[i.link].data
+                    r.potential = d.potential
                   }
                 }
               } else {
@@ -1026,7 +1043,7 @@
 
         const reduced = s.reduce(this.reducer[this.groupBy], {})
 
-        if(this.reducerSorter[this.groupBy] !== false) {
+        if (this.reducerSorter[this.groupBy] !== false) {
           Object.keys(reduced).forEach((c) => {
             reduced[c].sort(this.sorter[this.sortBy])
           })
@@ -1067,6 +1084,22 @@
           .filter(d => d)
           .map(d => this.icons.find(i => i.name === d))
       },
+      compareStats () {
+        if (!this.compare) {
+          return null
+        }
+
+        const stats = this.compare.reduce((r, i) => {
+          r[i.note] = r[i.note] || 0
+          r[i.note]++
+          return r
+        }, {all: this.compare.length})
+
+        return Object.keys(stats).map(k => ({name: k, count: stats[k]})).sort((a, b) => a.count - b.count)
+      },
+      compareFiltered () {
+        return this.compareFilter === 'all' ? this.compare : this.compare.filter(d => d.note === this.compareFilter)
+      },
       showCompare () {
         return this.$route.path === '/compare'
       }
@@ -1089,7 +1122,10 @@
       sortBy () {this.getLines()},
       source () {this.getLines()},
       size () {this.getLines()},
-      search () {this.getLines()},
+      search () {
+        this.getLines()
+        this.getCompare()
+      },
       icons () {
         this.getLines()
         this.getCompare()
@@ -1098,7 +1134,6 @@
       showCompare () {
         this.scrolling()
         this.getCompare()
-        console.log(this.$vuetify.breakpoint.width)
       },
       $vuetify: {
         handler () {this.getLines()},
