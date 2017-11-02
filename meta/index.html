@@ -218,24 +218,28 @@
       stroke-opacity: 0.8;
     }
 
-    .status-4 {
-      background-color: rgba(200, 230, 201, 0.6)
-    }
-
-    .status-2 {
-      background-color: rgba(187, 222, 251, 0.6)
-    }
-
-    .status-3 {
-      background-color: rgba(225, 190, 231, 0.6)
+    .status-0 {
+      background-color: rgba(255, 205, 210, 0.6);
     }
 
     .status-1 {
-      background-color: rgba(255, 236, 179, 0.6)
+      background-color: rgba(255, 236, 179, 0.6);
     }
 
-    .status-0 {
-      background-color: rgba(255, 205, 210, 0.6)
+    .status-2 {
+      background-color: rgba(207, 216, 220, 0.4);
+    }
+
+    .status-3 {
+      background-color: rgba(187, 222, 251, 0.6);
+    }
+
+    .status-4 {
+      background-color: rgba(225, 190, 231, 0.6);
+    }
+
+    .status-5 {
+      background-color: rgba(200, 230, 201, 0.6);
     }
   </style>
 </head>
@@ -478,8 +482,13 @@
               <td>
                 {{props.item.note}}
               </td>
-              <td @click="icon = props.item.icon" class="click" v-ripple>
-                {{props.item.bundle}}
+              <td>
+                <a @click="icon = props.item.icon" class="link">{{props.item.bundle}}</a>
+                <span v-if="props.item.potential">, </span>
+                <a v-if="props.item.potential" @click="icon = props.item.potential[0]" class="black--text link">{{props.item.community}}</a>
+              </td>
+              <td>
+                <span v-if="props.item.potential && props.item.potential[1]">{{props.item.potential[1]}}</span>
               </td>
             </tr>
           </template>
@@ -635,7 +644,8 @@
           {width: '32px', align: 'left', text: '', value: 'communityData'},
           {width: '280px', align: 'left', text: 'Community', value: 'community'},
           {width: '80px', align: 'left', text: 'Status', value: 'status'},
-          {width: '280px', align: 'left', text: 'Bundle', value: 'bundle'}
+          {width: '280px', align: 'left', text: 'Bundle', value: 'bundle'},
+          {width: '280px', align: 'left', text: 'Comment', value: 'potential.0'}
         ],
         pagination: {sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false},
         rowsPerPage: [100, 500, {text: 'All', value: -1}],
@@ -878,6 +888,11 @@
                   r.community = this.dashed(d.merged.name.trim())
                   r.communityData = d.merged.data
                   r.exact = d.merged.exact
+                } else if (d.potential) {
+                  const i = this.icons[d.potential[0]]
+                  r.community = this.dashed(i.name.trim())
+                  r.communityData = i.data || this.icons[i.link].data
+                  r.potential = d.potential
                 } else {
                   const f = this.icons.find(v => v.link === d.id)
 
@@ -896,25 +911,28 @@
                 r.communityData = d.data
               }
 
-              r.status = r.exact === true
-                ? 4
-                : r.exact === 1
-                  ? 1
-                  : r.exact === -1
-                    ? 0
-                    : !r.community && r.google
-                      ? 2
-                      : 3
+              r.status = r.potential
+                ? 2
+                : r.exact === true
+                  ? 5
+                  : r.exact === 1
+                    ? 1
+                    : r.exact === -1
+                      ? 0
+                      : !r.community && r.google
+                        ? 3
+                        : 4
 
-              r.googleClass = r.community && !r.google ? '' : ('status-' + r.status)
+              r.googleClass = r.community && !r.google ? '' : ('status-' + (r.potential ? 3 : r.status))
               r.communityClass = !r.community && r.google ? '' : ('status-' + r.status)
 
               r.note = {
-                4: 'exact',
-                1: 'similar',
                 0: 'manual',
-                2: 'missing',
-                3: 'added'
+                1: 'similar',
+                2: 'potential',
+                3: 'missing',
+                4: 'added',
+                5: 'exact'
               }[r.status]
 
               return r
