@@ -1,0 +1,69 @@
+3d_rotation	rotate-3d
+ac_unit	air-conditioner	Matches name/purpose but not design
+ac_unit	snowflake	Matches design but not name/purpose
+accessible	wheelchair-accessibility	See accessibleicon.org
+add_alarm	alarm-plus
+add_location	map-marker-plus
+airport_shuttle	van-passenger
+announcement	message-alert
+backup	cloud-upload
+beach_access	beach
+call	phone
+casino	dice-5
+collections_bookmark	book-multiple	?
+comment	message-reply-text
+control point	plus-circle-outline
+create new folder	folder-plus
+date range	calendar-range
+description	file-document	?
+directions subway	subway-variant
+done	check
+drafts	email-open
+drive eta	car
+edit	pencil
+euro symbol	currency-eur
+exposure plus 1	plus-one	?
+fiber manual record	record
+fitness center	dumbbell
+free breakfast	coffee	Saucer of stock icon is shifted to the right
+functions	sigma
+g translate	google-translate
+games	gamepad
+gavel	gavel
+hd	high-definition
+keyboard arrow down	chevron-down
+keyboard arrow left	chevron-left
+keyboard voice	microphone
+kitchen	fridge
+lens	circle
+local dining	silverware
+local play	ticket
+local see	camera
+mail	email
+mail outline	email-outline
+merge type	call-merge
+message	message-text
+motorcycle	motorbike
+music note	music-note
+no sim	sim-off
+note add	file-plus
+payment	credit-card
+pets	paw
+photo	image
+pie chart	chart-pie
+poll	poll-box
+pool	pool	Matches name/purpose but not design
+pool	swim	Matches design but not name/purpose
+priority high	exclamation	Matches design but not name/purpose
+priority high	priority-high	Matches name/purpose but not design
+redeem	wallet-giftcard
+room	map-marker
+schedule	clock
+sentiment dissatisfied	emoticon-sad
+sentiment neutral	emoticon-neutral
+sentiment satisfied	emoticon-happy
+shop	shopping-music
+straighten	ruler	?
+swap vert	swap-vertical
+turned in not	bookmark-outline
+wrap text	wrap

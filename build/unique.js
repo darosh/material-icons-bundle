@@ -25,7 +25,7 @@ meta.filter(m => m.link >= 0).forEach(m => {
   const sameShape = meta.filter(n => n.link === m.link && n.id !== m.id)
   const alt = sameShape.find(n => n.name === m.name + ' alt')
 
-  if(alt) {
+  if (alt) {
     console.log(`Merging alt: ${alt.name}`)
     merge(m, alt)
   }
@@ -89,6 +89,30 @@ meta.forEach((m, i) => {
   }
 })
 
+const potential = fs.readFileSync('./build/potential.tsv', 'utf8').split('\n').filter(d => d).reduce((r, i) => {
+  const s = i.split('\t')
+  const n = s.shift().replace(/_/g, ' ').replace(/^(\d)/, ' $1')
+  s[0] = s[0].replace(/-/g, ' ')
+  r[n] = s.filter(d => d)
+  return r
+}, {})
+
+meta.forEach(m => {
+  if (potential[m.name]) {
+    const p = potential[m.name]
+    const n = p[0]
+    const f = meta.find(d => (d.original === n || d.name === n))
+
+    if (!f) {
+      console.error('Missing potential', m.name)
+    } else {
+      p[0] = f.id
+    }
+
+    m.potential = p
+  }
+})
+
 console.log('Writing meta/meta.json')
 fs.writeFileSync('meta/meta.json', compact(meta, {maxLength: 4096}))
 
@@ -113,11 +137,17 @@ function merge (m, t) {
     }
   }
 
-  if(t.merged) {
+  if (t.merged) {
     throw '!!!!'
   }
 
-  t.merged = {name: m.name, author: m.author, source: m.source, data: m.name === t.name ? m.data : undefined, exact: m.exact}
+  t.merged = {
+    name: m.name,
+    author: m.author,
+    source: m.source,
+    data: m.name === t.name ? m.data : undefined,
+    exact: m.exact
+  }
 }
 
 function update () {
