@@ -780,6 +780,9 @@
         },
         reduceSource: {
           'Distance': 'similar'
+        },
+        reducerSorter: {
+          'Distance': false
         }
       }
     },
@@ -1010,6 +1013,7 @@
         }
 
         let s
+
         if (this.reduceSource[this.groupBy]) {
           s = this[this.reduceSource[this.groupBy]]
 
@@ -1022,9 +1026,11 @@
 
         const reduced = s.reduce(this.reducer[this.groupBy], {})
 
-        Object.keys(reduced).forEach((c) => {
-          reduced[c].sort(this.sorter[this.sortBy])
-        })
+        if(this.reducerSorter[this.groupBy] !== false) {
+          Object.keys(reduced).forEach((c) => {
+            reduced[c].sort(this.sorter[this.sortBy])
+          })
+        }
 
         return this.groupSort[this.groupBy](Object.keys(reduced)).map(key => ({name: key, value: reduced[key]}))
       },
