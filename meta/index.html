@@ -184,6 +184,39 @@
       fill: #1976d2 !important;
       fill-opacity: 0.5 !important;
     }
+
+    .grid {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    /**:hover > .grid {*/
+      /*z-index: 10;*/
+    /*}*/
+
+    .grid rect {
+      stroke-width: 0.2;
+      stroke: #1976d2;
+      stroke-opacity: 0.6;
+      fill: none;
+    }
+
+    .grid line {
+      stroke-width: 0.05;
+      stroke: #1976d2;
+      stroke-opacity: 0.3;
+    }
+
+    .grid line.key {
+      stroke-width: 0.1;
+      stroke-opacity: 0.6;
+    }
+
+    .grid line.border {
+      stroke-width: 0.2;
+      stroke-opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -204,7 +237,10 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class=" text-xs-center">
-          <div style="display: inline-block;" class="checker swap-wrap">
+          <div @click="gridType = (gridType + 1) % 3" style="display: inline-block;" class="swap-wrap"
+               :class="{checker: gridType === 1}">
+            <svg v-if="gridType === 0" viewBox="0 0 24 24" width="240" height="240" v-html="gridImage"
+                 class="grid"></svg>
             <transition-group name="swap" mode="out-in">
               <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
             </transition-group>
@@ -454,18 +490,18 @@
     </v-container>
   </v-content>
 </v-app>
-<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
-<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
+<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>-->
+<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
 <!--<script src="../build/duplicates.conf.js"></script>-->
 <script async>
-  const START = Date.now()
   const ICONS = fetch('./meta.json')
   const SIMILAR = fetch('./similar.json')
   const BAR = getBarWidth()
+  const GRID = getIconGrid()
 
   function getBarWidth () {
     // Based on: https://davidwalsh.name/detect-scrollbar-width
@@ -475,6 +511,18 @@
     const bar = scrollDiv.offsetWidth - scrollDiv.clientWidth
     document.body.removeChild(scrollDiv)
     return bar
+  }
+
+  function getIconGrid () {
+    const grid = 24
+    const keys = {8: 1, 12: 1, 16: 1}
+    const arr = new Array(grid + 1).fill(0).map((d, i) => i)
+    const rects = [[20, 16, 2], [16, 20, 2], [18, 18, 2], [20, 20, 10], [10, 10, 5]]
+    return `${arr.map(i => `<line class="${keys[i] && 'key'} ${!(i % grid) && 'border'}" x1="0" y1="${i}" x2="24" y2="${i}"/>`).join('')}`
+      + `${arr.map(i => `<line class="${keys[i] && 'key'} ${!(i % grid) && 'border'}" y1="0" x1="${i}" y2="24" x2="${i}"/>`).join('')}`
+      + `${rects.map(i => `<rect width="${i[0]}" height="${i[1]}" rx="${i[2]}" ry="${i[2]}" x="${(grid - i[0]) / 2}" y="${(grid - i[1]) / 2}"/>`).join('')}`
+      + '<line class="key" x1="0" y1="0" x2="24" y2="24"/>'
+      + '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
   }
 </script>
 <script>
@@ -543,6 +591,8 @@
         selectedText: '',
         groups,
         compare: null,
+        gridImage: GRID,
+        gridType: 0,
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
         ],
