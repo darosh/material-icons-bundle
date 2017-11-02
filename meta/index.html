@@ -221,15 +221,19 @@
     .status-4 {
       background-color: rgba(200, 230, 201, 0.6)
     }
+
     .status-2 {
       background-color: rgba(187, 222, 251, 0.6)
     }
+
     .status-3 {
       background-color: rgba(225, 190, 231, 0.6)
     }
+
     .status-1 {
       background-color: rgba(255, 236, 179, 0.6)
     }
+
     .status-0 {
       background-color: rgba(255, 205, 210, 0.6)
     }
@@ -253,9 +257,10 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class=" text-xs-center">
-          <div @click="gridType = (gridType + 1) % 3" style="display: inline-block;" class="swap-wrap"
+          <div @click="gridType = (gridType + 1) % 5" style="display: inline-block;" class="swap-wrap"
                :class="{checker: gridType === 1}">
-            <svg v-if="gridType === 0" viewBox="0 0 24 24" width="240" height="240" v-html="gridImage"
+            <svg v-if="gridType > 1" viewBox="0 0 24 24" width="240" height="240"
+                 v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
                  class="grid"></svg>
             <transition-group name="swap" mode="out-in">
               <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
@@ -517,6 +522,8 @@
   const ICONS = fetch('./meta.json')
   const SIMILAR = fetch('./similar.json')
   const BAR = getBarWidth()
+  const GRID_FULL = getIconGrid(2)
+  const GRID_RICH = getIconGrid(1)
   const GRID = getIconGrid()
 
   function getBarWidth () {
@@ -529,16 +536,20 @@
     return bar
   }
 
-  function getIconGrid () {
+  function getIconGrid (rich) {
     const grid = 24
     const keys = {0: 'border', 8: 'key', 12: 'key', 16: 'key', 24: 'border'}
-    const arr = new Array(grid + 1).fill(0).map((d, i) => i)
+    const arr = rich !== 1 ? new Array(grid + 1).fill(0).map((d, i) => i) : [0, 24]
     const rects = [[20, 16, 2], [16, 20, 2], [18, 18, 2], [20, 20, 10], [10, 10, 5]]
     return `${arr.map(i => `<line class="${keys[i] || ''}" x1="0" y1="${i}" x2="24" y2="${i}"/>`).join('')}`
       + `${arr.map(i => `<line class="${keys[i] || ''}" y1="0" x1="${i}" y2="24" x2="${i}"/>`).join('')}`
-      + `${rects.map(i => `<rect width="${i[0]}" height="${i[1]}" rx="${i[2]}" ry="${i[2]}" x="${(grid - i[0]) / 2}" y="${(grid - i[1]) / 2}"/>`).join('')}`
-      + '<line class="key" x1="0" y1="0" x2="24" y2="24"/>'
-      + '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
+      + (rich > 0
+        ? `${rects.map(i => `<rect width="${i[0]}" height="${i[1]}" rx="${i[2]}" ry="${i[2]}" x="${(grid - i[0]) / 2}" y="${(grid - i[1]) / 2}"/>`).join('')}`
+        : '')
+      + (rich > 1
+        ? '<line class="key" x1="0" y1="0" x2="24" y2="24"/>'
+        + '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
+        : '')
   }
 </script>
 <script>
@@ -608,6 +619,8 @@
         groups,
         compare: null,
         gridImage: GRID,
+        gridImageRich: GRID_RICH,
+        gridImageFull: GRID_FULL,
         gridType: 1,
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
