@@ -483,7 +483,7 @@
                   <td :class="props.item.googleClass">
                     <a class="black--text"
                        :href="'https://github.com/google/material-design-icons/blob/master/' + props.item.googleFolder + '/svg/production/ic_' + props.item.google + '_24px.svg'"
-                       target="_blank" role="noopener">{{props.item.google}}</a>
+                       target="_blank" role="noopener">{{props.item.google}}</a> <span class="grey--text text--darken-1">{{props.item.googleAliases}}</span>
                   </td>
                   <td :class="props.item.communityClass">
                     <app-icon :svg="props.item.communityData" v-if="props.item.communityData" size="24"></app-icon>
@@ -892,6 +892,15 @@
               return d.author.startsWith('Google') && d.data && !(d.link >= 0)
             })
 
+            const linkedBy = {}
+
+            this.filtered.filter(d => {
+              return (d.source === 'Google') && (d.link >= 0)
+            }).forEach(d => {
+              linkedBy[d.link] = linkedBy[d.link] || []
+              linkedBy[d.link].push(this.underscored(d.name.trim()))
+            })
+
             const compare = google.map(d => {
               const r = {
                 bundle: this.underscored(d.name),
@@ -900,6 +909,7 @@
 
               if (d.source === 'Google') {
                 r.google = this.underscored(d.name.trim())
+                r.googleAliases = linkedBy[d.id] ? '(' + linkedBy[d.id].join(', ') + ')' : ''
                 r.googleData = d.data
                 r.googleFolder = d.tags[0]
 
