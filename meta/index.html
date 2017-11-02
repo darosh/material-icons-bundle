@@ -486,7 +486,10 @@
           <template slot="expand" slot-scope="props">
             <v-card flat v-if="props.expanded">
               <v-card flat style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
-                      class="checker">
+                      :class="{checker: gridType === 1}" @click.native="gridType = (gridType + 1) % 5">
+                <svg v-if="gridType > 1" viewBox="0 0 24 24" width="240" height="240"
+                     v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
+                     class="grid"></svg>
                 <svg v-if="props.item.googleData" viewBox="0 0 24 24" width="240" height="240"
                      style="position: absolute; fill: #00d; fill-opacity: 0.4">
                   <g v-if="props.item.googleData[0] === '<'" v-html="props.item.googleData"></g>
