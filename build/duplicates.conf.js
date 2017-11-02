@@ -6,6 +6,24 @@
   }
 }(typeof self !== 'undefined' ? self : this, function () {
   const matches = {
+    // 2nd batch
+    // 'local play': 'ticket',
+    // 'local dining': 'silverware',
+    // 'lens': 'circle',
+    // 'schedule': 'clock',
+    // 'keyboard voice': 'microphone',
+    'keyboard arrow down': 'chevron down',
+    // 'directions subway': 'subway variant',
+    // 'add alarm': 'alarm plus',
+    // 'edit': 'pencil',
+    // 'room': 'map marker',
+    // 'euro symbol': 'currency eur',
+    // 'gavel': 'gavel',
+    // 'g translate': 'google translate',
+    // 'redeem': 'wallet giftcard',
+    // 'turned in not': 'bookmark outline',
+
+    // 1nd batch
     'airplanemode inactive': 'airplane off',
     'arrow drop down circle': 'arrow down drop circle',
     'arrow drop up': 'menu up',
@@ -29,7 +47,8 @@
     'thumbs up down': 'thumbs up down',
     'touch app': 'gesture tap',
     'view headline': 'view headline',
-    'work': 'briefcase'
+    'work': 'briefcase',
+    'keyboard arrow left': 'chevron left'
     // 'sort by alpha': 'sort alphabetical', // for num sort consistency
   }
 
