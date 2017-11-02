@@ -192,7 +192,7 @@
     }
 
     /**:hover > .grid {*/
-      /*z-index: 10;*/
+    /*z-index: 10;*/
     /*}*/
 
     .grid rect {
@@ -216,6 +216,22 @@
     .grid line.border {
       stroke-width: 0.4;
       stroke-opacity: 0.8;
+    }
+
+    .status-4 {
+      background-color: rgba(200, 230, 201, 0.6)
+    }
+    .status-2 {
+      background-color: rgba(187, 222, 251, 0.6)
+    }
+    .status-3 {
+      background-color: rgba(225, 190, 231, 0.6)
+    }
+    .status-1 {
+      background-color: rgba(255, 236, 179, 0.6)
+    }
+    .status-0 {
+      background-color: rgba(255, 205, 210, 0.6)
     }
   </style>
 </head>
@@ -864,22 +880,6 @@
                 r.communityData = d.data
               }
 
-              r.googleClass = {
-                'green lighten-4': r.exact === true,
-                'amber lighten-4': r.exact === 1,
-                'red lighten-4': r.exact === -1,
-                'grey lighten-4': r.community && !r.google,
-                'blue lighten-4': !r.community && r.google
-              }
-
-              r.communityClass = {
-                'green lighten-4': r.exact === true,
-                'amber lighten-4': r.exact === 1,
-                'red lighten-4': r.exact === -1,
-                'grey lighten-4': !r.community && r.google,
-                'purple lighten-4': r.community && !r.google
-              }
-
               r.status = r.exact === true
                 ? 4
                 : r.exact === 1
@@ -889,6 +889,9 @@
                     : !r.community && r.google
                       ? 2
                       : 3
+
+              r.googleClass = r.community && !r.google ? '' : ('status-' + r.status)
+              r.communityClass = !r.community && r.google ? '' : ('status-' + r.status)
 
               r.note = {
                 4: 'exact',
