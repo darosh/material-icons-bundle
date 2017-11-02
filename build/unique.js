@@ -101,15 +101,14 @@ meta.forEach(m => {
   if (potential[m.name]) {
     const p = potential[m.name]
     const n = p[0]
-    const f = meta.find(d => (d.original === n || d.name === n))
+    const f = meta.find(d => (d.original === n || d.name === n) && (d.source === 'Community' || (d.merged)))
 
     if (!f) {
       console.error('Missing potential', m.name)
     } else {
       p[0] = f.id
+      m.potential = p
     }
-
-    m.potential = p
   }
 })
 
