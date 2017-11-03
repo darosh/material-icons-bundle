@@ -191,10 +191,6 @@
       top: 0;
     }
 
-    /**:hover > .grid {*/
-    /*z-index: 10;*/
-    /*}*/
-
     .grid rect {
       stroke-width: 0.2;
       stroke: #1976d2;
@@ -241,6 +237,19 @@
     .status-5 {
       background-color: rgba(200, 230, 201, 0.6);
     }
+
+    .points {
+      position: absolute;
+      left: -10px;
+      top: -10px;
+      z-index: 777;
+    }
+
+    .points rect {
+      stroke: rgba(255, 0, 0, 0.9);
+      stroke-width: 0.08;
+      fill: rgba(255, 0, 0, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -261,14 +270,19 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class=" text-xs-center">
-          <div @click="gridType = (gridType + 1) % 5" style="display: inline-block;" class="swap-wrap"
+          <div @click="gridType = (gridType + 1) % 6" style="display: inline-block;" class="swap-wrap"
                :class="{checker: gridType === 1}">
-            <svg v-if="gridType > 1" viewBox="0 0 24 24" width="240" height="240"
+            <svg v-if="gridType > 1 && gridType < 5" viewBox="0 0 24 24" width="240" height="240"
                  v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
                  class="grid"></svg>
             <transition-group name="swap" mode="out-in">
               <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
             </transition-group>
+            <svg v-if="gridType === 5" viewBox="-1 -1 26 26" width="260" height="260" class="points">
+              <rect v-for="p in points.points" :x="p[0] - .4" :y="p[1] - .4" rx="0.2" ry="0.2" width="0.8"
+                    height="0.8"/>
+              <!--<path :d="points.abs" fill="red"></path>-->
+            </svg>
           </div>
         </div>
       </div>
@@ -483,7 +497,8 @@
                   <td :class="props.item.googleClass">
                     <a class="black--text"
                        :href="'https://github.com/google/material-design-icons/blob/master/' + props.item.googleFolder + '/svg/production/ic_' + props.item.google + '_24px.svg'"
-                       target="_blank" role="noopener">{{props.item.google}}</a> <span class="grey--text text--darken-1">{{props.item.googleAliases}}</span>
+                       target="_blank" role="noopener">{{props.item.google}}</a> <span
+                    class="grey--text text--darken-1">{{props.item.googleAliases}}</span>
                   </td>
                   <td :class="props.item.communityClass">
                     <app-icon :svg="props.item.communityData" v-if="props.item.communityData" size="24"></app-icon>
@@ -509,7 +524,7 @@
                 <v-card flat v-if="props.expanded">
                   <v-card flat style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
                           :class="{checker: gridType === 1}" @click.native="gridType = (gridType + 1) % 5">
-                    <svg v-if="gridType > 1" viewBox="0 0 24 24" width="240" height="240"
+                    <svg v-if="gridType > 1 && gridType < 5" viewBox="0 0 24 24" width="240" height="240"
                          v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
                          class="grid"></svg>
                     <svg v-if="props.item.googleData" viewBox="0 0 24 24" width="240" height="240"
@@ -578,6 +593,156 @@
         + '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
         : '')
   }
+</script>
+<script>
+  const parsePath = (function () {
+    const length = {
+      m: ['x', 'y'],
+      l: ['x', 'y'],
+      h: ['x'],
+      v: ['y'],
+      c: ['x1', 'y1', 'x2', 'y2', 'x', 'y'],
+      s: ['x2', 'y2', 'x', 'y'],
+      q: ['x1', 'y1', 'x', 'y'],
+      t: ['x', 'y'],
+      a: ['rx', 'ry', 'xAxisRotation', 'largeArcFlag', 'sweepFlag', 'x', 'y'],
+      z: []
+    }
+
+    const segment = /([astvzqmhlc])([^astvzqmhlc]*)/ig
+
+    const number = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
+
+    function parseValues (args) {
+      const numbers = args.match(number)
+      return numbers ? numbers.map(Number) : []
+    }
+
+    // https://github.com/jkroso/parse-svg-path/blob/master/index.js
+    function parse (path) {
+      var data = []
+      path.replace(segment, function (_, command, args) {
+        var type = command.toLowerCase()
+        args = parseValues(args)
+
+        // overloaded moveTo
+        if (type === 'm' && args.length > 2) {
+          data.push([command].concat(args.splice(0, 2)))
+          type = 'l'
+          command = command === 'm' ? 'l' : 'L'
+        }
+
+        while (true) {
+          if (args.length === length[type].length) {
+            args.unshift(command)
+            return data.push(args)
+          }
+          if (args.length < length[type].length) throw new Error('malformed path data')
+          data.push([command].concat(args.splice(0, length[type].length)))
+        }
+      })
+      return data
+    }
+
+    function getAst (d) {
+      const p = parse(d)
+
+      return p.map(d => {
+        const type = d.shift()
+        const t = type.toLowerCase()
+
+        return {
+          type,
+          params: d.reduce((r, v, i) => {
+            r[length[t][i]] = v
+            return r
+          }, {})
+        }
+      })
+    }
+
+    // https://github.com/jxnblk/path-ast/blob/master/lib/to-absolute.js
+    function abs (d) {
+      const ast = getAst(d)
+      var lastX = 0
+      var lastY = 0
+      const X_REGEX = /^x[0-9]?$/
+      const Y_REGEX = /^y[0-9]?$/
+
+      var firstX = 0
+      var firstY = 0
+
+      let first = true
+
+      return ast.map(function (command) {
+        console.log(command)
+        const params = command.params
+
+        if (command.type.toLowerCase() === 'z') {
+          lastX = firstX
+          lastY = firstY
+        }
+
+        if (command.type.match(/[A-Z]/)) {
+          lastX = isNaN(params.x) ? lastX : params.x
+          lastY = isNaN(params.y) ? lastY : params.y
+        } else {
+          command.type = command.type.toUpperCase()
+          length[command.type.toLowerCase()].forEach(function (key) {
+            const param = params[key]
+
+            if (key.match(X_REGEX)) {
+              params[key] = lastX + param
+            }
+
+            if (key.match(Y_REGEX)) {
+              params[key] = lastY + param
+            }
+          })
+          lastX = isNaN(params.x) ? lastX : params.x
+          lastY = isNaN(params.y) ? lastY : params.y
+        }
+
+        if (first) {
+          firstX = lastX
+          firstY = lastY
+          first = false
+        }
+
+        if (command.type.toLowerCase() === 'z') {
+          first = true
+        }
+
+        return command
+      })
+    }
+
+    function toString (ast) {
+      return ast.map(d => d.type + ' ' + length[d.type.toLowerCase()].map(k => d.params[k]).join(' ')).join(' ')
+    }
+
+    return function points (d) {
+      const ast = abs(d)
+      let prev = [0, 0]
+
+      const points = Object.keys(ast
+        .filter(function (command) {
+          return Object.keys(command.params).length
+        })
+        .map(function ({params: {x, y}}) {
+          return prev = [isNaN(x) ? prev[0] : x, isNaN(y) ? prev[1] : y]
+        }).reduce((r, i) => {
+          r[i] = true
+          return r
+        }, {})).map(d => d.split(','))
+
+      return {
+        ast,
+        points,
+        abs: toString(ast)
+      }
+    }
+  })()
 </script>
 <script>
   Vue.use(VueSmoothScroll)
@@ -650,6 +815,7 @@
         gridImageRich: GRID_RICH,
         gridImageFull: GRID_FULL,
         gridType: 1,
+        points: [],
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
         ],
@@ -1126,6 +1292,8 @@
           Vue.nextTick(() => {
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
           })
+
+          this.points = parsePath(this.linked.data[0] === '<' ? '' : this.linked.data)
         }
       },
       groupBy () {this.getLines()},
