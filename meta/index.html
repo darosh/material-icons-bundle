@@ -1052,12 +1052,13 @@
             if (l === 0 || l === 1) {
               c = l
             } else {
-              const breakPoints = [2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+              const breakPoints = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
               let i = 0
 
               while (i < breakPoints.length && l > breakPoints[i]) {
                 i++
               }
+              breakPoints[0] = 2
               c = breakPoints[i - 1] + (breakPoints[i] ? '\u2009–\u2009' + (breakPoints[i] - 1) : '+')
             }
 
@@ -1078,7 +1079,7 @@
           'Duplicates': (d) => d,
           'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
           'Points': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
-          'Uniqueness': (d) => d
+          'Uniqueness': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
         },
         reduceSource: {
           'Distance': 'similar'
