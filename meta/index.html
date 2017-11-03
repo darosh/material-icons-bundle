@@ -675,7 +675,6 @@
       let first = true
 
       return ast.map(function (command) {
-        console.log(command)
         const params = command.params
 
         if (command.type.toLowerCase() === 'z') {
@@ -737,9 +736,9 @@
         }, {})).map(d => d.split(','))
 
       return {
-        ast,
+        // ast,
         points,
-        abs: toString(ast)
+        // abs: toString(ast)
       }
     }
   })()
@@ -815,7 +814,6 @@
         gridImageRich: GRID_RICH,
         gridImageFull: GRID_FULL,
         gridType: 1,
-        points: [],
         colors: [
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
         ],
@@ -1278,11 +1276,16 @@
       },
       showCompare () {
         return this.$route.path === '/compare'
+      },
+      points  () {
+        if(this.icon >= 0) {
+          return parsePath(this.linked.data[0] === '<' ? '' : this.linked.data)
+        }
       }
     },
     watch: {
       icon (value) {
-        if (value) {
+        if (value >= 0) {
           if (this.selectedText.split(/[\n,]/).map(d => d.trim()).indexOf(this.google) === -1) {
             this.selectedText += (this.selectedText ? ',\n' : '') + this.google
           }
@@ -1292,8 +1295,6 @@
           Vue.nextTick(() => {
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
           })
-
-          this.points = parsePath(this.linked.data[0] === '<' ? '' : this.linked.data)
         }
       },
       groupBy () {this.getLines()},
