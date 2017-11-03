@@ -345,10 +345,11 @@
                   :items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"
                   prepend-icon="tonality"></v-select>
         <v-divider></v-divider>
-        <div class="pl-3 pt-2 pb-2">
-          <v-checkbox color="red darken-2" hide-details label="Highlight community"
-                      v-model="highlight"></v-checkbox>
-        </div>
+      </template>
+      <div class="pl-3 pt-2 pb-2" v-if="icon !== null || !showCompare">
+        <v-checkbox color="red darken-2" hide-details label="Highlight community" v-model="highlight"></v-checkbox>
+      </div>
+      <template v-if="!showCompare">
         <v-divider></v-divider>
         <v-expansion-panel expand class="elevation-0">
           <v-expansion-panel-content ripple>
@@ -566,8 +567,8 @@
     </v-container>
   </v-content>
 </v-app>
-<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
-<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
+<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>-->
+<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
