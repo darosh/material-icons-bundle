@@ -444,7 +444,13 @@
     </v-btn>
   </v-toolbar>
   <v-content :class="{highlight : highlight}" class="no"
-             :style="{display: !compare && !((showHome || showChart) && icons && similar) ? 'flex' : ''}">
+             :style="{display: showLoading ? 'flex' : ''}">
+    <v-container v-if="showLoading" fluid fill-height>
+      <v-layout justify-center align-center>
+        <v-progress-circular style="margin-top: -48px" indeterminate color="primary" :size="80"
+                             :width="3"></v-progress-circular>
+      </v-layout>
+    </v-container>
     <virtual-scroller v-if="showHome && icons && similar"
                       ref="scroller" tabindex="1" buffer="64" pool-size="64" class="gpu scroller"
                       :items="lines"
@@ -479,7 +485,7 @@
         </v-layout>
       </template>
     </virtual-scroller>
-    <v-container v-else-if="compare" fill-height fluid>
+    <v-container v-else-if="showCompare && compare" fill-height fluid>
       <v-layout column style="max-width: 100%">
         <v-radio-group hide-details v-model="compareFilter" row class="mt-2 ml-4 mr-4 pa-0 wrap">
           <v-layout row wrap>
@@ -574,14 +580,13 @@
         </v-layout>
       </v-layout>
     </v-container>
-    <v-container v-if="showChart">
-      Not implemented yet
-    </v-container>
-    <v-container v-else fluid fill-height>
-      <v-layout justify-center align-center>
-        <v-progress-circular style="margin-top: -48px" indeterminate color="primary" :size="80"
-                             :width="3"></v-progress-circular>
-      </v-layout>
+    <v-container v-else-if="showChart" fill-height fluid>
+      <div>
+        Not implemented yet
+        <div>
+          {{chart}}
+        </div>
+      </div>
     </v-container>
   </v-content>
 </v-app>
@@ -1044,14 +1049,6 @@
               return r
             }
 
-            this.similarLookup = this.similarLookup || this.similar.reduce((r, i) => {
-              r[i[0]] = r[i[0]] || 0
-              r[i[0]]++
-              r[i[1]] = r[i[1]] || 0
-              r[i[1]]++
-              return r
-            }, {})
-
             // const l = this.similar.filter(d => d[0] === icon.id || d[1] === icon.id).length
             const l = this.similarLookup[icon.id] || 0
             let c
@@ -1127,7 +1124,7 @@
         }
       },
       scrolling () {
-        document.getElementsByTagName('html')[0].className = this.showCompare ? '' : 'no-scroll'
+        document.getElementsByTagName('html')[0].className = !this.showHome ? '' : 'no-scroll'
       },
       scroll (name) {
         this.$refs.scroller.scrollToItem(this.lines.indexOf(this.lines.find(d => d.name === name)))
@@ -1180,7 +1177,7 @@
           return null
         }
 
-        this.compare = null
+        // this.compare = null
 
         Vue.nextTick(() => {
           setTimeout(() => {
@@ -1456,18 +1453,42 @@
         return this.compareFilter === 'all' ? this.compare : this.compare.filter(d => d.note === this.compareFilter)
       },
       showHome () {
-        return this.$route.path === '/'
+        return (this.$route.path === '/') && this.icons && !!this.similar
       },
       showChart () {
-        return this.$route.path === '/chart'
+        return (this.$route.path === '/chart') && this.icons && !!this.similar
       },
       showCompare () {
-        return this.$route.path === '/compare'
+        return (this.$route.path === '/compare') && !!this.icons
+      },
+      showLoading () {
+        return !(this.icons && this.similar) || (this.showCompare && !this.compare)
       },
       points () {
         if (this.icon !== null) {
           return parsePath(this.linked.data)
         }
+      },
+      similarLookup () {
+        return this.similar.reduce((r, i) => {
+          r[i[0]] = r[i[0]] || 0
+          r[i[0]]++
+          r[i[1]] = r[i[1]] || 0
+          r[i[1]]++
+          return r
+        }, {})
+      },
+      chart () {
+        if (!this.similar) {
+          return null
+        }
+
+        const w = Object.keys(this.similarLookup).map(k => ({
+          icon: k,
+          count: this.similarLookup[k]
+        })).sort((a, b) => b.count - a.count)
+
+        return w
       }
     },
     watch: {
@@ -1520,7 +1541,6 @@
       icons () {
         this.fromRoute()
         this.getLines()
-        this.getCompare()
       },
       similar () {
         this.fromRoute()
