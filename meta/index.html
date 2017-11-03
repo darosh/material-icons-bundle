@@ -417,6 +417,7 @@
     <virtual-scroller v-if="!showCompare && icons && similar"
                       ref="scroller" tabindex="1" buffer="64" pool-size="64" class="gpu scroller"
                       :items="lines"
+                      style="width: auto"
                       :style="{'margin-left': margin + 'px'}"
                       :item-height="grid">
       <template slot-scope="props">
@@ -784,7 +785,7 @@
     el: '#app',
     router,
     data () {
-      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Distance', 'Density', 'Shapes', 'Complexity']
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points']
 
       if (window.IconDuplicates) {
         groups.push('Duplicates?')
@@ -945,6 +946,28 @@
             r[c].push(icon.id)
 
             return r
+          },'Points': (r, icon) => {
+            if (icon.link >= 0) {
+              return r
+            }
+
+            const l = parsePath(icon.data[0] === '<' ? '' : icon.data).points.length
+
+            const breakPoints = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+            let i = 0
+
+            while (i < breakPoints.length && l > breakPoints[i]) {
+              i++
+            }
+
+            const c = icon.data[0] === '<'
+              ? 'Multi-shape'
+              : breakPoints[i - 1] + (breakPoints[i] ? '\u2009–\u2009' + (breakPoints[i] - 1) : '+')
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
           }
         },
         groupSort: {
@@ -956,7 +979,8 @@
           'Shapes': (d) => d,
           'Distance': (d) => d,
           'Duplicates': (d) => d,
-          'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
+          'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
+          'Points': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
         },
         reduceSource: {
           'Distance': 'similar'
