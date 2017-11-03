@@ -327,8 +327,8 @@
       </div>
       <template v-if="!showCompare">
         <v-divider></v-divider>
-        <v-select class="elevation-0" v-ripple="true" solo :items="['All', 'Community', 'Google']" v-model="source"
-                  prepend-icon="people_outline" :class="{'grey lighten-4': source !== 'All'}"></v-select>
+        <v-select class="elevation-0" v-ripple="true" solo :items="sources" v-model="source"
+                  prepend-icon="people_outline" :class="{'grey lighten-4': source !== sourceDefault}"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo
                   :items="groups"
@@ -567,14 +567,15 @@
     </v-container>
   </v-content>
 </v-app>
-<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>-->
-<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
+<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
+<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
 <!--<script src="../build/duplicates.conf.js"></script>-->
 <script async>
+  /* eslint-disable no-unused-vars */
   const ICONS = fetch('./meta.json')
   const SIMILAR = fetch('./similar.json')
   const BAR = getBarWidth()
@@ -597,18 +598,19 @@
     const keys = {0: 'border', 8: 'key', 12: 'key', 16: 'key', 24: 'border'}
     const arr = rich !== 1 ? new Array(grid + 1).fill(0).map((d, i) => i) : [0, 24]
     const rects = [[20, 16, 2], [16, 20, 2], [18, 18, 2], [20, 20, 10], [10, 10, 5]]
-    return `${arr.map(i => `<line class="${keys[i] || ''}" x1="0" y1="${i}" x2="24" y2="${i}"/>`).join('')}`
-      + `${arr.map(i => `<line class="${keys[i] || ''}" y1="0" x1="${i}" y2="24" x2="${i}"/>`).join('')}`
-      + (rich > 0
+    return `${arr.map(i => `<line class="${keys[i] || ''}" x1="0" y1="${i}" x2="24" y2="${i}"/>`).join('')}` +
+      `${arr.map(i => `<line class="${keys[i] || ''}" y1="0" x1="${i}" y2="24" x2="${i}"/>`).join('')}` +
+      (rich > 0
         ? `${rects.map(i => `<rect width="${i[0]}" height="${i[1]}" rx="${i[2]}" ry="${i[2]}" x="${(grid - i[0]) / 2}" y="${(grid - i[1]) / 2}"/>`).join('')}`
-        : '')
-      + (rich > 1
-        ? '<line class="key" x1="0" y1="0" x2="24" y2="24"/>'
-        + '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
+        : '') +
+      (rich > 1
+        ? '<line class="key" x1="0" y1="0" x2="24" y2="24"/>' +
+        '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
         : '')
   }
 </script>
 <script>
+  // eslint-disable-next-line no-unused-vars
   const parsePath = (function () {
     const length = {
       m: ['x', 'y'],
@@ -730,9 +732,10 @@
       })
     }
 
-    function toString (ast) {
-      return ast.map(d => d.type + ' ' + length[d.type.toLowerCase()].map(k => d.params[k]).join(' ')).join(' ')
-    }
+    // abs path test
+    // function toString (ast) {
+    //   return ast.map(d => d.type + ' ' + length[d.type.toLowerCase()].map(k => d.params[k]).join(' ')).join(' ')
+    // }
 
     return function points (d) {
       const ast = abs(d)
@@ -743,7 +746,7 @@
           return Object.keys(command.params).length
         })
         .map(function ({params: {x, y}}) {
-          return prev = [isNaN(x) ? prev[0] : x, isNaN(y) ? prev[1] : y]
+          return (prev = [isNaN(x) ? prev[0] : x, isNaN(y) ? prev[1] : y])
         }).reduce((r, i) => {
           r[i] = true
           return r
@@ -751,13 +754,17 @@
 
       return {
         // ast,
-        points,
+        points
         // abs: toString(ast)
       }
     }
   })()
 </script>
 <script>
+  /* global ICONS, SIMILAR, BAR, GRID_FULL, GRID_RICH, GRID */
+  /* global parsePath */
+  /* global Vue, VueRouter, VueSmoothScroll */
+
   Vue.use(VueSmoothScroll)
 
   const router = new VueRouter({
@@ -794,6 +801,7 @@
     }
   })
 
+  // eslint-disable-next-line no-new
   new Vue({
     el: '#app',
     router,
@@ -804,6 +812,8 @@
         groups.push('Duplicates?')
       }
 
+      const sourceDefault = 'All'
+
       return {
         icons: null,
         similar: null,
@@ -813,7 +823,9 @@
         compareFilter: 'all',
         groupBy: 'Tags',
         sortBy: 'Name',
-        source: 'All',
+        sources: ['All', 'Community', 'Google'],
+        source: sourceDefault,
+        sourceDefault,
         theme: 'Light',
         size: 'Medium',
         highlight: false,
@@ -845,8 +857,8 @@
         rowsPerPage: [100, 500, {text: 'All', value: -1}],
         sorter: {
           Name: (a, b) => this.icons[a].name.localeCompare(this.icons[b].name),
-          Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id)
-            - (this.icons[b].link >= 0 ? this.icons[b].link : this.icons[b].id),
+          Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id) -
+            (this.icons[b].link >= 0 ? this.icons[b].link : this.icons[b].id),
           Density: (a, b) => {
             let aa = (this.icons[a].link >= 0 ? this.icons[this.icons[a].link] : this.icons[a])
             let bb = (this.icons[b].link >= 0 ? this.icons[this.icons[b].link] : this.icons[b])
@@ -959,7 +971,8 @@
             r[c].push(icon.id)
 
             return r
-          }, 'Points': (r, icon) => {
+          },
+          'Points': (r, icon) => {
             if (icon.link >= 0) {
               return r
             }
@@ -1172,6 +1185,25 @@
             this.compare = Object.freeze(compare)
           })
         })
+      },
+      route () {
+        this.$router.push({
+          path: this.$route.path,
+          query: {
+            icon: this.meta.name,
+            source: this.source !== this.sourceDefault ? this.source : null
+          }
+        })
+      },
+      fromRoute () {
+        const q = this.$route.query
+
+        if (q.icon) {
+          const f = this.icons.find(d => d.name === q.icon)
+          this.icon = f ? f.id : null
+        }
+
+        this.source = q.source || this.sourceDefault
       }
     },
     computed: {
@@ -1228,11 +1260,11 @@
         const s = this.search.toLowerCase().replace(/[_]/g, ' ')
 
         return icons.filter(d => {
-          return d.name.includes(s)
-            || (d.category && d.category.includes(s))
-            || (!d.category && !d.tags && (s === 'other'))
-            || (d.tags && d.tags.filter(d => d.includes(s)).length)
-            || (d.aliases && d.aliases.filter(d => d.includes(s)).length)
+          return d.name.includes(s) ||
+            (d.category && d.category.includes(s)) ||
+            (!d.category && !d.tags && (s === 'other')) ||
+            (d.tags && d.tags.filter(d => d.includes(s)).length) ||
+            (d.aliases && d.aliases.filter(d => d.includes(s)).length)
         })
       },
       sorted () {
@@ -1332,12 +1364,17 @@
           Vue.nextTick(() => {
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
           })
+
+          this.route()
         }
       },
-      groupBy () {this.getLines()},
-      sortBy () {this.getLines()},
-      source () {this.getLines()},
-      size () {this.getLines()},
+      groupBy () { this.getLines() },
+      sortBy () { this.getLines() },
+      source () {
+        this.route()
+        this.getLines()
+      },
+      size () { this.getLines() },
       search () {
         this.getLines()
         this.getCompare()
@@ -1346,14 +1383,17 @@
         this.getLines()
         this.getCompare()
       },
-      similar () {this.getLines()},
+      similar () { this.getLines() },
       showCompare () {
         this.scrolling()
         this.getCompare()
       },
       $vuetify: {
-        handler () {this.getLines()},
+        handler () { this.getLines() },
         deep: true
+      },
+      $route () {
+        this.fromRoute()
       }
     }
   })
