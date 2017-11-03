@@ -1293,12 +1293,16 @@
       fromRoute () {
         const q = this.$route.query
 
-        if (q.icon && this.icons) {
+        if(q.icon && !this.icons) {
+          return
+        }
+
+        if (q.icon) {
           const n = q.icon.replace(/_/g, ' ')
           const f = this.icons.find(d => d.name === n)
           this.icon = f ? f.id : null
         } else {
-          return
+          this.icon = null
         }
 
         this.source = q.source || this.sourceDefault
@@ -1603,8 +1607,9 @@
         handler () { this.getLines() },
         deep: true
       },
-      $route () {
-        this.fromRoute()
+      $route: {
+        handler () { this.fromRoute() },
+        deep: true
       }
     }
   })
