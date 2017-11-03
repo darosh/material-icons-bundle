@@ -1315,8 +1315,15 @@
 
         const s = this.search.toLowerCase().replace(/[_]/g, ' ')
 
+        let rx = null
+
+        try {
+          rx = new RegExp(s)
+        } catch (ign) {
+        }
+
         return icons.filter(d => {
-          return d.name.includes(s) ||
+          return rx ? rx.test(d.name) : d.name.includes(s) ||
             (d.category && d.category.includes(s)) ||
             (!d.category && !d.tags && (s === 'other')) ||
             (d.tags && d.tags.filter(d => d.includes(s)).length) ||
