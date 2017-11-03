@@ -351,7 +351,7 @@
         <v-select class="elevation-0" v-ripple="true" solo :items="sorts" v-model="sortBy"
                   prepend-icon="sort" :class="{'grey lighten-4 filtering': sortBy !== 'Name'}"></v-select>
         <v-divider></v-divider>
-        <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
+        <v-select class="elevation-0" v-ripple="true" solo :items="sizes" v-model="size"
                   prepend-icon="aspect_ratio"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo
@@ -828,6 +828,7 @@
       const sourceDefault = 'All'
       const groupByDefault = 'Tags'
       const sortByDefault = 'Name'
+      const sizeDefault = 'Medium'
 
       return {
         icons: null,
@@ -845,7 +846,9 @@
         source: sourceDefault,
         sourceDefault,
         theme: 'Light',
-        size: 'Medium',
+        sizes: ['Small', 'Medium', 'Large'],
+        size: sizeDefault,
+        sizeDefault,
         highlight: false,
         no: true,
         drawer: window.innerWidth > 800,
@@ -1215,7 +1218,8 @@
             sort: this.sortBy !== this.sortByDefault ? this.sortBy : undefined,
             search: this.search ? this.search : undefined,
             grid: this.gridType !== 1 ? this.gridType : undefined,
-            community: this.highlight ? this.highlight : undefined
+            community: this.highlight ? this.highlight : undefined,
+            size: this.size !== this.sizeDefault ? this.size : undefined
           }
         })
       },
@@ -1234,6 +1238,7 @@
         this.search = q.search || ''
         this.gridType = !isNaN(q.grid) ? this.gridType : 1
         this.highlight = !!q.community
+        this.size = q.size || this.sizeDefault
       },
       setIcon (icon) {
         this.icon = this.icon !== icon ? icon : null
