@@ -1224,19 +1224,22 @@
         })
       },
       fromRoute () {
+        console.log('fromroute')
         const q = this.$route.query
 
         if (q.icon && this.icons) {
           const n = q.icon.replace(/_/g, ' ')
           const f = this.icons.find(d => d.name === n)
           this.icon = f ? f.id : null
+        } else {
+          return
         }
 
         this.source = q.source || this.sourceDefault
         this.groupBy = q.group || this.groupByDefault
         this.sortBy = q.sort || this.sortByDefault
         this.search = q.search || ''
-        this.gridType = !isNaN(q.grid) ? this.gridType : 1
+        this.gridType = q.grid ? parseInt(q.grid) : 1
         this.highlight = !!q.community
         this.size = q.size || this.sizeDefault
       },
