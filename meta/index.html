@@ -1233,7 +1233,7 @@
             group: this.groupBy !== this.groupByDefault ? this.groupBy : undefined,
             sort: this.sortBy !== this.sortByDefault ? this.sortBy : undefined,
             search: this.search ? this.search : undefined,
-            grid: this.gridType !== 1 ? this.gridType : undefined,
+            grid: this.gridType !== 1 ? this.gridType.toString() : undefined,
             community: this.highlight ? this.highlight : undefined,
             size: this.size !== this.sizeDefault ? this.size : undefined,
             filter: this.compareFilter !== 'all' ? this.compareFilter : undefined
