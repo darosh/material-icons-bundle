@@ -1361,7 +1361,7 @@
         return this.groupSort[this.groupBy](Object.keys(reduced)).map(key => ({name: key, value: reduced[key]}))
       },
       similarIcons () {
-        if (!this.icon || !this.similar) {
+        if (!this.linked || !this.similar) {
           return null
         }
 
