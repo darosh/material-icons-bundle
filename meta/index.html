@@ -750,7 +750,24 @@
     //   return ast.map(d => d.type + ' ' + length[d.type.toLowerCase()].map(k => d.params[k]).join(' ')).join(' ')
     // }
 
-    return function points (d) {
+    return function points (o) {
+      let d = ''
+
+      if (o[0] === '<') {
+        const rx = /d="([^"]+)"/gi
+        let m
+
+        do {
+          m = rx.exec(o)
+
+          if (m) {
+            d += m[1]
+          }
+        } while (m)
+      } else {
+        d = o
+      }
+
       const ast = abs(d)
       let prev = [0, 0]
 
@@ -1224,7 +1241,6 @@
         })
       },
       fromRoute () {
-        console.log('fromroute')
         const q = this.$route.query
 
         if (q.icon && this.icons) {
@@ -1388,8 +1404,8 @@
         return this.$route.path === '/compare'
       },
       points () {
-        if (this.icon >= 0) {
-          return parsePath(this.linked.data[0] === '<' ? '' : this.linked.data)
+        if (this.icon !== null) {
+          return parsePath(this.linked.data)
         }
       }
     },
