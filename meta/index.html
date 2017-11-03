@@ -250,11 +250,19 @@
       stroke-width: 0.08;
       fill: rgba(255, 0, 0, 0.4);
     }
+
+    .scrollbar {
+      overflow: hidden;
+    }
+
+    .scrollbar:hover {
+      overflow: auto;
+    }
   </style>
 </head>
 <body>
 <v-app id="app" v-cloak :dark="theme.includes('Dark')">
-  <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1"
+  <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1 scrollbar"
                        fixed
                        :class="{no: no}"
                        disable-route-watcher
@@ -946,7 +954,7 @@
             r[c].push(icon.id)
 
             return r
-          },'Points': (r, icon) => {
+          }, 'Points': (r, icon) => {
             if (icon.link >= 0) {
               return r
             }
@@ -1301,8 +1309,8 @@
       showCompare () {
         return this.$route.path === '/compare'
       },
-      points  () {
-        if(this.icon >= 0) {
+      points () {
+        if (this.icon >= 0) {
           return parsePath(this.linked.data[0] === '<' ? '' : this.linked.data)
         }
       }
