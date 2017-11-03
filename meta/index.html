@@ -432,12 +432,12 @@
     <v-btn v-if="icons" icon tag="a" :to="{path: '/'}" exact v-show="!no">
       <app-icon name="home outline" size="24"></app-icon>
     </v-btn>
-    <v-btn icon tag="a" :to="{path: '/compare'}" v-show="!no">
-      <v-icon>compare_arrows</v-icon>
+    <v-btn v-if="icons" icon tag="a" :to="{path: '/compare'}" v-show="!no">
+      <app-icon name="vector difference" size="24"></app-icon>
     </v-btn>
-    <v-btn icon tag="a" :to="{path: '/chart'}" v-show="!no">
-      <v-icon>pie_chart_outlined</v-icon>
-    </v-btn>
+    <!--<v-btn icon tag="a" :to="{path: '/chart'}" v-show="!no">-->
+      <!--<v-icon>pie_chart_outlined</v-icon>-->
+    <!--</v-btn>-->
     <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
            rel="noopener" v-show="!no">
       <app-icon name="github circle" size="24"></app-icon>
@@ -586,7 +586,7 @@
           Not implemented yet&hellip;
         </div>
         <div>
-          <!--{{chart}}-->
+          {{chart}}
         </div>
       </div>
     </v-container>
@@ -849,7 +849,7 @@
     el: '#app',
     router,
     data () {
-      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness']
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar']
 
       if (window.IconDuplicates) {
         groups.push('Duplicates?')
@@ -1002,6 +1002,10 @@
 
             return r
           },
+          'Similar': (r, group) => {
+            r[this.icons[group.icon].name] = [group.icon, ...group.icons]
+            return r
+          },
           'Complexity': (r, icon) => {
             if (icon.link >= 0) {
               return r
@@ -1081,6 +1085,7 @@
           'Versions': (d) => d.sort().reverse(),
           'Density': (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
           'Shapes': (d) => d,
+          'Similar': (d) => d,
           'Distance': (d) => d,
           'Duplicates': (d) => d,
           'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
@@ -1088,9 +1093,11 @@
           'Uniqueness': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
         },
         reduceSource: {
-          'Distance': 'similar'
+          'Distance': 'similar',
+          'Similar': 'chart'
         },
         reducerSorter: {
+          'Similar': false,
           'Distance': false,
           'Uniqueness': false
         }
@@ -1126,7 +1133,7 @@
         }
       },
       scrolling () {
-        document.getElementsByTagName('html')[0].className = !this.showHome ? '' : 'no-scroll'
+        document.getElementsByTagName('html')[0].className = this.$route.path === '/' ? 'no-scroll' : ''
       },
       scroll (name) {
         this.$refs.scroller.scrollToItem(this.lines.indexOf(this.lines.find(d => d.name === name)))
@@ -1480,17 +1487,55 @@
           return r
         }, {})
       },
+      similarLookupIcons () {
+        return this.similar.reduce((r, i) => {
+          r[i[0]] = r[i[0]] || []
+          r[i[0]].push({icon: i[1], match: i[2]})
+          r[i[1]] = r[i[1]] || []
+          r[i[1]].push({icon: i[0], match: i[2]})
+          return r
+        }, {})
+      },
       chart () {
         if (!this.similar) {
           return null
         }
 
-        const w = Object.keys(this.similarLookup).map(k => ({
+        const w = Object.keys(this.similarLookupIcons).map(k => ({
           icon: k,
-          count: this.similarLookup[k]
-        })).sort((a, b) => b.count - a.count)
+          icons: this.similarLookupIcons[k]
+        })).sort((a, b) => b.icons.length - a.icons.length)
 
-        return w
+        const icons = this.icons.map(() => true)
+        const groups = []
+        const groupKeys = {}
+
+        while (w.length) {
+          const g = w.shift()
+
+          groupKeys[g.icon] = true
+
+          g.icons.sort((a, b) => a.match - b.match)
+
+          groups.push({
+            icon: g.icon,
+            icons: g.icons.reduce((r, ic) => {
+              if(r.length > 22 || ic.icon.match > 32) {
+                return r
+              }
+
+              const i = ic.icon
+              if (!groupKeys[i] && icons[i]) {
+                r.push(i)
+                icons[i] = false
+              }
+
+              return r
+            }, [])
+          })
+        }
+
+        return groups.sort((a, b) => b.icons.length - a.icons.length).filter(d => d.icons.length > 1)
       }
     },
     watch: {
