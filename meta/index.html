@@ -1209,12 +1209,13 @@
         this.$router.push({
           path: this.$route.path,
           query: {
-            icon: this.meta ? this.meta.name : undefined,
+            icon: this.meta ? this.underscored(this.meta.name) : undefined,
             source: this.source !== this.sourceDefault ? this.source : undefined,
             group: this.groupBy !== this.groupByDefault ? this.groupBy : undefined,
             sort: this.sortBy !== this.sortByDefault ? this.sortBy : undefined,
             search: this.search ? this.search : undefined,
-            grid: this.gridType !== 1 ? this.gridType : undefined
+            grid: this.gridType !== 1 ? this.gridType : undefined,
+            community: this.highlight ? this.highlight : undefined
           }
         })
       },
@@ -1222,7 +1223,8 @@
         const q = this.$route.query
 
         if (q.icon && this.icons) {
-          const f = this.icons.find(d => d.name === q.icon)
+          const n = q.icon.replace(/_/g, ' ')
+          const f = this.icons.find(d => d.name === n)
           this.icon = f ? f.id : null
         }
 
@@ -1231,6 +1233,7 @@
         this.sortBy = q.sort || this.sortByDefault
         this.search = q.search || ''
         this.gridType = !isNaN(q.grid) ? this.gridType : 1
+        this.highlight = !!q.community
       },
       setIcon (icon) {
         this.icon = this.icon !== icon ? icon : null
@@ -1399,6 +1402,9 @@
         this.route()
       },
       gridType () {
+        this.route()
+      },
+      highlight () {
         this.route()
       },
       groupBy () {
