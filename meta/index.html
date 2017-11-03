@@ -328,15 +328,15 @@
       <template v-if="!showCompare">
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo :items="['All', 'Community', 'Google']" v-model="source"
-                  prepend-icon="people_outline"></v-select>
+                  prepend-icon="people_outline" :class="{'grey lighten-4': source !== 'All'}"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo
                   :items="groups"
                   v-model="groupBy"
-                  prepend-icon="folder_open"></v-select>
+                  prepend-icon="folder_open" :class="{'grey lighten-4': groupBy !== 'Tags'}"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo :items="['Name', 'Shape', 'Density']" v-model="sortBy"
-                  prepend-icon="sort"></v-select>
+                  prepend-icon="sort" :class="{'grey lighten-4': sortBy !== 'Name'}"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
                   prepend-icon="aspect_ratio"></v-select>
