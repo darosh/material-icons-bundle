@@ -1233,7 +1233,8 @@
             search: this.search ? this.search : undefined,
             grid: this.gridType !== 1 ? this.gridType : undefined,
             community: this.highlight ? this.highlight : undefined,
-            size: this.size !== this.sizeDefault ? this.size : undefined
+            size: this.size !== this.sizeDefault ? this.size : undefined,
+            filter: this.compareFilter !== 'all' ? this.compareFilter : undefined
           }
         })
       },
@@ -1255,6 +1256,7 @@
         this.gridType = q.grid ? parseInt(q.grid) : 1
         this.highlight = !!q.community
         this.size = q.size || this.sizeDefault
+        this.compareFilter = q.filter || 'all'
       },
       setIcon (icon) {
         this.icon = this.icon !== icon ? icon : null
@@ -1420,6 +1422,9 @@
           })
         }
 
+        this.route()
+      },
+      compareFilter () {
         this.route()
       },
       gridType () {
