@@ -344,7 +344,7 @@
                 :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
 
       <v-divider></v-divider>
-      <template v-if="!showCompare">
+      <template v-if="showHome">
         <v-select class="elevation-0" v-ripple="true" solo
                   :items="groups"
                   v-model="groupBy"
@@ -361,11 +361,11 @@
                   prepend-icon="tonality"></v-select>
         <v-divider></v-divider>
       </template>
-      <div class="pl-3 pt-2 pb-2" v-if="icon !== null || !showCompare">
+      <div class="pl-3 pt-2 pb-2" v-if="icon !== null || showHome">
         <v-checkbox color="red darken-2" hide-details label="Highlight community" v-model="highlight"></v-checkbox>
       </div>
-      <v-divider v-if="icon !== null || !showCompare"></v-divider>
-      <template v-if="!showCompare">
+      <v-divider v-if="icon !== null || showHome"></v-divider>
+      <template v-if="showHome">
         <v-expansion-panel expand class="elevation-0">
           <v-expansion-panel-content ripple>
             <div slot="header">
@@ -429,11 +429,14 @@
       <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon tag="a" :to="{path: '/'}" exact v-show="!no">
-      <v-icon>home</v-icon>
+    <v-btn v-if="icons" icon tag="a" :to="{path: '/'}" exact v-show="!no">
+      <app-icon name="home outline" size="24"></app-icon>
     </v-btn>
     <v-btn icon tag="a" :to="{path: '/compare'}" v-show="!no">
       <v-icon>compare_arrows</v-icon>
+    </v-btn>
+    <v-btn icon tag="a" :to="{path: '/chart'}" v-show="!no">
+      <v-icon>pie_chart_outlined</v-icon>
     </v-btn>
     <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
            rel="noopener" v-show="!no">
@@ -441,8 +444,8 @@
     </v-btn>
   </v-toolbar>
   <v-content :class="{highlight : highlight}" class="no"
-             :style="{display: !compare && !(!showCompare && icons && similar) ? 'flex' : ''}">
-    <virtual-scroller v-if="!showCompare && icons && similar"
+             :style="{display: !compare && !((showHome || showChart) && icons && similar) ? 'flex' : ''}">
+    <virtual-scroller v-if="showHome && icons && similar"
                       ref="scroller" tabindex="1" buffer="64" pool-size="64" class="gpu scroller"
                       :items="lines"
                       style="width: auto"
@@ -570,6 +573,9 @@
           </v-card>
         </v-layout>
       </v-layout>
+    </v-container>
+    <v-container v-if="showChart">
+      Not implemented yet
     </v-container>
     <v-container v-else fluid fill-height>
       <v-layout justify-center align-center>
@@ -799,7 +805,8 @@
   const router = new VueRouter({
     routes: [
       {path: '/'},
-      {path: '/compare'}
+      {path: '/compare'},
+      {path: '/chart'}
     ]
   })
 
@@ -1447,6 +1454,12 @@
       },
       compareFiltered () {
         return this.compareFilter === 'all' ? this.compare : this.compare.filter(d => d.note === this.compareFilter)
+      },
+      showHome () {
+        return this.$route.path === '/'
+      },
+      showChart () {
+        return this.$route.path === '/chart'
       },
       showCompare () {
         return this.$route.path === '/compare'
