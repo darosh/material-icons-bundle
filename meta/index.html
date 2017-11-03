@@ -337,12 +337,14 @@
         <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
                       :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
       </div>
+      <v-divider></v-divider>
+      <v-select class="elevation-0" v-ripple="true" solo :items="sources"
+                v-model="source"
+                prepend-icon="people_outline"
+                :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
+
+      <v-divider></v-divider>
       <template v-if="!showCompare">
-        <v-divider></v-divider>
-        <v-select class="elevation-0" v-ripple="true" solo :items="sources" v-model="source"
-                  prepend-icon="people_outline"
-                  :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
-        <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo
                   :items="groups"
                   v-model="groupBy"
@@ -362,8 +364,8 @@
       <div class="pl-3 pt-2 pb-2" v-if="icon !== null || !showCompare">
         <v-checkbox color="red darken-2" hide-details label="Highlight community" v-model="highlight"></v-checkbox>
       </div>
+      <v-divider v-if="icon !== null || !showCompare"></v-divider>
       <template v-if="!showCompare">
-        <v-divider></v-divider>
         <v-expansion-panel expand class="elevation-0">
           <v-expansion-panel-content ripple>
             <div slot="header">
@@ -1324,8 +1326,9 @@
 
         return icons.filter(d => {
           return rx ? rx.test(d.name) : d.name.includes(s) ||
-            (d.category && d.category.includes(s)) ||
-            (!d.category && !d.tags && (s === 'other')) ||
+            // (d.category && d.category.includes(s)) ||
+            // (!d.category && !d.tags && (s === 'other')) ||
+            (!d.tags && (s === 'other')) ||
             (d.tags && d.tags.filter(d => d.includes(s)).length) ||
             (d.aliases && d.aliases.filter(d => d.includes(s)).length)
         })
@@ -1401,7 +1404,11 @@
           return r
         }, {all: this.compare.length})
 
-        return Object.keys(stats).map(k => ({name: k, display: k[0].toUpperCase() + k.substr(1), count: stats[k]})).sort((a, b) => b.count - a.count)
+        return Object.keys(stats).map(k => ({
+          name: k,
+          display: k[0].toUpperCase() + k.substr(1),
+          count: stats[k]
+        })).sort((a, b) => b.count - a.count)
       },
       compareFiltered () {
         return this.compareFilter === 'all' ? this.compare : this.compare.filter(d => d.note === this.compareFilter)
