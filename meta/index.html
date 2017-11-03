@@ -127,6 +127,10 @@
       fill: rgba(211, 47, 47, 0.7)
     }
 
+    .filtering .icon {
+      color: rgba(211, 47, 47, 0.87) !important;
+    }
+
     .checkbox label {
       margin-left: 8px;
     }
@@ -258,6 +262,14 @@
     .scrollbar:hover {
       overflow: auto;
     }
+
+    .application--light .input-group:not(.input-group--error) label {
+      color: rgba(0, 0, 0, .87);
+    }
+
+    .application--dark .input-group:not(.input-group--error) label {
+      color: #fff
+    }
   </style>
 </head>
 <body>
@@ -328,15 +340,16 @@
       <template v-if="!showCompare">
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo :items="sources" v-model="source"
-                  prepend-icon="people_outline" :class="{'grey lighten-4': source !== sourceDefault}"></v-select>
+                  prepend-icon="people_outline"
+                  :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo
                   :items="groups"
                   v-model="groupBy"
-                  prepend-icon="folder_open" :class="{'grey lighten-4': groupBy !== 'Tags'}"></v-select>
+                  prepend-icon="folder_open" :class="{'grey lighten-4 filtering': groupBy !== 'Tags'}"></v-select>
         <v-divider></v-divider>
-        <v-select class="elevation-0" v-ripple="true" solo :items="['Name', 'Shape', 'Density']" v-model="sortBy"
-                  prepend-icon="sort" :class="{'grey lighten-4': sortBy !== 'Name'}"></v-select>
+        <v-select class="elevation-0" v-ripple="true" solo :items="sorts" v-model="sortBy"
+                  prepend-icon="sort" :class="{'grey lighten-4 filtering': sortBy !== 'Name'}"></v-select>
         <v-divider></v-divider>
         <v-select class="elevation-0" v-ripple="true" solo :items="['Small', 'Medium', 'Large']" v-model="size"
                   prepend-icon="aspect_ratio"></v-select>
@@ -813,6 +826,8 @@
       }
 
       const sourceDefault = 'All'
+      const groupByDefault = 'Tags'
+      const sortByDefault = 'Name'
 
       return {
         icons: null,
@@ -821,8 +836,11 @@
         icon: null,
         search: '',
         compareFilter: 'all',
-        groupBy: 'Tags',
-        sortBy: 'Name',
+        groupBy: groupByDefault,
+        groupByDefault,
+        sorts: ['Name', 'Shape', 'Density'],
+        sortBy: sortByDefault,
+        sortByDefault,
         sources: ['All', 'Community', 'Google'],
         source: sourceDefault,
         sourceDefault,
@@ -1018,6 +1036,7 @@
     },
     created () {
       this.scrolling()
+      this.fromRoute()
     },
     mounted () {
       Vue.nextTick(() => {
@@ -1190,20 +1209,28 @@
         this.$router.push({
           path: this.$route.path,
           query: {
-            icon: this.meta.name,
-            source: this.source !== this.sourceDefault ? this.source : null
+            icon: this.meta ? this.meta.name : undefined,
+            source: this.source !== this.sourceDefault ? this.source : undefined,
+            group: this.groupBy !== this.groupByDefault ? this.groupBy : undefined,
+            sort: this.sortBy !== this.sortByDefault ? this.sortBy : undefined,
+            search: this.search ? this.search : undefined,
+            grid: this.gridType !== 1 ? this.gridType : undefined
           }
         })
       },
       fromRoute () {
         const q = this.$route.query
 
-        if (q.icon) {
+        if (q.icon && this.icons) {
           const f = this.icons.find(d => d.name === q.icon)
           this.icon = f ? f.id : null
         }
 
         this.source = q.source || this.sourceDefault
+        this.groupBy = q.group || this.groupByDefault
+        this.sortBy = q.sort || this.sortByDefault
+        this.search = q.search || ''
+        this.gridType = !isNaN(q.grid) ? this.gridType : 1
       },
       setIcon (icon) {
         this.icon = this.icon !== icon ? icon : null
@@ -1220,7 +1247,7 @@
         return Math.max(0, Math.floor(Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left) - this.grid * this.columns) / 2) - this.bar)
       },
       google () {
-        return this.underscored(this.meta.name)
+        return this.meta ? this.underscored(this.meta.name) : null
       },
       linkedGoogle () {
         return this.underscored(this.linked.name)
@@ -1232,7 +1259,7 @@
         return {Small: 64, Medium: 128, Large: 160}[this.size]
       },
       meta () {
-        return this.icons[this.icon]
+        return this.icons ? this.icons[this.icon] : null
       },
       linked () {
         return this.icons[this.icon].link >= 0 ? this.icons[this.icons[this.icon].link] : this.icons[this.icon]
@@ -1357,7 +1384,7 @@
     },
     watch: {
       icon (value) {
-        if (value >= 0) {
+        if (value !== null) {
           if (this.selectedText.split(/[\n,]/).map(d => d.trim()).indexOf(this.google) === -1) {
             this.selectedText += (this.selectedText ? ',\n' : '') + this.google
           }
@@ -1367,22 +1394,33 @@
           Vue.nextTick(() => {
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
           })
-
-          this.route()
         }
+
+        this.route()
       },
-      groupBy () { this.getLines() },
-      sortBy () { this.getLines() },
+      gridType () {
+        this.route()
+      },
+      groupBy () {
+        this.route()
+        this.getLines()
+      },
+      sortBy () {
+        this.route()
+        this.getLines()
+      },
       source () {
         this.route()
         this.getLines()
       },
       size () { this.getLines() },
       search () {
+        this.route()
         this.getLines()
         this.getCompare()
       },
       icons () {
+        this.fromRoute()
         this.getLines()
         this.getCompare()
       },
