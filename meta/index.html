@@ -1252,7 +1252,7 @@
         return Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left - this.bar) / this.grid)
       },
       margin () {
-        return Math.max(0, Math.floor(Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left) - this.grid * this.columns) / 2) - this.bar)
+        return Math.max(0, Math.floor(Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left) - this.grid * this.columns) / 2) - this.bar / 2)
       },
       google () {
         return this.meta ? this.underscored(this.meta.name) : null
@@ -1424,7 +1424,10 @@
         this.route()
         this.getLines()
       },
-      size () { this.getLines() },
+      size () {
+        this.route()
+        this.getLines()
+      },
       search () {
         this.route()
         this.getLines()
