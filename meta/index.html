@@ -244,14 +244,13 @@
 
     .points {
       position: absolute;
-      left: -10px;
-      top: -10px;
+      left: 0;
+      top: 0;
       z-index: 777;
     }
 
     .points rect {
       stroke: rgba(255, 0, 0, 0.9);
-      stroke-width: 0.08;
       fill: rgba(255, 0, 0, 0.4);
     }
 
@@ -287,23 +286,14 @@
       <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
         <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
         </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="fullScreen = true">
+          <v-icon>fullscreen</v-icon>
+        </v-btn>
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
-        <div class=" text-xs-center">
-          <div @click="gridType = (gridType + 1) % 6" style="display: inline-block;" class="swap-wrap"
-               :class="{checker: gridType === 1}">
-            <svg v-if="gridType > 1 && gridType < 5" viewBox="0 0 24 24" width="240" height="240"
-                 v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
-                 class="grid"></svg>
-            <transition-group name="swap" mode="out-in">
-              <app-icon class="swap-item" v-for="icon in iconSwap" :key="icon" :name="icon" :size="240"></app-icon>
-            </transition-group>
-            <svg v-if="gridType === 5" viewBox="-1 -1 26 26" width="260" height="260" class="points">
-              <rect v-for="p in points.points" :x="p[0] - .4" :y="p[1] - .4" rx="0.2" ry="0.2" width="0.8"
-                    height="0.8"/>
-              <!--<path :d="points.abs" fill="red"></path>-->
-            </svg>
-          </div>
+        <div class="text-xs-center" @click="gridType = (gridType + 1) % 6" >
+          <app-icon-preview style="display: inline-block" :icon="icon" :type="gridType" :size="240" :svg="linked.data"></app-icon-preview>
         </div>
       </div>
       <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
@@ -436,7 +426,7 @@
       <app-icon name="vector difference" size="24"></app-icon>
     </v-btn>
     <!--<v-btn icon tag="a" :to="{path: '/chart'}" v-show="!no">-->
-      <!--<v-icon>pie_chart_outlined</v-icon>-->
+    <!--<v-icon>pie_chart_outlined</v-icon>-->
     <!--</v-btn>-->
     <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
            rel="noopener" v-show="!no">
@@ -489,7 +479,7 @@
       <v-layout column style="max-width: 100%">
         <v-radio-group hide-details v-model="compareFilter" row class="mt-2 ml-4 mr-4 pa-0 wrap">
           <v-layout row wrap>
-            <v-flex style="max-width: 160px" lg2 md3 sm6 xs12 v-for="i in compareStats">
+            <v-flex style="max-width: 160px" lg2 md3 sm6 xs12 v-for="i in compareStats" :key="i.name">
               <v-radio color="primary" hide-details :label="i.display + ' (' + i.count + ')'" :value="i.name"></v-radio>
             </v-flex>
           </v-layout>
@@ -590,10 +580,36 @@
         </div>
       </div>
     </v-container>
+    <v-dialog v-model="fullScreen" :max-width="fullSize">
+      <v-card @click.native="gridType = (gridType + 1) % 6" :style="{width: fullSize + 'px !important', height: fullSize + 'px !important'}">
+        <app-icon-preview v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
+                          :svg="linked.data"></app-icon-preview>
+      </v-card>
+    </v-dialog>
   </v-content>
 </v-app>
-<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
-<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
+
+<script id="app-icon-preview" type="x-template">
+  <div v-if="icon" class="swap-wrap" :class="{checker: type === 1}" :style="checker">
+    <svg v-if="type > 1 && type < 5" viewBox="0 0 24 24" :width="size" :height="size"
+         v-html="type === 2 ? gridImage : type === 3 ? gridImageRich : gridImageFull"
+         class="grid"></svg>
+    <transition-group name="swap" mode="out-in">
+      <app-icon class="swap-item" v-for="icon in swap" :key="icon" :name="icon" :size="size"></app-icon>
+    </transition-group>
+    <svg v-if="type === 5" viewBox="0 0 24 24" :width="size" :height="size" class="points">
+      <rect vector-effect="non-scaling-stroke"
+            stroke-width="1"
+            v-for="p in points.points"
+            :x="p[0] - marker * unit / 2" :y="p[1] - marker * unit / 2" :rx="round * unit" :ry="round * unit"
+            :width="marker * unit" :height="marker * unit"/>
+      <!--<path :d="points.abs" fill="red"></path>-->
+    </svg>
+  </div>
+</script>
+
+<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>-->
+<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
@@ -844,6 +860,39 @@
     }
   })
 
+  Vue.component('app-icon-preview', {
+    template: '#app-icon-preview',
+    props: ['icon', 'type', 'size', 'svg'],
+    data () {
+      return {
+        gridImage: GRID,
+        gridImageRich: GRID_RICH,
+        gridImageFull: GRID_FULL,
+        marker: 9,
+        round: 3
+      }
+    },
+    computed: {
+      swap () {
+        return [this.icon]
+      },
+      unit () {
+        return 24 / this.size
+      },
+      points () {
+        return parsePath(this.svg)
+      },
+      checker () {
+        return {
+          backgroundSize: (this.size / 12) + 'px ' + (this.size / 12) + 'px',
+          backgroundPosition: '0 0, ' + (this.size / 24) + 'px ' + (this.size / 24) + 'px',
+          width: this.size + 'px',
+          height: this.size + 'px'
+        }
+      }
+    }
+  })
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#app',
@@ -866,6 +915,7 @@
         lines: [],
         icon: null,
         search: '',
+        fullScreen: false,
         compareFilter: 'all',
         groupBy: groupByDefault,
         groupByDefault,
@@ -1293,7 +1343,7 @@
       fromRoute () {
         const q = this.$route.query
 
-        if(q.icon && !this.icons) {
+        if (q.icon && !this.icons) {
           return
         }
 
@@ -1319,6 +1369,9 @@
       }
     },
     computed: {
+      fullSize () {
+        return Math.floor((Math.min(this.$vuetify.breakpoint.width, this.$vuetify.breakpoint.height) - 64 * 2) / 24) * 24
+      },
       iconSwap () {
         return [this.icon]
       },
@@ -1526,7 +1579,7 @@
           groups.push({
             icon: g.icon,
             icons: g.icons.reduce((r, ic) => {
-              if(r.length > 22 || ic.icon.match > 32) {
+              if (r.length > 22 || ic.icon.match > 32) {
                 return r
               }
 
