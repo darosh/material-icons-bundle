@@ -560,23 +560,13 @@
                 </tr>
               </template>
               <template slot="expand" slot-scope="props">
-                <v-card flat v-if="props.expanded">
-                  <v-card flat style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
-                          :class="{checker: gridType === 1}" @click.native="gridType = (gridType + 1) % 5">
-                    <svg v-if="gridType > 1 && gridType < 5" viewBox="0 0 24 24" width="240" height="240"
-                         v-html="gridType === 2 ? gridImage : gridType === 3 ? gridImageRich : gridImageFull"
-                         class="grid"></svg>
-                    <svg v-if="props.item.googleData" viewBox="0 0 24 24" width="240" height="240"
-                         style="position: absolute; fill: #00d; fill-opacity: 0.4">
-                      <g v-if="props.item.googleData[0] === '<'" v-html="props.item.googleData"></g>
-                      <path v-else :d="props.item.googleData"></path>
-                    </svg>
-                    <svg v-if="props.item.communityData" viewBox="0 0 24 24" width="240" height="240"
-                         style="position: absolute; fill: #d00; fill-opacity: 0.4">
-                      <g v-if="props.item.communityData[0] === '<'" v-html="props.item.communityData"></g>
-                      <path v-else :d="props.item.communityData"></path>
-                    </svg>
-                  </v-card>
+                <v-card flat>
+                  <div v-if="props.expanded" style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
+                          @click="gridType = (gridType + 1) % 5">
+                    <app-icon-preview :compare="[props.item.googleData || '', props.item.communityData || '']"
+                                      :icon="null" :type="gridType" :size="240"
+                                      :svg="null"></app-icon-preview>
+                  </div>
                 </v-card>
               </template>
             </v-data-table>
@@ -931,11 +921,11 @@
       background () {
         if (this.compare && (this.mode === 1)) {
           return {
-            background: `${this.url(0, '#00f', 1)}, ${this.url(1, '#f00', 1)}`,
+            background: `${this.url(0, '#00f', 0.97)}, ${this.url(1, '#f00', 0.97)}`,
             backgroundBlendMode: 'darken',
             width: `${this.size}px`,
             height: `${this.size}px`,
-            opacity: 0.78
+            opacity: 0.66
           }
         }
       }
