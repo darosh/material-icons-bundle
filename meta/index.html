@@ -442,7 +442,7 @@
                              :width="3"></v-progress-circular>
       </v-layout>
     </v-container>
-    <virtual-scroller v-if="showHome && icons && similar"
+    <virtual-scroller id="page" v-if="showHome && icons && similar"
                       ref="scroller" tabindex="1" buffer="64" pool-size="64" class="gpu scroller"
                       :items="lines"
                       style="width: auto"
@@ -1160,6 +1160,8 @@
       this.fromRoute()
     },
     mounted () {
+      this.focusing()
+
       window.addEventListener('keyup', (event) => {
         if (event.keyCode === 27 && this.icon !== null) {
           this.fullScreen = !this.fullScreen
@@ -1192,6 +1194,9 @@
       },
       scrolling () {
         document.getElementsByTagName('html')[0].className = this.$route.path === '/' ? 'no-scroll' : ''
+      },
+      focusing () {
+        (document.querySelector('#page') || document.querySelector('html')).focus()
       },
       scroll (name) {
         this.$refs.scroller.scrollToItem(this.lines.indexOf(this.lines.find(d => d.name === name)))
@@ -1663,6 +1668,11 @@
       showCompare () {
         this.scrolling()
         this.getCompare()
+      },
+      showHome () {
+        Vue.nextTick(() => {
+          this.focusing()
+        })
       },
       $vuetify: {
         handler () { this.getLines() },
