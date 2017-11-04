@@ -305,7 +305,7 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
-          <app-icon-preview style="display: inline-block" :icon="icon" :type="gridType" :size="240"
+          <app-icon-preview :compare="compare" style="display: inline-block" :icon="icon" :type="gridType" :size="240"
                             :svg="linked.data"></app-icon-preview>
         </div>
       </div>
@@ -473,7 +473,8 @@
                  :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
                  :key="i"
                  v-for="i in props.item">
-              <div tabindex="1" @click="setIcon(i)" v-ripple="true" class="no click focusable" @keyup.13="setIcon(i)">
+              <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable"
+                   @keyup.13="setIcon(i)">
                 <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
                           class="no"
                           :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
@@ -596,7 +597,7 @@
     <v-dialog v-model="fullScreen" :max-width="fullSize">
       <v-card @click.native="gridType = (gridType + 1) % 6"
               :style="{width: fullSize + 'px !important', height: fullSize + 'px !important'}">
-        <app-icon-preview v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
+        <app-icon-preview :compare="compare" v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
                           :svg="linked.data"></app-icon-preview>
       </v-card>
     </v-dialog>
@@ -604,13 +605,29 @@
 </v-app>
 
 <script id="app-icon-preview" type="x-template">
-  <div v-if="icon !== null" class="swap-wrap" :class="{checker: type === 1}" :style="checker">
+  <div v-if="icon !== null || compare" class="swap-wrap" :class="{checker: type === 1}" :style="checker">
     <svg v-if="type > 1 && type < 5" viewBox="0 0 24 24" :width="size" :height="size"
          v-html="type === 2 ? gridImage : type === 3 ? gridImageRich : gridImageFull"
          class="grid"></svg>
-    <transition-group name="swap" mode="out-in">
+
+    <svg v-if="compare && !mode" viewBox="0 0 24 24" :width="size" :height="size"
+         style="position: absolute; fill: #00d; fill-opacity: 0.4; left: 0; top: 0">
+      <g v-if="compare[0][0] === '<'" v-html="compare[0]"></g>
+      <path v-else :d="compare[0]"></path>
+    </svg>
+
+    <svg v-if="compare && !mode" viewBox="0 0 24 24" :width="size" :height="size"
+         style="position: absolute; fill: #d00; fill-opacity: 0.4; left: 0; top: 0">
+      <g v-if="compare[1][0] === '<'" v-html="compare[1]"></g>
+      <path v-else :d="compare[1]"></path>
+    </svg>
+
+    <transition-group v-if="!compare && (icon !== null)" name="swap" mode="out-in">
       <app-icon class="swap-item" v-for="icon in swap" :key="icon" :name="icon" :size="size"></app-icon>
     </transition-group>
+
+    <div v-if="compare && mode" style="position: absolute; top: 0; left: 0;" :style="background"></div>
+
     <svg v-if="type === 5" viewBox="0 0 24 24" :width="size" :height="size" class="points">
       <rect vector-effect="non-scaling-stroke"
             stroke-width="1"
@@ -876,14 +893,21 @@
 
   Vue.component('app-icon-preview', {
     template: '#app-icon-preview',
-    props: ['icon', 'type', 'size', 'svg'],
+    props: ['icon', 'type', 'size', 'svg', 'compare', 'xmode'],
     data () {
       return {
         gridImage: GRID,
         gridImageRich: GRID_RICH,
         gridImageFull: GRID_FULL,
         marker: 9,
-        round: 3
+        round: 3,
+        compare: null,
+        mode: 1
+      }
+    },
+    methods: {
+      url (i, c, o) {
+        return `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${this.size}" height="${this.size}" fill="${c}" fill-opacity="${o}">${this.compare[i][0] === '<' ? `<g>${this.compare[i]}</g>` : `<path d="${this.compare[i]}"></path>`}</svg>')`
       }
     },
     computed: {
@@ -902,6 +926,17 @@
           backgroundPosition: '0 0, ' + (this.size / 24) + 'px ' + (this.size / 24) + 'px',
           width: this.size + 'px',
           height: this.size + 'px'
+        }
+      },
+      background () {
+        if (this.compare && (this.mode === 1)) {
+          return {
+            background: `${this.url(0, '#00f', 1)}, ${this.url(1, '#f00', 1)}`,
+            backgroundBlendMode: 'darken',
+            width: `${this.size}px`,
+            height: `${this.size}px`,
+            opacity: 0.78
+          }
         }
       }
     }
@@ -928,6 +963,7 @@
         similar: null,
         lines: [],
         icon: null,
+        compare: null,
         search: '',
         fullScreen: false,
         compareFilter: 'all',
@@ -1389,8 +1425,14 @@
         this.size = q.size || this.sizeDefault
         this.compareFilter = q.filter || 'all'
       },
-      setIcon (icon) {
-        this.icon = this.icon !== icon ? icon : null
+      setIcon (icon, event) {
+        if (event && event.ctrlKey) {
+          const i = this.icons[icon]
+          this.compare = [this.linked.data, (i.link >= 0 ? this.icons[i.link] : i).data]
+        } else {
+          this.icon = this.icon !== icon ? icon : null
+          this.compare = null
+        }
       }
     },
     computed: {
