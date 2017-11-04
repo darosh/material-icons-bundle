@@ -305,7 +305,7 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
-          <app-icon-preview :compare="compare" style="display: inline-block" :icon="icon" :type="gridType" :size="240"
+          <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType" :size="240"
                             :svg="linked.data"></app-icon-preview>
         </div>
       </div>
@@ -597,7 +597,7 @@
     <v-dialog v-model="fullScreen" :max-width="fullSize">
       <v-card @click.native="gridType = (gridType + 1) % 6"
               :style="{width: fullSize + 'px !important', height: fullSize + 'px !important'}">
-        <app-icon-preview :compare="compare" v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
+        <app-icon-preview :compare="compareIcons" v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
                           :svg="linked.data"></app-icon-preview>
       </v-card>
     </v-dialog>
@@ -942,6 +942,9 @@
     }
   })
 
+  let RESOLVE
+  const ready = new Promise(resolve => {RESOLVE = resolve})
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#app',
@@ -959,11 +962,12 @@
       const sizeDefault = 'Medium'
 
       return {
+        ready,
         icons: null,
         similar: null,
         lines: [],
         icon: null,
-        compare: null,
+        compareIcons: null,
         search: '',
         fullScreen: false,
         compareFilter: 'all',
@@ -1225,10 +1229,17 @@
       ICONS.then(res => res.json()).then(data => {
         data.forEach(d => Object.freeze(d))
         Vue.$icons = this.icons = Object.freeze(data)
+
+        if (this.similar) {
+          RESOLVE(true)
+        }
       })
 
       SIMILAR.then(res => res.json()).then(data => {
         this.similar = Object.freeze(data)
+        if (this.icons) {
+          RESOLVE(true)
+        }
       })
     },
     methods: {
@@ -1404,34 +1415,31 @@
       fromRoute () {
         const q = this.$route.query
 
-        if (q.icon && !this.icons) {
-          return
-        }
-
-        if (q.icon) {
-          const n = q.icon.replace(/_/g, ' ')
-          const f = this.icons.find(d => d.name === n)
-          this.icon = f ? f.id : null
-        } else {
-          this.icon = null
-        }
-
-        this.source = q.source || this.sourceDefault
-        this.groupBy = q.group || this.groupByDefault
-        this.sortBy = q.sort || this.sortByDefault
-        this.search = q.search || ''
-        this.gridType = q.grid ? parseInt(q.grid) : 1
-        this.highlight = !!q.community
-        this.size = q.size || this.sizeDefault
-        this.compareFilter = q.filter || 'all'
+        this.ready.then(() => {
+          if (q.icon) {
+            const n = q.icon.replace(/_/g, ' ')
+            const f = this.icons.find(d => d.name === n)
+            this.icon = f ? f.id : null
+          } else {
+            this.icon = null
+          }
+          this.source = q.source || this.sourceDefault
+          this.groupBy = q.group || this.groupByDefault
+          this.sortBy = q.sort || this.sortByDefault
+          this.search = q.search || ''
+          this.gridType = q.grid ? parseInt(q.grid) : 1
+          this.highlight = !!q.community
+          this.size = q.size || this.sizeDefault
+          this.compareFilter = q.filter || 'all'
+        })
       },
       setIcon (icon, event) {
         if (event && event.ctrlKey) {
           const i = this.icons[icon]
-          this.compare = [this.linked.data, (i.link >= 0 ? this.icons[i.link] : i).data]
+          this.compareIcons = [this.linked.data, (i.link >= 0 ? this.icons[i.link] : i).data]
         } else {
           this.icon = this.icon !== icon ? icon : null
-          this.compare = null
+          this.compareIcons = null
         }
       }
     },
@@ -1712,11 +1720,11 @@
         this.getCompare()
       },
       icons () {
-        this.fromRoute()
+        // this.fromRoute()
         this.getLines()
       },
       similar () {
-        this.fromRoute()
+        // this.fromRoute()
         this.getLines()
       },
       showCompare () {
