@@ -66,6 +66,10 @@
       background-color: rgba(127, 127, 127, .5);
     }
 
+    .focusable:focus {
+      background-color: rgba(127, 127, 127, .25);
+    }
+
     .checker {
       background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.08);
       background-position: 0 0, 10px 10px;
@@ -461,7 +465,7 @@
                  :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
                  :key="i"
                  v-for="i in props.item">
-              <div @click="setIcon(i)" v-ripple="true" class="no click">
+              <div tabindex="1" @click="setIcon(i)" v-ripple="true" class="no click focusable" @keyup.13="setIcon(i)">
                 <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
                           class="no"
                           :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
@@ -1673,6 +1677,11 @@
         Vue.nextTick(() => {
           this.focusing()
         })
+      },
+      fullScreen (value) {
+        if (!value) {
+          this.focusing()
+        }
       },
       $vuetify: {
         handler () { this.getLines() },
