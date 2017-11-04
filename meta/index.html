@@ -618,13 +618,12 @@
 
     <div v-if="compare && mode" style="position: absolute; top: 0; left: 0;" :style="background"></div>
 
-    <svg v-if="type === 5" viewBox="0 0 24 24" :width="size" :height="size" class="points">
+    <svg v-if="points" viewBox="0 0 24 24" :width="size" :height="size" class="points">
       <rect vector-effect="non-scaling-stroke"
             stroke-width="1"
-            v-for="p in points.points"
+            v-for="p in points"
             :x="p[0] - marker * unit / 2" :y="p[1] - marker * unit / 2" :rx="round * unit" :ry="round * unit"
             :width="marker * unit" :height="marker * unit"/>
-      <!--<path :d="points.abs" fill="red"></path>-->
     </svg>
   </div>
 </script>
@@ -892,7 +891,8 @@
         marker: 9,
         round: 3,
         compare: null,
-        mode: 1
+        mode: 1,
+        svg: null
       }
     },
     methods: {
@@ -908,7 +908,7 @@
         return 24 / this.size
       },
       points () {
-        return parsePath(this.svg)
+        return this.svg && (this.type === 5) ? parsePath(this.svg).points : null
       },
       checker () {
         return {
