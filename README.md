@@ -9,7 +9,8 @@ Visit [Icon Browser](https://darosh.github.io/material-icons-bundle/) featuring:
 - **Visually similar icons** (using per pixel compare)
 - Simple bundle (icon selection) copy/paste editor
 - Various view, filtering and grouping options
-- Large preview on 24&times;24 checkerboard grid
+- Large preview with various 24&times;24 grids and keyline blueprints (click preview to switch backgrounds)
+- Full screen preview (press <kbd>Esc</kbd> to open/close)
 - Instant search
 
 ## Install
