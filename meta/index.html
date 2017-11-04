@@ -292,8 +292,9 @@
         </v-btn>
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
-        <div class="text-xs-center" @click="gridType = (gridType + 1) % 6" >
-          <app-icon-preview style="display: inline-block" :icon="icon" :type="gridType" :size="240" :svg="linked.data"></app-icon-preview>
+        <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
+          <app-icon-preview style="display: inline-block" :icon="icon" :type="gridType" :size="240"
+                            :svg="linked.data"></app-icon-preview>
         </div>
       </div>
       <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
@@ -581,7 +582,8 @@
       </div>
     </v-container>
     <v-dialog v-model="fullScreen" :max-width="fullSize">
-      <v-card @click.native="gridType = (gridType + 1) % 6" :style="{width: fullSize + 'px !important', height: fullSize + 'px !important'}">
+      <v-card @click.native="gridType = (gridType + 1) % 6"
+              :style="{width: fullSize + 'px !important', height: fullSize + 'px !important'}">
         <app-icon-preview v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
                           :svg="linked.data"></app-icon-preview>
       </v-card>
@@ -1158,6 +1160,12 @@
       this.fromRoute()
     },
     mounted () {
+      window.addEventListener('keyup', (event) => {
+        if (event.keyCode === 27 && this.icon !== null) {
+          this.fullScreen = !this.fullScreen
+        }
+      })
+
       Vue.nextTick(() => {
         setTimeout(() => {
           this.no = false
