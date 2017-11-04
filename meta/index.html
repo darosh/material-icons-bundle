@@ -317,20 +317,20 @@
           <div>Author: <span>{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
                                                          class="link primary--text">{{meta.author}}</a></div>
           <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
-            @click="setIcon(linked.id)"
+            @click="setIcon(linked.id, $event)"
             class="link primary--text"><b>{{linkedGoogle}}</b></a>
           </div>
           <div v-if="alternatives && alternatives.length">Alternatives: <span
             v-for="(t, i) in alternatives"><span
             v-if="i">, </span> <a
-            @click="setIcon(t.id)" class="link primary--text">{{t.name}}</a></span></div>
+            @click="setIcon(t.id, $event)" class="link primary--text">{{t.name}}</a></span></div>
           <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
             @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
           <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
         </div>
         <div class="pl-3 pr-3" :class="{highlight: highlight}">
                     <span style="display: inline-block; width: 36px; height: 36px; padding: 2px"
-                          class="list__tile--link" @click="setIcon(i[0])" v-for="i in similarIcons">
+                          class="list__tile--link" @click="setIcon(i[0], $event)" v-for="i in similarIcons">
                         <app-icon class="no" size="32" :name="i[0]"
                                   :class="{community: communityShape(i[0])}"></app-icon>
                     </span>
@@ -375,7 +375,7 @@
               <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
             </div>
             <v-card :class="{highlight: highlight}">
-              <div v-ripple="true" @click="setIcon(i.id)" v-for="i in selectedIcons"
+              <div v-ripple="true" @click="setIcon(i.id, $event)" v-for="i in selectedIcons"
                    class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
                 <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id"
                           size="24"></app-icon>
@@ -474,7 +474,7 @@
                  :key="i"
                  v-for="i in props.item">
               <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable"
-                   @keyup.13="setIcon(i)">
+                   @keyup.13="setIcon(i, $event)">
                 <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
                           class="no"
                           :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
@@ -550,9 +550,9 @@
                     {{props.item.note}}
                   </td>
                   <td>
-                    <a @click="setIcon(props.item.icon)" class="link">{{props.item.bundle}}</a>
+                    <a @click="setIcon(props.item.icon, $event)" class="link">{{props.item.bundle}}</a>
                     <span v-if="props.item.potential">, </span>
-                    <a v-if="props.item.potential" @click="setIcon(props.item.potential[0])" class="black--text link">{{props.item.community}}</a>
+                    <a v-if="props.item.potential" @click="setIcon(props.item.potential[0], $event)" class="black--text link">{{props.item.community}}</a>
                   </td>
                   <td>
                     <span v-if="props.item.potential && props.item.potential[1]">{{props.item.potential[1]}}</span>
