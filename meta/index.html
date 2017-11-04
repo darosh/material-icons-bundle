@@ -71,8 +71,11 @@
     }
 
     .focusable:focus {
-      transition: background-color .2s linear .3s;
       background-color: rgba(127, 127, 127, .25);
+    }
+
+    .focusable:focus:hover {
+      transition: background-color .2s linear .3s;
     }
 
     .checker {
