@@ -604,7 +604,7 @@
 </v-app>
 
 <script id="app-icon-preview" type="x-template">
-  <div v-if="icon" class="swap-wrap" :class="{checker: type === 1}" :style="checker">
+  <div v-if="icon !== null" class="swap-wrap" :class="{checker: type === 1}" :style="checker">
     <svg v-if="type > 1 && type < 5" viewBox="0 0 24 24" :width="size" :height="size"
          v-html="type === 2 ? gridImage : type === 3 ? gridImageRich : gridImageFull"
          class="grid"></svg>
