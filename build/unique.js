@@ -89,7 +89,7 @@ meta.forEach((m, i) => {
   }
 })
 
-const potential = fs.readFileSync('./build/config/potential.tsv', 'utf8').split('\n').filter(d => d).reduce((r, i) => {
+const alternative = fs.readFileSync('./build/config/alternatives.tsv', 'utf8').split('\n').filter(d => d).reduce((r, i) => {
   const s = i.split('\t')
   const n = s.shift().replace(/_/g, ' ').replace(/^(\d)/, ' $1')
   s[0] = s[0].replace(/-/g, ' ')
@@ -98,16 +98,16 @@ const potential = fs.readFileSync('./build/config/potential.tsv', 'utf8').split(
 }, {})
 
 meta.forEach(m => {
-  if (potential[m.name]) {
-    const p = potential[m.name]
+  if (alternative[m.name]) {
+    const p = alternative[m.name]
     const n = p[0]
     const f = meta.find(d => (d.original === n || d.name === n) && (d.source === 'Community' || (d.merged)))
 
     if (!f) {
-      console.error('Missing potential', m.name)
+      console.error('Missing alternative', m.name)
     } else {
       p[0] = f.id
-      m.potential = p
+      m.alternative = p
     }
   }
 })

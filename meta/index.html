@@ -575,12 +575,12 @@
                   </td>
                   <td>
                     <a @click="setIcon(props.item.icon, $event)" class="link">{{props.item.bundle}}</a>
-                    <span v-if="props.item.potential">, </span>
-                    <a v-if="props.item.potential" @click="setIcon(props.item.potential[0], $event)"
+                    <span v-if="props.item.alternative">, </span>
+                    <a v-if="props.item.alternative" @click="setIcon(props.item.alternative[0], $event)"
                        class="black--text link">{{props.item.community}}</a>
                   </td>
                   <td>
-                    <span v-if="props.item.potential && props.item.potential[1]">{{props.item.potential[1]}}</span>
+                    <span v-if="props.item.alternative && props.item.alternative[1]">{{props.item.alternative[1]}}</span>
                   </td>
                 </tr>
               </template>
@@ -1022,7 +1022,7 @@
           {width: '280px', align: 'left', text: 'Community', value: 'community'},
           {width: '80px', align: 'left', text: 'Status', value: 'status'},
           {width: '280px', align: 'left', text: 'Bundle', value: 'bundle'},
-          {width: '280px', align: 'left', text: 'Comment', value: 'potential.0'}
+          {width: '280px', align: 'left', text: 'Comment', value: 'alternative.0'}
         ],
         pagination: {sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false},
         rowsPerPage: [100, 500, {text: 'All', value: -1}],
@@ -1393,11 +1393,11 @@
                     r.community = this.dashed(m.name.trim())
                     r.exact = f.exact
                     r.communityData = f.data
-                  } else if (d.potential) {
-                    const i = this.icons[d.potential[0]]
+                  } else if (d.alternative) {
+                    const i = this.icons[d.alternative[0]]
                     r.community = this.dashed(i.name.trim())
                     r.communityData = i.data || this.icons[i.link].data
-                    r.potential = d.potential
+                    r.alternative = d.alternative
                   }
                 }
               } else {
@@ -1409,7 +1409,7 @@
                 r.communityData = d.data
               }
 
-              r.status = r.potential
+              r.status = r.alternative
                 ? 2
                 : r.exact === true
                   ? 5
@@ -1421,13 +1421,13 @@
                         ? 3
                         : 4
 
-              r.googleClass = r.community && !r.google ? '' : ('status-' + (r.potential ? 3 : r.status))
+              r.googleClass = r.community && !r.google ? '' : ('status-' + (r.alternative ? 3 : r.status))
               r.communityClass = !r.community && r.google ? '' : ('status-' + r.status)
 
               r.note = {
                 0: 'manual',
                 1: 'similar',
-                2: 'potential',
+                2: 'alternative',
                 3: 'missing',
                 4: 'added',
                 5: 'exact'

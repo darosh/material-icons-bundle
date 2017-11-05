@@ -187,7 +187,7 @@ module.exports = {
       'battery',
       'dice',
       'arrow',
-      'format',
+      ['format','editor'],
       'account',
       ['checkbox', 'toggle'],
       ['brightness', 'image'],
