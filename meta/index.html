@@ -7,7 +7,7 @@
   <title>Material Icons Bundle</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-  <link rel="stylesheet" href="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vuetify@0.17.0-beta.2/dist/vuetify.min.css">
   <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.css">
   <!--<link rel="stylesheet" href="https://unpkg.com/mdi@2.0.46/css/materialdesignicons.min.css">-->
 
@@ -54,7 +54,7 @@
       outline: none;
     }
 
-    .no {
+    .no, .no .content {
       transition: none;
     }
 
@@ -284,7 +284,7 @@
   </style>
 </head>
 <body>
-<v-app id="app" v-cloak :dark="theme.includes('Dark')">
+<v-app id="app" v-cloak :dark="theme.includes('Dark')" :light="theme.includes('Light')">
   <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1 scrollbar"
                        fixed
                        :class="{no: no}"
@@ -303,7 +303,7 @@
           <v-icon>fullscreen</v-icon>
         </v-btn>
       </v-toolbar>
-      <div v-if="icon !== null" class="elevation-0">
+      <div v-if="icon !== null">
         <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
           <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
                             :size="240"
@@ -490,9 +490,9 @@
         </v-layout>
       </template>
     </virtual-scroller>
-    <v-container v-else-if="showCompare && compare" fill-height fluid>
+    <v-container v-else-if="showCompare && compare" fluid>
       <v-layout column style="max-width: 100%">
-        <v-radio-group hide-details v-model="compareFilter" row class="mt-2 ml-4 mr-4 pa-0 wrap">
+        <v-radio-group hide-details v-model="compareFilter" row class="mt-2 ml-4 mr-4 pa-0 mb-3 wrap">
           <v-layout row wrap>
             <v-flex style="max-width: 160px" lg2 md3 sm6 xs12 v-for="i in compareStats" :key="i.name">
               <v-radio color="primary" hide-details :label="i.display + ' (' + i.count + ')'" :value="i.name"></v-radio>
@@ -634,7 +634,7 @@
 <script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
 <!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
-<script src="https://unpkg.com/vuetify@0.17.0-beta.1/dist/vuetify.min.js"></script>
+<script src="https://unpkg.com/vuetify@0.17.0-beta.2/dist/vuetify.min.js"></script>
 <script src="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.min.js"></script>
 <script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
 <!--<script src="../build/duplicates.conf.js"></script>-->
