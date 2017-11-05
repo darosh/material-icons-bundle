@@ -312,10 +312,9 @@
       </div>
       <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
         <div class="pl-3 pr-3">
-          <div>Name: <span
-            :class="{'community-text': linked.source !== 'Google'}">{{google}}</span></div>
+          <div>Name: {{google}}</div>
 
-          <div>Author: <span>{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
+          <div>Author: <span :class="{'community-text': meta.source === 'Community'}">{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
                                                          class="link primary--text">{{meta.author}}</a></div>
           <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
             @click="setIcon(linked.id, $event)"
@@ -478,10 +477,10 @@
                 <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : grid > 32 ? 32 : 24" :name="i"
                           class="no"
                           :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
-                          :class="{active: icon === i, community: highlight && (grid < 128) && communityShape(i)}"></app-icon>
+                          :class="{active: icon === i, community: (icon !== i) && highlight && communityShape(i)}"></app-icon>
               </div>
               <div v-if="grid >= 128" style="font-size: 13px"
-                   :class="{'pt-1': grid > 128, 'pt-2': grid === 128, 'primary--text': icon === i, community: communityShape(i)}">
+                   :class="{'pt-1': grid > 128, 'pt-2': grid === 128, 'primary--text': icon === i}">
                 {{icons[i].name}}
               </div>
             </div>
