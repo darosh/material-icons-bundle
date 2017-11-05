@@ -201,6 +201,21 @@
       fill-opacity: 0.5 !important;
     }
 
+    .down-enter {
+      transform: translateY(-65%);
+      opacity: 0;
+    }
+
+    .down-leave-to {
+      transform: translateY(-100%);
+      transition: all 0.2s ease-in;
+      opacity: 0;
+    }
+
+    .down-enter-active {
+      transition: all 0.2s ease-in;
+    }
+
     .grid {
       position: absolute;
       left: 0;
@@ -295,47 +310,54 @@
                        :temporary="($vuetify.breakpoint.width || width) <= 800"
                        v-model="drawer">
     <div v-if="icons && similar">
-      <v-toolbar v-if="icon !== null" dense class="transparent elevation-0">
-        <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon @click="fullScreen = true">
-          <v-icon>fullscreen</v-icon>
-        </v-btn>
-      </v-toolbar>
-      <div v-if="icon !== null">
-        <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
-          <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
-                            :size="240"
-                            :svg="linked.data"></app-icon-preview>
-        </div>
-      </div>
-      <div v-if="icon !== null" class="elevation-0 pb-2 pt-2" style="line-height: 32px">
-        <div class="pl-3 pr-3">
-          <div>Name: {{google}}</div>
 
-          <div>Author: <span :class="{'community-text': meta.source === 'Community'}">{{meta.source}}</span> / <a @click="groupBy = 'Authors', scroll(meta.author)"
-                                                         class="link primary--text">{{meta.author}}</a></div>
-          <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
-            @click="setIcon(linked.id, $event)"
-            class="link primary--text"><b>{{linkedGoogle}}</b></a>
+      <transition name="down">
+        <div v-if="icon !== null">
+          <v-toolbar dense class="transparent elevation-0">
+            <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="fullScreen = true">
+              <v-icon>fullscreen</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <div>
+            <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
+              <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
+                                :size="240"
+                                :svg="linked.data"></app-icon-preview>
+            </div>
           </div>
-          <div v-if="alternatives && alternatives.length">Alternatives: <span
-            v-for="(t, i) in alternatives"><span
-            v-if="i">, </span> <a
-            @click="setIcon(t.id, $event)" class="link primary--text">{{t.name}}</a></span></div>
-          <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
-            @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
-          <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
-        </div>
-        <div class="pl-3 pr-3" :class="{highlight: highlight}">
+          <div class="elevation-0 pb-2 pt-2" style="line-height: 32px">
+            <div class="pl-3 pr-3">
+              <div>Name: {{google}}</div>
+
+              <div>Author: <span :class="{'community-text': meta.source === 'Community'}">{{meta.source}}</span> / <a
+                @click="groupBy = 'Authors', scroll(meta.author)"
+                class="link primary--text">{{meta.author}}</a></div>
+              <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
+                @click="setIcon(linked.id, $event)"
+                class="link primary--text"><b>{{linkedGoogle}}</b></a>
+              </div>
+              <div v-if="alternatives && alternatives.length">Alternatives: <span
+                v-for="(t, i) in alternatives"><span
+                v-if="i">, </span> <a
+                @click="setIcon(t.id, $event)" class="link primary--text">{{t.name}}</a></span></div>
+              <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
+                @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
+              <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
+            </div>
+            <div class="pl-3 pr-3" :class="{highlight: highlight}">
                     <span style="display: inline-block; width: 36px; height: 36px; padding: 2px"
                           class="list__tile--link" @click="setIcon(i[0], $event)" v-for="i in similarIcons">
                         <app-icon class="no" size="32" :name="i[0]"
                                   :class="{community: communityShape(i[0])}"></app-icon>
                     </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </transition>
+
       <div class="pa-3">
         <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
                       :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
@@ -360,8 +382,8 @@
                   prepend-icon="aspect_ratio"></v-select>
         <v-divider></v-divider>
         <!--<v-select class="elevation-0" v-ripple="true" solo-->
-                  <!--:items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"-->
-                  <!--prepend-icon="tonality"></v-select>-->
+        <!--:items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"-->
+        <!--prepend-icon="tonality"></v-select>-->
         <!--<v-divider></v-divider>-->
       </template>
       <div class="pl-3 pt-2 pb-2" v-if="icon !== null || showHome">
@@ -455,7 +477,8 @@
       </v-layout>
     </v-container>
     <virtual-scroller id="page" v-if="showHome && icons && similar"
-                      ref="scroller" tabindex="1" :buffer="grid === 32 ? 2048 : 64" :pool-size="grid === 32 ? 2048 : 64" class="gpu scroller"
+                      ref="scroller" tabindex="1" :buffer="grid === 32 ? 2048 : 64" :pool-size="grid === 32 ? 2048 : 64"
+                      class="gpu scroller"
                       :items="lines"
                       style="width: auto"
                       :style="{'margin-left': margin + 'px'}"
@@ -463,7 +486,8 @@
       <template slot-scope="props">
         <div v-if="!props.itemKey" :key="props.itemKey"></div>
         <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
-          <div v-if="props.item.name" :class="{'headline pl-3 pt-3 pr-3': grid > 32, 'pt-2 pl-1 pr-1 body-2': grid === 32}">
+          <div v-if="props.item.name"
+               :class="{'headline pl-3 pt-3 pr-3': grid > 32, 'pt-2 pl-1 pr-1 body-2': grid === 32}">
             <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
               <small>({{props.item.length}})</small>
             </div>
@@ -473,7 +497,8 @@
                  :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
                  :key="i"
                  v-for="i in props.item">
-              <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable" @keyup.13="setIcon(i, $event)">
+              <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable"
+                   @keyup.13="setIcon(i, $event)">
                 <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : grid > 32 ? 32 : 24" :name="i"
                           class="no"
                           :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
