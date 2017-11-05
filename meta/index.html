@@ -16,7 +16,7 @@
       fill: rgba(0, 0, 0, .54);
     }
 
-    .application--dark svg.icon {
+    .theme--dark svg.icon {
       fill: rgba(255, 255, 255, .70);
     }
 
@@ -24,11 +24,11 @@
       fill: rgba(25, 118, 210, .87);
     }
 
-    .application--dark svg.icon.active {
+    .theme--dark svg.icon.active {
       fill: rgba(25, 118, 210, 1);
     }
 
-    .application--dark .input-group--solo {
+    .theme--dark .input-group--solo {
       background-color: #212121;
     }
 
@@ -86,7 +86,7 @@
       background-size: 20px 20px;
     }
 
-    .application--dark .checker {
+    .theme--dark .checker {
       background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.5);
       background-position: 0 0, 10px 10px;
       background-origin: padding-box;
@@ -135,7 +135,7 @@
       color: #d32f2f
     }
 
-    .highlight .application--dark svg.community {
+    .highlight .theme--dark svg.community {
       fill: rgba(211, 47, 47, 0.7)
     }
 
@@ -274,11 +274,11 @@
       overflow: auto;
     }
 
-    .application--light .input-group:not(.input-group--error) label {
+    .theme--light .input-group:not(.input-group--error) label {
       color: rgba(0, 0, 0, .87);
     }
 
-    .application--dark .input-group:not(.input-group--error) label {
+    .theme--dark .input-group:not(.input-group--error) label {
       color: #fff
     }
   </style>
@@ -456,7 +456,7 @@
       </v-layout>
     </v-container>
     <virtual-scroller id="page" v-if="showHome && icons && similar"
-                      ref="scroller" tabindex="1" buffer="64" pool-size="64" class="gpu scroller"
+                      ref="scroller" tabindex="1" :buffer="grid === 32 ? 2048 : 64" :pool-size="grid === 32 ? 2048 : 64" class="gpu scroller"
                       :items="lines"
                       style="width: auto"
                       :style="{'margin-left': margin + 'px'}"
@@ -464,7 +464,7 @@
       <template slot-scope="props">
         <div v-if="!props.itemKey" :key="props.itemKey"></div>
         <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
-          <div v-if="props.item.name" class="headline pl-3 pt-3 pr-3">
+          <div v-if="props.item.name" :class="{'headline pl-3 pt-3 pr-3': grid > 32, 'pt-2 pl-1 pr-1 body-2': grid === 32}">
             <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
               <small>({{props.item.length}})</small>
             </div>
@@ -474,9 +474,8 @@
                  :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
                  :key="i"
                  v-for="i in props.item">
-              <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable"
-                   @keyup.13="setIcon(i, $event)">
-                <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : 32" :name="i"
+              <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable" @keyup.13="setIcon(i, $event)">
+                <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : grid > 32 ? 32 : 24" :name="i"
                           class="no"
                           :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
                           :class="{active: icon === i, community: highlight && (size === 'Small') && communityShape(i)}"></app-icon>
@@ -973,7 +972,7 @@
         source: sourceDefault,
         sourceDefault,
         theme: 'Light',
-        sizes: ['Small', 'Medium', 'Large'],
+        sizes: ['Tiny', 'Small', 'Medium', 'Large'],
         size: sizeDefault,
         sizeDefault,
         highlight: false,
@@ -1487,7 +1486,7 @@
         return this.meta.name.replace(/ /g, '-')
       },
       grid () {
-        return {Small: 64, Medium: 128, Large: 160}[this.size]
+        return {Tiny: 32, Small: 64, Medium: 128, Large: 160}[this.size]
       },
       meta () {
         return this.icons ? this.icons[this.icon] : null
