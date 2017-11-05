@@ -1,6 +1,6 @@
-const meta = require('../meta/_meta.json')
 const fs = require('fs')
-const conf = require('./icon.conf')
+const meta = require('../meta/_rendered.json')
+const conf = require('./config/icon.conf')
 const maxLimit = conf.distance
 
 let similar = []

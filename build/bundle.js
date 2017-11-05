@@ -1,10 +1,9 @@
 const fs = require('fs')
 const _ = require('lodash')
 const compact = require('json-stringify-pretty-compact')
-const meta = require('../meta/_meta.json')
-const patch = require('./patch.conf')
-const duplicates = require('./duplicates.conf')
-// const duplicates = null
+const meta = require('../meta/_rendered.json')
+const patch = require('./config/patch.conf')
+const duplicates = require('./config/duplicates.conf')
 let similar = require('../meta/_similar.json')
 
 console.log('Adding IDs')
@@ -12,12 +11,6 @@ meta.forEach((m, i) => (m.id = i))
 
 console.log('Linking duplicates')
 let count = 0
-
-// for (let x = 0; x < meta.length; x++) {
-//   for (let y = x + 1; y < meta.length; y++) {
-// testDupl(x, y)
-// }
-// }
 
 Object.keys(duplicates.matches).forEach(m => {
   console.log(m)
@@ -35,7 +28,6 @@ Object.keys(duplicates.matches).forEach(m => {
 similar.forEach(testDupl)
 
 function testDupl (d) {
-  // const d = similar.find(d => d[0] === aa && d[1] === bb) || [aa, bb, Infinity]
   const a = meta[d[0]]
   const b = meta[d[1]]
 

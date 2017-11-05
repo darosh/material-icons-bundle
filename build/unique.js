@@ -89,7 +89,7 @@ meta.forEach((m, i) => {
   }
 })
 
-const potential = fs.readFileSync('./build/potential.tsv', 'utf8').split('\n').filter(d => d).reduce((r, i) => {
+const potential = fs.readFileSync('./build/config/potential.tsv', 'utf8').split('\n').filter(d => d).reduce((r, i) => {
   const s = i.split('\t')
   const n = s.shift().replace(/_/g, ' ').replace(/^(\d)/, ' $1')
   s[0] = s[0].replace(/-/g, ' ')

@@ -15,28 +15,29 @@
     "json-stringify-pretty-compact": "^1.0.4",
     "lodash": "^4.17.4",
     "material-design-icons": "^3.0.1",
+    "MaterialDesignLight": "github:Templarian/MaterialDesignLight",
     "mdi-svg": "^2.0.46",
     "mkdirp": "^0.5.1",
     "recursive-readdir": "^2.2.1",
     "rimraf": "^2.6.2",
     "sharp": "^0.18.4",
     "shelljs": "^0.7.8",
-    "svg-pathdata": "^4.0.1",
     "xml2js": "^0.4.19"
   },
   "license": "MIT",
   "module": "index.js",
   "scripts": {
-    "build": "npm run build:download && npm run build:meta && npm run build:compare && npm run build:bundle && npm run build:unique && npm run build:export",
-    "build:bundle": "node build/bundle.js",
-    "build:compare": "node build/compare.js",
-    "build:download": "node build/download.js",
-    "build:export": "node build/export.js",
-    "build:meta": "node build/meta.js",
-    "build:unique": "node build/unique.js",
+    "build": "npm run build:1:download && npm run build:2:load && npm run build:3:render && npm run build:4:compare && npm run build:5:bundle && npm run build:6:unique",
+    "build:1:download": "node build/download.js",
+    "build:2:load": "node build/load.js",
+    "build:3:render": "node build/render.js",
+    "build:4:compare": "node build/compare.js",
+    "build:5:bundle": "node build/bundle.js",
+    "build:6:unique": "node build/unique.js",
+    "export": "node build/export.js",
     "clean": "rimraf index.js icons meta/*.json",
     "deploy": "cpy meta/*.* !meta/_*.* demo && deploy-to-gh-pages --local demo",
     "lint": "eslint --ext .html meta",
-    "update": "npm run build:bundle && npm run build:unique"
+    "update": "npm run build:5:bundle && npm run build:6:unique"
   }
 }
