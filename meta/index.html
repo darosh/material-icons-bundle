@@ -305,7 +305,8 @@
       </v-toolbar>
       <div v-if="icon !== null" class="elevation-0">
         <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
-          <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType" :size="240"
+          <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
+                            :size="240"
                             :svg="linked.data"></app-icon-preview>
         </div>
       </div>
@@ -552,7 +553,8 @@
                   <td>
                     <a @click="setIcon(props.item.icon, $event)" class="link">{{props.item.bundle}}</a>
                     <span v-if="props.item.potential">, </span>
-                    <a v-if="props.item.potential" @click="setIcon(props.item.potential[0], $event)" class="black--text link">{{props.item.community}}</a>
+                    <a v-if="props.item.potential" @click="setIcon(props.item.potential[0], $event)"
+                       class="black--text link">{{props.item.community}}</a>
                   </td>
                   <td>
                     <span v-if="props.item.potential && props.item.potential[1]">{{props.item.potential[1]}}</span>
@@ -561,8 +563,9 @@
               </template>
               <template slot="expand" slot-scope="props">
                 <v-card flat>
-                  <div v-if="props.expanded" style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
-                          @click="gridType = (gridType + 1) % 5">
+                  <div v-if="props.expanded"
+                       style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
+                       @click="gridType = (gridType + 1) % 5">
                     <app-icon-preview :compare="[props.item.googleData || '', props.item.communityData || '']"
                                       :icon="null" :type="gridType" :size="240"
                                       :svg="null"></app-icon-preview>
@@ -940,7 +943,7 @@
     el: '#app',
     router,
     data () {
-      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar']
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Text', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar']
 
       if (window.IconDuplicates) {
         groups.push('Duplicates?')
@@ -1021,10 +1024,37 @@
         },
         reducer: {
           'Tags': (r, icon) => {
-            [].concat(icon.category ? [icon.category] : [])
-              .concat(icon.tags || [])
-              .concat(!icon.tags && !icon.category ? ['other'] : [])
+            [].concat(icon.tags || [])
+              .concat(!icon.tags ? ['other'] : [])
               .forEach(c => {
+                r[c] = r[c] || []
+
+                if (r[c].indexOf(icon.id) === -1) {
+                  r[c].push(icon.id)
+                }
+              })
+
+            return r
+          },
+          'Text': (r, icon) => {
+            [].concat((icon.tags || []).reduce((r, a) => {
+              return r.concat(a.split(' '))
+            }, []))
+              .concat((icon.aliases || []).reduce((r, a) => {
+                return r.concat(a.split(' '))
+              }, []))
+              .concat(icon.name.split(' '))
+              .forEach(c => {
+                if (!c) {
+                  return
+                }
+
+                c = c.trim()
+
+                if (!c || (c.length < 3)) {
+                  return
+                }
+
                 r[c] = r[c] || []
 
                 if (r[c].indexOf(icon.id) === -1) {
@@ -1175,6 +1205,7 @@
         groupSort: {
           'All': (d) => d.sort(),
           'Tags': (d) => d.sort(),
+          'Text': (d) => d.sort(),
           'Authors': (d) => d.sort(),
           'Versions': (d) => d.sort().reverse(),
           'Density': (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
@@ -1523,6 +1554,14 @@
         }
 
         const reduced = s.reduce(this.reducer[this.groupBy], {})
+
+        if (this.groupBy === 'Text') {
+          Object.keys(reduced).forEach(d => {
+            if (reduced[d].length < 12) {
+              delete reduced[d]
+            }
+          })
+        }
 
         if (this.reducerSorter[this.groupBy] !== false) {
           Object.keys(reduced).forEach((c) => {
