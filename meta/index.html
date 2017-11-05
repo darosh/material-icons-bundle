@@ -1465,7 +1465,7 @@
     },
     computed: {
       fullSize () {
-        return Math.floor((Math.min(this.$vuetify.breakpoint.width, this.$vuetify.breakpoint.height) - 64 * 2) / 24) * 24
+        return Math.floor((Math.min(this.$vuetify.breakpoint.width - 64, this.$vuetify.breakpoint.height - 64 * 2)) / 24) * 24
       },
       iconSwap () {
         return [this.icon]
