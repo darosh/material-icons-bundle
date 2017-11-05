@@ -41,7 +41,7 @@ will produce object like:
 }
 ```
 
-where most of values are `<path>` `d` attribute data. Some data starting with `<` are svg inner elements, such icons are tagged as `multi-shape` in the [browser](https://darosh.github.io/material-icons-bundle/).
+where most of values are `<path>` `d` attribute data. Some data starting with `<` are svg inner elements, such icons are tagged as `multi-shape` in the [browser](https://darosh.github.io/material-icons-bundle/#/?group=All&search=multi-shape).
 
 Icon aliases points to same `*.js` file for minimal build. 
 
