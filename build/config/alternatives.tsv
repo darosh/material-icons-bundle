@@ -71,6 +71,7 @@ battery 80	battery 80
 battery 90	battery 90
 battery std	battery
 battery alert	battery alert
+battery unknown	battery unknown
 border color	border color
 format color text	format color text
 link text	link
