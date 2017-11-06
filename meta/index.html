@@ -313,8 +313,8 @@
                        v-model="drawer">
     <div v-if="icons && similar">
 
-      <div ref="downwrap" class="downwrap">
-        <transition name="down" @enter="enterIcon" @leave="leaveIcon">
+      <div ref="downwrap" class="downwrap" style="height: 0; transition: height 0.2s ease-in .325s">
+        <transition name="down">
           <div v-if="icon !== null" ref="down">
             <v-toolbar dense class="transparent elevation-0">
               <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
@@ -1274,6 +1274,7 @@
       Vue.nextTick(() => {
         setTimeout(() => {
           this.no = false
+          this.transit = true
         }, 300)
       })
 
@@ -1299,15 +1300,20 @@
           return
         }
 
-        if (this.$refs.downwrap.style.height === '0px') {
-          this.$refs.downwrap.style.transition = 'height 0.2s ease-in'
+        if(this.transit) {
+          if (this.$refs.downwrap.style.height === '0px') {
+            this.$refs.downwrap.style.transition = 'height 0.2s ease-in'
+          } else {
+            this.$refs.downwrap.style.transition = 'height 0.12s ease'
+          }
         } else {
-          this.$refs.downwrap.style.transition = 'height 0.12s ease'
+          this.transit = true
         }
 
         this.$refs.downwrap.style.height = el.clientHeight + 'px'
       },
       leaveIcon () {
+        console.log('leave')
         this.$refs.downwrap.style.height = '0px'
       },
       changeSort (column) {
@@ -1772,6 +1778,10 @@
           Vue.nextTick(() => {
             this.enterIcon(this.$refs.down)
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
+          })
+        } else {
+          Vue.nextTick(() => {
+            this.leaveIcon()
           })
         }
 
