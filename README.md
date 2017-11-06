@@ -55,3 +55,4 @@ _Here is some real usage [example](https://github.com/darosh/oax/commit/9856e4a2
 - Community icons [materialdesignicons.com](https://materialdesignicons.com/) from [Templarian/MaterialDesign-SVG](https://github.com/Templarian/MaterialDesign-SVG) and [API](https://github.com/Templarian/MaterialDesign-Site/blob/master/src/content/api.md)
 
 Sources are merged comparing rendered pixel with some additional auto tagging.
+See [compare](https://darosh.github.io/material-icons-bundle/#/compare) table for more information.
