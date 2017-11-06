@@ -39,6 +39,7 @@ no sim	sim-off
 note add	file-plus
 pets	paw
 pie chart	chart-pie
+donut large	chart-arc
 poll	poll-box
 pool	pool	Matches name/purpose but not design
 pool	swim	Matches design but not name/purpose
