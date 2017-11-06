@@ -214,10 +214,6 @@
       opacity: 0;
     }
 
-    .downwrap {
-      transition: height 0.2s ease-in;
-    }
-
     .down-enter-active {
       transition: all 0.2s ease-in;
     }
@@ -318,84 +314,86 @@
     <div v-if="icons && similar">
 
       <div ref="downwrap" class="downwrap" style="height: 0">
-      <transition name="down" @enter="enterIcon" @leave="leaveIcon">
-        <div v-if="icon !== null" ref="down">
-          <v-toolbar dense class="transparent elevation-0">
-            <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="fullScreen = true">
-              <v-icon>fullscreen</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <div>
-            <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
-              <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
-                                :size="240"
-                                :svg="linked.data"></app-icon-preview>
-            </div>
-          </div>
-          <div class="elevation-0 pb-2 pt-2" style="line-height: 32px">
-            <div class="pl-3 pr-3">
-              <div>Name: {{google}}</div>
-
-              <div>Author: <span :class="{'community-text': meta.source === 'Community'}">{{meta.source}}</span> / <a
-                @click="groupBy = 'Authors', scroll(meta.author)"
-                class="link primary--text">{{meta.author}}</a></div>
-              <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
-                @click="setIcon(linked.id, $event)"
-                class="link primary--text"><b>{{linkedGoogle}}</b></a>
+        <transition name="down" @enter="enterIcon" @leave="leaveIcon">
+          <div v-if="icon !== null" ref="down">
+            <v-toolbar dense class="transparent elevation-0">
+              <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon @click="fullScreen = true">
+                <v-icon>fullscreen</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <div>
+              <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
+                <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
+                                  :size="240"
+                                  :svg="linked.data"></app-icon-preview>
               </div>
-              <div v-if="alternatives && alternatives.length">Alternatives: <span
-                v-for="(t, i) in alternatives"><span
-                v-if="i">, </span> <a
-                @click="setIcon(t.id, $event)" class="link primary--text">{{t.name}}</a></span></div>
-              <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
-                @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
-              <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
             </div>
-            <div class="pl-3 pr-3" :class="{highlight: highlight}">
+            <div class="elevation-0 pb-2 pt-2" style="line-height: 32px">
+              <div class="pl-3 pr-3">
+                <div>Name: {{google}}</div>
+
+                <div>Author: <span :class="{'community-text': meta.source === 'Community'}">{{meta.source}}</span> / <a
+                  @click="groupBy = 'Authors', scroll(meta.author)"
+                  class="link primary--text">{{meta.author}}</a></div>
+                <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
+                  @click="setIcon(linked.id, $event)"
+                  class="link primary--text"><b>{{linkedGoogle}}</b></a>
+                </div>
+                <div v-if="alternatives && alternatives.length">Alternatives: <span
+                  v-for="(t, i) in alternatives"><span
+                  v-if="i">, </span> <a
+                  @click="setIcon(t.id, $event)" class="link primary--text">{{t.name}}</a></span></div>
+                <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
+                  @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
+                <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
+              </div>
+              <div class="pl-3 pr-3" :class="{highlight: highlight}">
                     <span style="display: inline-block; width: 36px; height: 36px; padding: 2px"
                           class="list__tile--link" @click="setIcon(i[0], $event)" v-for="i in similarIcons">
                         <app-icon class="no" size="32" :name="i[0]"
                                   :class="{community: communityShape(i[0])}"></app-icon>
                     </span>
+              </div>
             </div>
           </div>
+        </transition>
+      </div>
+
+      <div class="card elevation-0">
+        <div class="pa-3">
+          <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
+                        :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
         </div>
-      </transition>
-      </div>
+        <v-divider></v-divider>
+        <v-select class="elevation-0" v-ripple="true" solo :items="sources"
+                  v-model="source"
+                  prepend-icon="people_outline"
+                  :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
 
-      <div class="pa-3 card elevation-0">
-        <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
-                      :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
-      </div>
-      <v-divider></v-divider>
-      <v-select class="elevation-0" v-ripple="true" solo :items="sources"
-                v-model="source"
-                prepend-icon="people_outline"
-                :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
-
-      <v-divider></v-divider>
-      <template v-if="showHome">
-        <v-select class="elevation-0" v-ripple="true" solo
-                  :items="groups"
-                  v-model="groupBy"
-                  prepend-icon="folder_open" :class="{'grey lighten-4 filtering': groupBy !== 'Tags'}"></v-select>
         <v-divider></v-divider>
-        <v-select class="elevation-0" v-ripple="true" solo :items="sorts" v-model="sortBy"
-                  prepend-icon="sort" :class="{'grey lighten-4 filtering': sortBy !== 'Name'}"></v-select>
-        <v-divider></v-divider>
-        <v-select class="elevation-0" v-ripple="true" solo :items="sizes" v-model="size"
-                  prepend-icon="aspect_ratio"></v-select>
-        <v-divider></v-divider>
-        <!--<v-select class="elevation-0" v-ripple="true" solo-->
-        <!--:items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"-->
-        <!--prepend-icon="tonality"></v-select>-->
-        <!--<v-divider></v-divider>-->
-      </template>
-      <div class="pl-3 pt-2 pb-2" v-if="icon !== null || showHome">
-        <v-checkbox color="red darken-2" hide-details label="Highlight community" v-model="highlight"></v-checkbox>
+        <template v-if="showHome">
+          <v-select class="elevation-0" v-ripple="true" solo
+                    :items="groups"
+                    v-model="groupBy"
+                    prepend-icon="folder_open" :class="{'grey lighten-4 filtering': groupBy !== 'Tags'}"></v-select>
+          <v-divider></v-divider>
+          <v-select class="elevation-0" v-ripple="true" solo :items="sorts" v-model="sortBy"
+                    prepend-icon="sort" :class="{'grey lighten-4 filtering': sortBy !== 'Name'}"></v-select>
+          <v-divider></v-divider>
+          <v-select class="elevation-0" v-ripple="true" solo :items="sizes" v-model="size"
+                    prepend-icon="aspect_ratio"></v-select>
+          <v-divider></v-divider>
+          <!--<v-select class="elevation-0" v-ripple="true" solo-->
+          <!--:items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"-->
+          <!--prepend-icon="tonality"></v-select>-->
+          <!--<v-divider></v-divider>-->
+        </template>
+        <div class="pl-3 pt-2 pb-2" v-if="icon !== null || showHome">
+          <v-checkbox color="red darken-2" hide-details label="Highlight community" v-model="highlight"></v-checkbox>
+        </div>
       </div>
       <v-divider v-if="icon !== null || showHome"></v-divider>
       <template v-if="showHome">
@@ -1297,11 +1295,16 @@
     },
     methods: {
       enterIcon (el) {
-        // console.log(el.clientHeight)
-       this.$refs.downwrap.style.height = el.clientHeight + 'px';
+        if (this.$refs.downwrap.style.height === '0px') {
+          this.$refs.downwrap.style.transition = 'height 0.2s ease-in'
+        } else {
+          this.$refs.downwrap.style.transition = 'height 0.12s ease'
+        }
+
+        this.$refs.downwrap.style.height = el.clientHeight + 'px'
       },
       leaveIcon () {
-       this.$refs.downwrap.style.height = 0;
+        this.$refs.downwrap.style.height = '0px'
       },
       changeSort (column) {
         if (this.pagination.sortBy === column) {
