@@ -204,12 +204,18 @@
     .down-enter {
       transform: translateY(-65%);
       opacity: 0;
+      overflow: hidden;
     }
 
     .down-leave-to {
       transform: translateY(-100%);
       transition: all 0.2s ease-in;
+      overflow: hidden;
       opacity: 0;
+    }
+
+    .downwrap {
+      transition: height 0.2s ease-in;
     }
 
     .down-enter-active {
@@ -311,8 +317,9 @@
                        v-model="drawer">
     <div v-if="icons && similar">
 
-      <transition name="down">
-        <div v-if="icon !== null">
+      <div ref="downwrap" class="downwrap" style="height: 0">
+      <transition name="down" @enter="enterIcon" @leave="leaveIcon">
+        <div v-if="icon !== null" ref="down">
           <v-toolbar dense class="transparent elevation-0">
             <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
             </v-toolbar-title>
@@ -357,8 +364,9 @@
           </div>
         </div>
       </transition>
+      </div>
 
-      <div class="pa-3">
+      <div class="pa-3 card elevation-0">
         <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
                       :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
       </div>
@@ -1288,6 +1296,13 @@
       })
     },
     methods: {
+      enterIcon (el) {
+        // console.log(el.clientHeight)
+       this.$refs.downwrap.style.height = el.clientHeight + 'px';
+      },
+      leaveIcon () {
+       this.$refs.downwrap.style.height = 0;
+      },
       changeSort (column) {
         if (this.pagination.sortBy === column) {
           this.pagination.descending = !this.pagination.descending
@@ -1740,6 +1755,7 @@
     watch: {
       icon (value) {
         if (value !== null) {
+
           if (this.selectedText.split(/[\n,]/).map(d => d.trim()).indexOf(this.google) === -1) {
             this.selectedText += (this.selectedText ? ',\n' : '') + this.google
           }
@@ -1747,6 +1763,7 @@
           this.drawer = true
 
           Vue.nextTick(() => {
+            this.enterIcon(this.$refs.down)
             this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
           })
         }
