@@ -313,7 +313,7 @@
                        v-model="drawer">
     <div v-if="icons && similar">
 
-      <div ref="downwrap" class="downwrap" style="height: 0">
+      <div ref="downwrap" class="downwrap">
         <transition name="down" @enter="enterIcon" @leave="leaveIcon">
           <div v-if="icon !== null" ref="down">
             <v-toolbar dense class="transparent elevation-0">
