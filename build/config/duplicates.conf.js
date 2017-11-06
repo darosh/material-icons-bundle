@@ -12,6 +12,7 @@
     // 'lens': 'circle',
     // 'schedule': 'clock',
     // 'keyboard voice': 'microphone',
+    'free breakfast': 'local cafe',
     'chevron down': 'expand more',
     'keyboard arrow down': 'expand more',
     // 'directions subway': 'subway variant',
@@ -64,7 +65,7 @@
       b = t
     }
 
-    if (matches[a.name] === b.name) {
+    if (matches[a.name] === b.name || matches[b.name] === a.name) {
       return -1
     }
 

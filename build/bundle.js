@@ -13,15 +13,22 @@ console.log('Linking duplicates')
 let count = 0
 
 Object.keys(duplicates.matches).forEach(m => {
-  console.log(m)
+  const n = duplicates.matches[m]
+
   const a = (meta.find(d => d.name === m && d.source === 'Google') || meta.find(d => d.name === m && d.source === 'Community')).id
-  const b = (meta.find(d => d.name === duplicates.matches[m] && d.source === 'Community') || meta.find(d => d.name === duplicates.matches[m] && d.source === 'Google')).id
+  const b = (meta.find(d => d.name === n && d.source === 'Community') || meta.find(d => d.name === n && d.source === 'Google')).id
 
   const aa = Math.min(a, b)
   const bb = Math.max(a, b)
 
-  if (!similar.find(d => d[0] === aa && d[1] === bb)) {
+  const f = similar.find(d => (d[0] === aa) && (d[1] === bb))
+
+  if (!f) {
+    console.log('Adding duplicate', m, '-->', n)
     similar.push([aa, bb, 1])
+  } else {
+    f[2] = 1
+    console.log('Replacing duplicate', m, '-->', n)
   }
 })
 
@@ -32,6 +39,8 @@ function testDupl (d) {
   const b = meta[d[1]]
 
   const exact = d[2] === 0 || duplicates && duplicates(a, b, d[2])
+
+  console.log('Matching', a.name, b.name, exact)
 
   if (exact) {
     d.delete = true
