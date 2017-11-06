@@ -396,7 +396,7 @@
         </div>
       </div>
       <v-divider v-if="icon !== null || showHome"></v-divider>
-      <template v-if="showHome">
+      <div class="card elevation-0" v-if="showHome">
         <v-expansion-panel expand class="elevation-0">
           <v-expansion-panel-content ripple>
             <div slot="header">
@@ -445,7 +445,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-divider></v-divider>
-      </template>
+      </div>
     </div>
     <v-container v-else fluid fill-height>
       <v-layout justify-center align-center>
@@ -1295,6 +1295,10 @@
     },
     methods: {
       enterIcon (el) {
+        if (this.$refs.downwrap.style.height === (el.clientHeight + 'px')) {
+          return
+        }
+
         if (this.$refs.downwrap.style.height === '0px') {
           this.$refs.downwrap.style.transition = 'height 0.2s ease-in'
         } else {
