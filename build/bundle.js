@@ -40,7 +40,7 @@ function testDupl (d) {
 
   const exact = d[2] === 0 || duplicates && duplicates(a, b, d[2])
 
-  console.log('Matching', a.name, b.name, exact)
+  // console.log('Matching', a.name, b.name, exact)
 
   if (exact) {
     d.delete = true
