@@ -5,7 +5,6 @@ const maxLimit = conf.distance
 
 console.time('Comparing');
 
-// const cache = {}
 let similar = []
 let l = meta.length
 
@@ -57,51 +56,11 @@ function getDelta (a, b, limit) {
   let d = 0
 
   for (let i = 0; i < a.length; i += 8) {
-    // const as = a.substr(i, 8)
-    // const an = cache[as] || (cache[as] = parseInt(as, 16))
-    // const bs = b.substr(i, 8)
-    // const bn = cache[bs] || (cache[bs] = parseInt(bs, 16))
-
-    // d += count(an ^ bn)
     d += count(parseInt(a.substr(i, 8), 16) ^ parseInt(b.substr(i, 8), 16))
 
     if (d >= limit) {
       return d
     }
-  }
-
-  return d
-}
-
-function getDelta2 (a, b, limit) {
-  if (a === b) {
-    return 0
-  }
-
-  let d = 0
-
-  for (let i = 0; i < a.length; i++) {
-    d += getSubDelta(a[i], b[i])
-
-    if (d >= limit) {
-      return d
-    }
-  }
-
-  return d
-}
-
-function getSubDelta (a, b) {
-  if (a === b) {
-    return 0
-  }
-
-  let x = parseInt(a, 16) ^ parseInt(b, 16)
-  let d = 0
-
-  while (x) {
-    d += x & 1
-    x = x >>> 1
   }
 
   return d
