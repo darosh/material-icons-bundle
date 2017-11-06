@@ -580,7 +580,8 @@
                        class="black--text link">{{props.item.community}}</a>
                   </td>
                   <td>
-                    <span v-if="props.item.alternative && props.item.alternative[1]">{{props.item.alternative[1]}}</span>
+                    <span
+                      v-if="props.item.alternative && props.item.alternative[1]">{{props.item.alternative[1]}}</span>
                   </td>
                 </tr>
               </template>
@@ -1420,6 +1421,18 @@
                       : !r.community && r.google
                         ? 3
                         : 4
+
+              if (r.status === 4) {
+                const x = r.community.replace(/-/g, ' ')
+                const f = this.icons.find(d => {
+                  const a = d.alternative && this.icons[d.alternative[0]]
+                  return a && (x === a.name || x === a.original)
+                })
+
+                if (f) {
+                  return null
+                }
+              }
 
               r.googleClass = r.community && !r.google ? '' : ('status-' + (r.alternative ? 3 : r.status))
               r.communityClass = !r.community && r.google ? '' : ('status-' + r.status)

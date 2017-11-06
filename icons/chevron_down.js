@@ -1,1 +1,1 @@
-export {default} from './keyboard_arrow_down'
+export {default} from './expand_more'

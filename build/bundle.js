@@ -14,8 +14,8 @@ let count = 0
 
 Object.keys(duplicates.matches).forEach(m => {
   console.log(m)
-  const a = meta.find(d => d.name === m && d.source === 'Google').id
-  const b = meta.find(d => d.name === duplicates.matches[m] && d.source === 'Community').id
+  const a = (meta.find(d => d.name === m && d.source === 'Google') || meta.find(d => d.name === m && d.source === 'Community')).id
+  const b = (meta.find(d => d.name === duplicates.matches[m] && d.source === 'Community') || meta.find(d => d.name === duplicates.matches[m] && d.source === 'Google')).id
 
   const aa = Math.min(a, b)
   const bb = Math.max(a, b)
