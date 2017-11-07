@@ -973,7 +973,7 @@
     el: '#app',
     router,
     data () {
-      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Text', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar']
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Text', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar', 'Frame']
 
       if (window.IconDuplicates) {
         groups.push('Duplicates?')
@@ -1097,6 +1097,15 @@
           'Authors': (r, icon) => {
             const i = icon.link >= 0 ? this.icons[icon.link] : icon
             const c = i.author
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Frame': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.frame
 
             r[c] = r[c] || []
             r[c].push(icon.id)
@@ -1235,6 +1244,7 @@
         groupSort: {
           'All': (d) => d.sort(),
           'Tags': (d) => d.sort(),
+          'Frame': (d) => d.sort(),
           'Text': (d) => d.sort(),
           'Authors': (d) => d.sort(),
           'Versions': (d) => d.sort().reverse(),

@@ -74,6 +74,8 @@ const bundle = meta.map(m => {
   b.version = m.version
   b.pixels = b.link >= 0 ? undefined : m.pixels
   b.exact = m.exact
+  b.border = require('./lib/hash').border(m.hash)
+  b.frame = Math.min.apply(null, b.border)
 
   if (b.tags) {
     b.tags = b.tags.map(d => (patch.tags[d] === null ? false : (patch.tags[d] || d))).filter(d => d)
