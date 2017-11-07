@@ -161,6 +161,8 @@ module.exports = {
     'camera': 'image',
     'cart': null,
     'form': 'toggle',
+    'vote': 'toggle',
+    'user': 'account',
     'square': 'box',
     'map': 'maps',
     'octagon': null,
