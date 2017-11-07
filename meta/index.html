@@ -400,7 +400,7 @@
         <v-expansion-panel expand class="elevation-0">
           <v-expansion-panel-content ripple>
             <div slot="header">
-              <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle</span>
+              <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle <small class="pl-1">({{selectedIcons.length}})</small></span>
             </div>
             <v-card :class="{highlight: highlight}">
               <div v-ripple="true" @click="setIcon(i.id, $event)" v-for="i in selectedIcons"
@@ -430,7 +430,7 @@
           <v-expansion-panel-content ripple>
             <div slot="header">
               <span><app-icon v-if="icons" size="24" name="folder multiple outline"
-                              class="mr-3"></app-icon>Groups</span>
+                              class="mr-3"></app-icon>Groups <small class="pl-1">({{sorted.length}})</small></span>
             </div>
             <v-card>
               <div v-for="(s, i) in sorted">
