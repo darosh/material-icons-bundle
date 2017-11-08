@@ -1,4 +1,4 @@
-# ![](./meta/logo.svg width=24)Material Icons Bundle
+# ![](./meta/logo.svg width =24x24)Material Icons Bundle
 
 _Material Design SVG icons as ES modules_
 
