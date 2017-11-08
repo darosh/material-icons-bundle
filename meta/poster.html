@@ -46,8 +46,8 @@
           const icon = icons.splice(Math.round(v * (icons.length - 1) / 255), 1)[0]
           const fill = `rgb(${[img[index], img[index + 1], img[index + 2]].join(',')})`
           const i = icon.data[0] === '<'
-            ? `<g fill="${fill}" fill-opacity=".87" transform="translate(${x * tile - shift},${y * tile - shift})">${icon.data}</g>`
-            : `<path fill="${fill}" fill-opacity=".87" d="${icon.data}" transform="translate(${x * tile - shift},${y * tile - shift})"></path>`
+            ? `<g fill="${fill}" transform="translate(${x * tile - shift},${y * tile - shift})">${icon.data}</g>`
+            : `<path fill="${fill}" d="${icon.data}" transform="translate(${x * tile - shift},${y * tile - shift})"></path>`
           is += i
         }
       }
