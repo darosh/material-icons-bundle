@@ -1,6 +1,5 @@
 node_modules
 meta/*.json
-meta/*.svg
 demo
 package-lock.json
 yarn.lock

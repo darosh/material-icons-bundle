@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #fafafa">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300">
+</head>
+<body style="text-align: center; opacity: .87; margin: 0; padding: 24px">
+<svg></svg>
+<script>
+  fetch('./meta.json').then(res => res.json()).then(icons => {
+    const frame = 2
+    const base = 24
+    const tile = 22
+    const shift = (base - tile) / 2
+
+    icons = icons
+      .filter(d => d.link === undefined)
+      .filter(d => !d.tags || d.tags.indexOf('logo') === -1)
+      .filter(d => d.frame >= frame)
+    const size = 34
+    const canvas = document.createElement('canvas')
+    let ctx = canvas.getContext('2d')
+    canvas.width = size
+    canvas.height = size
+    const image = new Image()
+    image.width = canvas.width
+    image.height = canvas.height
+    image.src = './logo.svg'
+    image.onload = () => {
+      ctx.drawImage(image, 0, 0)
+      icons.sort((a, b) => a.pixels - b.pixels)
+      icons = icons.filter((d, i) => i < (icons.length - 3))
+      const img = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+      const svg = document.getElementsByTagName('svg')[0]
+      svg.setAttribute('viewBox', `0 0 ${canvas.width * tile} ${canvas.height * tile}`)
+      svg.setAttribute('width', 888)
+      svg.setAttribute('height', 888)
+      let is = ''
+
+      for (let y = 0; y < canvas.height; y++) {
+        for (let z = 0; z < canvas.width; z++) {
+          const x = y % 2 ? z : (canvas.width - 1 - z)
+          const index = (x + y * canvas.width) * 4
+          const v = img[index + 3]
+          const icon = icons.splice(Math.round(v * (icons.length - 1) / 255), 1)[0]
+          const fill = `rgb(${[img[index], img[index + 1], img[index + 2]].join(',')})`
+          const i = icon.data[0] === '<'
+            ? `<g fill="${fill}" transform="translate(${x * tile - shift},${y * tile - shift})">${icon.data}</g>`
+            : `<path fill="${fill}" d="${icon.data}" transform="translate(${x * tile - shift},${y * tile - shift})"></path>`
+          is += i
+        }
+      }
+      svg.innerHTML = is
+    }
+  })
+</script>
+</body>
+</html>

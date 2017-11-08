@@ -1,6 +1,8 @@
-# Material Icons Bundle
+# ![](./meta/logo.svg)Material Icons Bundle
 
 _Material Design SVG icons as ES modules_
+
+![](./meta/poster.svg)
 
 ## Browse Icons
 
