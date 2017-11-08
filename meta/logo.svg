@@ -4,16 +4,16 @@
    viewBox="0 0 24 24">
     <path
        d="M 0,0 V 12 A 12,12 0 0 1 12,0 Z"
-       style="fill:#666;fill-opacity:0.1" />
+       style="fill:#444;fill-opacity:0.1" />
     <path
        d="M 12,0 A 12,12 0 0 1 24,12 V 0 Z"
-       style="fill:#666;fill-opacity:0.1" />
+       style="fill:#444;fill-opacity:0.1" />
     <path
        d="M 24,12 A 12,12 0 0 1 12,24 h 12 z"
-       style="fill:#666;fill-opacity:0.1" />
+       style="fill:#444;fill-opacity:0.1" />
     <path
        d="M 12,24 A 12,12 0 0 1 0,12 v 12 z"
-       style="fill:#666;fill-opacity:0.1" />
+       style="fill:#444;fill-opacity:0.1" />
     <path
        d="M 12,0 A 12,12 0 0 0 3.5253906,3.515625 H 20.476562 A 12,12 0 0 0 12,0 Z"
        style="fill:#8e24aa;fill-opacity:.8" />
