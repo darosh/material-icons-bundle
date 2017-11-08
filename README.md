@@ -1,4 +1,4 @@
-# <img src="./meta/logo.svg" width="24" height="24" /> Material Icons Bundle
+# Material Icons Bundle
 
 _Material Design SVG icons as ES modules_
 
