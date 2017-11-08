@@ -2,7 +2,7 @@
 
 _Material Design SVG icons as ES modules_
 
-![](./meta/poster.svg)
+[![](./meta/poster.svg)](https://darosh.github.io/material-icons-bundle/)
 
 ## Browse Icons
 
