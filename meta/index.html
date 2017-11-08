@@ -400,7 +400,8 @@
         <v-expansion-panel expand class="elevation-0">
           <v-expansion-panel-content ripple>
             <div slot="header">
-              <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle <small class="pl-1">({{selectedIcons.length}})</small></span>
+              <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle <small
+                class="pl-1">({{selectedIcons.length}})</small></span>
             </div>
             <v-card :class="{highlight: highlight}">
               <div v-ripple="true" @click="setIcon(i.id, $event)" v-for="i in selectedIcons"
@@ -658,6 +659,10 @@
             :x="p[0] - marker * unit / 2" :y="p[1] - marker * unit / 2" :rx="round * unit" :ry="round * unit"
             :width="marker * unit" :height="marker * unit"/>
     </svg>
+
+    <!--<svg v-if="abs" viewBox="0 0 48 48" fill="rgba(0,255,0,1)">-->
+      <!--<path :d="abs"></path>-->
+    <!--</svg>-->
   </div>
 </script>
 
@@ -774,14 +779,10 @@
     // https://github.com/jxnblk/path-ast/blob/master/lib/to-absolute.js
     function abs (d) {
       const ast = getAst(d)
-      var lastX = 0
-      var lastY = 0
-      const X_REGEX = /^x[0-9]?$/
-      const Y_REGEX = /^y[0-9]?$/
-
-      var firstX = 0
-      var firstY = 0
-
+      let lastX = 0
+      let lastY = 0
+      let firstX = 0
+      let firstY = 0
       let first = true
 
       return ast.map(function (command) {
@@ -795,19 +796,24 @@
         if (command.type.match(/[A-Z]/)) {
           lastX = isNaN(params.x) ? lastX : params.x
           lastY = isNaN(params.y) ? lastY : params.y
+
+          if (command.type === 'M') {
+            first = true
+          }
         } else {
           command.type = command.type.toUpperCase()
           length[command.type.toLowerCase()].forEach(function (key) {
             const param = params[key]
 
-            if (key.match(X_REGEX)) {
+            if (key[0] === 'x') {
               params[key] = lastX + param
             }
 
-            if (key.match(Y_REGEX)) {
+            if (key[0] === 'y') {
               params[key] = lastY + param
             }
           })
+
           lastX = isNaN(params.x) ? lastX : params.x
           lastY = isNaN(params.y) ? lastY : params.y
         }
@@ -940,6 +946,9 @@
       unit () {
         return 24 / this.size
       },
+      // abs () {
+      //   return this.svg && (this.type === 5) ? parsePath(this.svg).abs : null
+      // },
       points () {
         return this.svg && (this.type === 5) ? parsePath(this.svg).points : null
       },
@@ -1310,7 +1319,7 @@
           return
         }
 
-        if(this.transit) {
+        if (this.transit) {
           if (this.$refs.downwrap.style.height === '0px') {
             this.$refs.downwrap.style.transition = 'height 0.2s ease-in'
           } else {
