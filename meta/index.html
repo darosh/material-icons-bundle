@@ -661,7 +661,7 @@
     </svg>
 
     <!--<svg v-if="abs" viewBox="0 0 48 48" fill="rgba(0,255,0,1)">-->
-      <!--<path :d="abs"></path>-->
+    <!--<path :d="abs"></path>-->
     <!--</svg>-->
   </div>
 </script>
@@ -982,7 +982,7 @@
     el: '#app',
     router,
     data () {
-      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Text', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar', 'Frame']
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Text', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar', 'Frame', 'Detail']
 
       if (window.IconDuplicates) {
         groups.push('Duplicates?')
@@ -1062,6 +1062,35 @@
           }
         },
         reducer: {
+          'Detail': (r, icon) => {
+            if (icon.link !== undefined) {
+              return r
+            }
+
+            const points = parsePath(icon.data).points
+            let distances = []
+
+            for (let x = 0; x < points.length; x++) {
+              for (let y = x + 1; y < points.length; y++) {
+                const d0 = points[x][0] - points[y][0]
+                const d1 = points[x][1] - points[y][1]
+                distances.push(d0 * d0 + d1 * d1)
+              }
+            }
+
+            distances.sort()
+            distances = distances.filter(d => d !== 0).filter(d => d < 1)
+
+            if(distances.length) {
+              // const c = Math.round(distances[0])
+              const c = distances.length
+
+              r[c] = r[c] || []
+              r[c].push(icon.id)
+            }
+
+            return r
+          },
           'Tags': (r, icon) => {
             [].concat(icon.tags || [])
               .concat(!icon.tags ? ['other'] : [])
@@ -1260,6 +1289,7 @@
           'Density': (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
           'Shapes': (d) => d,
           'Similar': (d) => d,
+          'Detail': (d) => d.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0)),
           'Distance': (d) => d,
           'Duplicates': (d) => d,
           'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
