@@ -61,10 +61,12 @@ See [compare](https://darosh.github.io/material-icons-bundle/#/compare) table fo
 
 ## Metadata
 
+Used by [Icon Browser](https://darosh.github.io/material-icons-bundle/):
+
 - [meta.json](https://darosh.github.io/material-icons-bundle/meta.json)
 - [similar.json](https://darosh.github.io/material-icons-bundle/similar.json)
 
-## Poster
+## Poster generator
 
 - [online](https://darosh.github.io/material-icons-bundle/poster.html) 
 - [source](./meta/poster.html)
