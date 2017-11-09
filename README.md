@@ -58,3 +58,13 @@ _Here is some real usage [example](https://github.com/darosh/oax/commit/9856e4a2
 
 Sources are merged comparing rendered pixel with some additional auto tagging.
 See [compare](https://darosh.github.io/material-icons-bundle/#/compare) table for more information.
+
+## Metadata
+
+- [meta.json](https://darosh.github.io/material-icons-bundle/meta.json)
+- [similar.json](https://darosh.github.io/material-icons-bundle/similar.json)
+
+## Poster
+
+- [online](https://darosh.github.io/material-icons-bundle/poster.html) 
+- [source](./meta/poster.html)
