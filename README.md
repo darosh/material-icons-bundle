@@ -68,5 +68,7 @@ Used by [Icon Browser](https://darosh.github.io/material-icons-bundle/):
 
 ## Poster generator
 
+Leverages `pixels` and `frame` metadata in [meta.json](https://darosh.github.io/material-icons-bundle/meta.json).
+
 - [online](https://darosh.github.io/material-icons-bundle/poster.html) 
 - [source](./meta/poster.html)
