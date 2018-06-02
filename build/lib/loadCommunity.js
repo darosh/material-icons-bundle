@@ -1,4 +1,4 @@
-const meta = require('mdi-svg/meta.json')
+const meta = require('@mdi/svg/meta.json')
 
 module.exports = function () {
   return new Promise(resolve => {

@@ -1,0 +1,1 @@
+export default "<path fill-opacity=\"1\" stroke-width=\"0.2\" stroke-linejoin=\"round\" d=\"M 5,13.0008L 5,12L 18.01,12L 18,13L 5,13.0008 Z \"/>"

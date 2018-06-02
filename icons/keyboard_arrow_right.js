@@ -1,1 +1,1 @@
-export {default} from './chevron_right'
+export {default} from './navigate_next'

@@ -16,7 +16,13 @@ Object.keys(duplicates.matches).forEach(m => {
   const n = duplicates.matches[m]
 
   const a = (meta.find(d => d.name === m && d.source === 'Google') || meta.find(d => d.name === m && d.source === 'Community')).id
-  const b = (meta.find(d => d.name === n && d.source === 'Community') || meta.find(d => d.name === n && d.source === 'Google')).id
+  let b = (meta.find(d => d.name === n && d.source === 'Community') || meta.find(d => d.name === n && d.source === 'Google'))
+
+  if (b) {
+    b = b.id
+  } else {
+    return
+  }
 
   const aa = Math.min(a, b)
   const bb = Math.max(a, b)
@@ -34,7 +40,7 @@ Object.keys(duplicates.matches).forEach(m => {
 
 similar.forEach(testDupl)
 
-function testDupl (d) {
+function testDupl(d) {
   const a = meta[d[0]]
   const b = meta[d[1]]
 
@@ -147,7 +153,7 @@ fs.writeFileSync('meta/meta.json', compact(bundle, {maxLength: 4096}))
 console.log('Writing meta/similar.json')
 fs.writeFileSync('meta/similar.json', JSON.stringify(similar))
 
-function link (a, b, exact) {
+function link(a, b, exact) {
   while (b.link) {
     b = meta[b.link]
   }

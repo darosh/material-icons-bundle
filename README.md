@@ -72,3 +72,13 @@ Leverages `pixels` and `frame` metadata in [meta.json](https://darosh.github.io/
 
 - [online](https://darosh.github.io/material-icons-bundle/poster.html) 
 - [source](./meta/poster.html)
+
+## Development
+
+__Note__: you may experience issues with installing material-design-icons package, it may be easier to download & unpack it manually
+
+```text
+yarn
+yarn build
+yarn export
+```

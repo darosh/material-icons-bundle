@@ -10,7 +10,7 @@ exports.render = function (svg, resolve) {
       background: {r: 255, g: 255, b: 255, alpha: 255}
     }
   })
-    .overlayWith(new Buffer(svg))
+    .overlayWith(Buffer.from(svg))
     .png()
     .toBuffer()
     .catch(x => console.error(x))
