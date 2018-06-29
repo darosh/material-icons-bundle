@@ -25,7 +25,7 @@ module.exports = function (svg) {
       }
 
       if (!data) {
-        data = svg.replace(/\n\r/g, ' ')
+        data = svg.replace(/[\n\r]/g, ' ')
           .replace(/ +/g, ' ')
           .replace(/.*<svg[^>]*>(.*)<\/svg>.*/gmi, '$1')
           .trim().replace('fill="#000000" fill-opacity="1" ', '')
