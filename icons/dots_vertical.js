@@ -1,1 +1,1 @@
-export {default} from './more_vert'
+export {default} from './dots_vertical_light'

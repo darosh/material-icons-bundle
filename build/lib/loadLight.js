@@ -7,6 +7,10 @@ module.exports = function () {
     const data = []
 
     readDir('./node_modules/MaterialDesignLight/icons/svg', (err, files) => {
+      if (err) {
+        throw (err)
+      }
+
       files.forEach(file => {
         const segments = file.split(path.sep)
 

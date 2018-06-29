@@ -1,1 +1,1 @@
-export {default} from './more_horiz'
+export {default} from './dots_horizontal_light'

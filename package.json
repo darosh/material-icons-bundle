@@ -1,6 +1,6 @@
 {
   "name": "material-icons-bundle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "devDependencies": {
     "@mdi/svg": "^2.4.43",
     "axios": "^0.17.0",

@@ -1,1 +1,1 @@
-export default "<path fill-opacity=\"1\" stroke-width=\"0.2\" stroke-linejoin=\"round\" d=\"M 19,13L 6.74998,13L 12,18.2501L 11.3357,19L 4.83579,12.5L 11.3358,6L 12,6.75001L 6.75,12L 19,12L 19,13 Z \"/>"
+export default "M 19,13L 6.74998,13L 12,18.2501L 11.3357,19L 4.83579,12.5L 11.3358,6L 12,6.75001L 6.75,12L 19,12L 19,13 Z"
