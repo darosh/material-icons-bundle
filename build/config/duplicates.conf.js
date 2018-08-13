@@ -59,7 +59,7 @@
   return dups
 
   function dups (a, b, c) {
-    if(a.source === 'Community') {
+    if (a.source !== 'Google') {
       const t = a
       a = b
       b = t
