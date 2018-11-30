@@ -1,0 +1,1 @@
+export {default} from './photo_size_select_small'

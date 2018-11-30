@@ -1,0 +1,1 @@
+export {default} from './alpha_b_box_outline'
