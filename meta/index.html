@@ -936,7 +936,8 @@
     },
     methods: {
       url (i, c, o) {
-        return `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${this.size}" height="${this.size}" fill="${c}" fill-opacity="${o}">${this.compare[i][0] === '<' ? `<g>${this.compare[i]}</g>` : `<path d="${this.compare[i]}"></path>`}</svg>')`
+        const image = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${this.size}" height="${this.size}" fill="${c}" fill-opacity="${o}">${this.compare[i][0] === '<' ? `<g>${this.compare[i]}</g>` : `<path d="${this.compare[i]}"></path>`}</svg>`
+        return `url('data:image/svg+xml;utf8,${encodeURIComponent(image)}')`
       }
     },
     computed: {
