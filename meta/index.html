@@ -694,7 +694,7 @@
 
   function getIconGrid (rich) {
     const grid = 24
-    const keys = {0: 'border', 8: 'key', 12: 'key', 16: 'key', 24: 'border'}
+    const keys = { 0: 'border', 8: 'key', 12: 'key', 16: 'key', 24: 'border' }
     const arr = rich !== 1 ? new Array(grid + 1).fill(0).map((d, i) => i) : [0, 24]
     const rects = [[20, 16, 2], [16, 20, 2], [18, 18, 2], [20, 20, 10], [10, 10, 5]]
     return `${arr.map(i => `<line class="${keys[i] || ''}" x1="0" y1="${i}" x2="24" y2="${i}"/>`).join('')}` +
@@ -862,7 +862,7 @@
         .filter(function (command) {
           return Object.keys(command.params).length
         })
-        .map(function ({params: {x, y}}) {
+        .map(function ({ params: { x, y } }) {
           return (prev = [isNaN(x) ? prev[0] : x, isNaN(y) ? prev[1] : y])
         }).reduce((r, i) => {
           r[i] = true
@@ -886,9 +886,9 @@
 
   const router = new VueRouter({
     routes: [
-      {path: '/'},
-      {path: '/compare'},
-      {path: '/chart'}
+      { path: '/' },
+      { path: '/compare' },
+      { path: '/chart' }
     ]
   })
 
@@ -1032,17 +1032,17 @@
           '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
         ],
         headers: [
-          {width: '32px', align: 'left', text: '', value: 'detail'},
-          {width: '32px', align: 'left', text: '', value: 'googleData'},
-          {width: '280px', align: 'left', text: 'Google', value: 'google'},
-          {width: '32px', align: 'left', text: '', value: 'communityData'},
-          {width: '280px', align: 'left', text: 'Community', value: 'community'},
-          {width: '80px', align: 'left', text: 'Status', value: 'status'},
-          {width: '280px', align: 'left', text: 'Bundle', value: 'bundle'},
-          {width: '280px', align: 'left', text: 'Comment', value: 'alternative.0'}
+          { width: '32px', align: 'left', text: '', value: 'detail' },
+          { width: '32px', align: 'left', text: '', value: 'googleData' },
+          { width: '280px', align: 'left', text: 'Google', value: 'google' },
+          { width: '32px', align: 'left', text: '', value: 'communityData' },
+          { width: '280px', align: 'left', text: 'Community', value: 'community' },
+          { width: '80px', align: 'left', text: 'Status', value: 'status' },
+          { width: '280px', align: 'left', text: 'Bundle', value: 'bundle' },
+          { width: '280px', align: 'left', text: 'Comment', value: 'alternative.0' }
         ],
-        pagination: {sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false},
-        rowsPerPage: [100, 500, {text: 'All', value: -1}],
+        pagination: { sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false },
+        rowsPerPage: [100, 500, { text: 'All', value: -1 }],
         sorter: {
           Name: (a, b) => this.icons[a].name.localeCompare(this.icons[b].name),
           Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id) -
@@ -1407,7 +1407,7 @@
         }
 
         const lines = this.sorted.reduce((r, group) => {
-          r.push({name: group.name, length: group.value.length, id: group.name})
+          r.push({ name: group.name, length: group.value.length, id: group.name })
 
           for (let i = 0; i < group.value.length; i += this.columns) {
             const v = group.value.slice(i, Math.min(i + this.columns, group.value.length))
@@ -1600,7 +1600,7 @@
         return this.meta.name.replace(/ /g, '-')
       },
       grid () {
-        return {Tiny: 32, Small: 64, Medium: 128, Large: 160}[this.size]
+        return { Tiny: 32, Small: 64, Medium: 128, Large: 160 }[this.size]
       },
       meta () {
         return this.icons ? this.icons[this.icon] : null
@@ -1682,7 +1682,7 @@
           })
         }
 
-        return this.groupSort[this.groupBy](Object.keys(reduced)).map(key => ({name: key, value: reduced[key]}))
+        return this.groupSort[this.groupBy](Object.keys(reduced)).map(key => ({ name: key, value: reduced[key] }))
       },
       similarIcons () {
         if (!this.linked || !this.similar) {
@@ -1726,7 +1726,7 @@
           r[i.note] = r[i.note] || 0
           r[i.note]++
           return r
-        }, {all: this.compare.length})
+        }, { all: this.compare.length })
 
         return Object.keys(stats).map(k => ({
           name: k,
@@ -1766,9 +1766,9 @@
       similarLookupIcons () {
         return this.similar.reduce((r, i) => {
           r[i[0]] = r[i[0]] || []
-          r[i[0]].push({icon: i[1], match: i[2]})
+          r[i[0]].push({ icon: i[1], match: i[2] })
           r[i[1]] = r[i[1]] || []
-          r[i[1]].push({icon: i[0], match: i[2]})
+          r[i[1]].push({ icon: i[0], match: i[2] })
           return r
         }, {})
       },
@@ -1817,7 +1817,6 @@
     watch: {
       icon (value) {
         if (value !== null) {
-
           if (this.selectedText.split(/[\n,]/).map(d => d.trim()).indexOf(this.google) === -1) {
             this.selectedText += (this.selectedText ? ',\n' : '') + this.google
           }
