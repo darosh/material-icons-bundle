@@ -6,6 +6,6 @@ Promise.all([
   require('./lib/loadLight')(),
   require('./lib/loadGoogle')()
 ]).then(sets => {
-  const loaded = sets.reduce((r, s) => {return r.concat(s)}, [])
-  fs.writeFileSync('./meta/_loaded.json', stringify(loaded, {maxLength: 2048}))
+  const loaded = sets.reduce((r, s) => { return r.concat(s) }, [])
+  fs.writeFileSync('./meta/_loaded.json', stringify(loaded, { maxLength: 2048 }))
 })

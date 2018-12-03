@@ -1,12 +1,12 @@
 const compactJSON = require('json-stringify-pretty-compact')
-const {writeFileSync} = require('fs')
-const {getHashes} = require('similar-icons')
+const { writeFileSync } = require('fs')
+const { getHashes } = require('similar-icons')
 const items = require('../meta/_loaded.json')
 
 console.time('Rendering')
 
 ;(async () => {
-  const hashes = await getHashes({items, toSVG}).then()
+  const hashes = await getHashes({ items, toSVG }).then()
 
   hashes.forEach((f, i) => {
     items[i].hash = f.hash
@@ -15,7 +15,7 @@ console.time('Rendering')
 
   console.timeEnd('Rendering')
 
-  writeFileSync('meta/_rendered.json', compactJSON(items, {maxLength: 2048}))
+  writeFileSync('meta/_rendered.json', compactJSON(items, { maxLength: 2048 }))
 })()
 
 function pathToSVG (pathOrSvg) {
@@ -24,6 +24,6 @@ function pathToSVG (pathOrSvg) {
   }</svg>`
 }
 
-function toSVG ({data}) {
+function toSVG ({ data }) {
   return pathToSVG(data)
 }

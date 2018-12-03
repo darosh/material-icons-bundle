@@ -113,7 +113,7 @@ meta.forEach(m => {
 })
 
 console.log('Writing meta/meta.json')
-fs.writeFileSync('meta/meta.json', compact(meta, {maxLength: 4096}))
+fs.writeFileSync('meta/meta.json', compact(meta, { maxLength: 4096 }))
 
 console.log('Writing meta/similar.json')
 fs.writeFileSync('meta/similar.json', JSON.stringify(similar))
@@ -137,7 +137,7 @@ function merge (m, t) {
   }
 
   if (t.merged) {
-    throw '!!!!'
+    throw new Error('!!!!')
   }
 
   t.merged = {

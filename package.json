@@ -38,7 +38,7 @@
     "export": "node build/export.js",
     "clean": "rimraf index.js icons meta/*.json",
     "deploy": "cpy meta/*.* !meta/_*.* demo && deploy-to-gh-pages --local demo",
-    "lint": "eslint --fix --ext .html meta",
+    "lint": "eslint --fix --ext .html,.js build meta",
     "update": "npm run build:5:bundle && npm run build:6:unique"
   }
 }

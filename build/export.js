@@ -5,7 +5,7 @@ const mkdirp = require('mkdirp')
 mkdirp.sync('icons')
 
 console.log('Underscoring names')
-meta.forEach(m => m.name = m.name.replace(/ /g, '_'))
+meta.forEach(m => { m.name = m.name.replace(/ /g, '_') })
 
 let ind = ['/* eslint-disable camelcase */']
 

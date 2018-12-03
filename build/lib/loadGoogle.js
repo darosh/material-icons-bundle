@@ -18,6 +18,10 @@ module.exports = function () {
         }
       }],
       (err, files) => {
+        if (err) {
+          console.error(err)
+        }
+
         files.forEach(file => {
           const segments = file.split(path.sep)
 

@@ -3,7 +3,7 @@ const meta = require('../meta/_rendered.json')
 const conf = require('./config/icon.conf')
 const maxLimit = conf.distance
 
-console.time('Comparing');
+console.time('Comparing')
 
 let similar = []
 let l = meta.length
@@ -44,7 +44,7 @@ similar.sort((a, b) => {
   return a[2] - b[2]
 })
 
-console.timeEnd('Comparing');
+console.timeEnd('Comparing')
 
 fs.writeFileSync('meta/_similar.json', JSON.stringify(similar))
 
