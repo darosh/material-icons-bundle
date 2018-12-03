@@ -1,1 +1,1 @@
-export {default} from './add_alarm'
+export {default} from './alarm_add'
