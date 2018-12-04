@@ -10,77 +10,116 @@
 </head>
 <body style="text-align: center; opacity: .87; margin: 0; padding: 20px">
 <script>
-  function createPoster ({ icons, logo, base, tile, frame, size, targetSize }) {
-    return new Promise(resolve => {
-      const shift = (base - tile) / 2
-      icons = icons.filter(d => d.frame >= frame)
-      const copy = icons.slice()
-      const canvas = document.createElement('canvas')
-      let ctx = canvas.getContext('2d')
-      canvas.width = size
-      canvas.height = size
-      const image = new Image()
-      image.width = canvas.width
-      image.height = canvas.height
-      image.src = logo
-      image.onload = () => {
-        ctx.drawImage(image, 0, 0)
-        // icons = icons.filter((d, i) => i < (icons.length - 3))
-        const img = ctx.getImageData(0, 0, canvas.width, canvas.height).data
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-        svg.setAttribute('viewBox', `0 0 ${canvas.width * tile} ${canvas.height * tile}`)
-        svg.setAttribute('width', targetSize)
-        svg.setAttribute('height', targetSize)
-        let is = ''
+function createPoster ({ icons, logo, base, tile, frame, size, targetSize }) {
+  return new Promise(resolve => {
+    const shift = (base - tile) / 2
+    icons = icons.filter(d => d.frame >= frame)
+    const copy = icons.slice()
+    const canvas = document.createElement('canvas')
+    let ctx = canvas.getContext('2d')
+    canvas.width = size
+    canvas.height = size
+    const image = new Image()
+    image.width = canvas.width
+    image.height = canvas.height
+    image.src = logo
+    image.onload = () => {
+      ctx.drawImage(image, 0, 0)
+      // icons = icons.filter((d, i) => i < (icons.length - 3))
+      const img = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+      svg.setAttribute('viewBox', `0 0 ${canvas.width * tile} ${canvas.height * tile}`)
+      svg.setAttribute('width', targetSize)
+      svg.setAttribute('height', targetSize)
+      let is = ''
 
-        for (let y = 0; y < canvas.height; y++) {
-          for (let z = 0; z < canvas.width; z++) {
-            const x = y % 2 ? z : (canvas.width - 1 - z)
-            const index = (x + y * canvas.width) * 4
-            const v = img[index + 3]
-            icons = icons.length ? icons : copy
-            const icon = icons.splice(Math.round(v * (icons.length - 1) / 255), 1)[0]
-            const fill = `rgb(${[img[index], img[index + 1], img[index + 2]].join(',')})`
-            const i = icon.data[0] === '<'
-              ? `<g fill="${fill}" transform="translate(${x * tile - shift},${y * tile - shift})">${icon.data}</g>`
-              : `<path fill="${fill}" d="${icon.data}" transform="translate(${x * tile - shift},${y * tile - shift})"></path>`
-            is += i
-          }
+      for (let y = 0; y < canvas.height; y++) {
+        for (let z = 0; z < canvas.width; z++) {
+          const x = y % 2 ? z : (canvas.width - 1 - z)
+          const index = (x + y * canvas.width) * 4
+          const v = img[index + 3]
+          icons = icons.length ? icons : copy.slice()
+          const icon = icons.splice(Math.round(v * (icons.length - 1) / 255) % icons.length, 1)[0]
+          const fill = `rgb(${[img[index], img[index + 1], img[index + 2]].join(',')})`
+          const i = icon.data[0] === '<'
+            ? `<g fill="${fill}" transform="translate(${x * tile - shift},${y * tile - shift})">${icon.data}</g>`
+            : `<path fill="${fill}" d="${icon.data}" transform="translate(${x * tile - shift},${y * tile - shift})"></path>`
+          is += i
         }
-        svg.innerHTML = is
-        resolve(svg)
       }
-    })
-  }
-
-  function iconDataUrl ({ icons, name, fill = 'rgba(0,0,0,1)', background = 'rgba(255,255,255,0)' }) {
-    const data = icons.find(d => d.name === name).data
-    return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="background-color: ${background}">${
-      data[0] === '<'
-        ? `<g fill="${fill}">${data}</g>`
-        : `<path fill="${fill}" d="${data}"></path>`
-    }</svg>`
-  }
-
-  fetch('./meta.json').then(res => res.json()).then(icons => {
-    const frame = 2
-    const base = 24
-    const tile = 22
-    const size = 34
-    const targetSize = 888
-    const allIcons = icons.filter(d => (d.link === undefined))
-    allIcons.sort((a, b) => a.pixels - b.pixels)
-    icons = allIcons.filter(d => (!d.tags || d.tags.indexOf('logo') === -1))
-    Promise.all([
-      createPoster({ logo: './logo-bw.svg', icons, frame, base, tile, size, targetSize }),
-      createPoster({ logo: './logo.svg', icons, frame, base, tile, size, targetSize }),
-      createPoster({ logo: iconDataUrl({ name: 'vector square', background: 'rgba(63, 82, 181, .5)', fill: 'rgba(251, 140, 0, 1)', icons: allIcons }), icons, frame: 0, base, tile: 26, size: 36, targetSize }),
-      createPoster({ logo: iconDataUrl({ name: 'vector square', icons: icons }), icons, frame: 1, base, tile: 18, size: 34, targetSize }),
-      createPoster({ logo: iconDataUrl({ name: 'spa', fill: '#000', icons }), icons, frame: 1, base, tile: 18, size, targetSize }),
-      createPoster({ logo: iconDataUrl({ name: 'emoticon cool', fill: 'rgba(251, 140, 0, 1)', icons }), icons: allIcons, frame: 2, base, tile: 18, size: 36, targetSize })
-    ]).then(svg => svg.forEach(s => document.body.appendChild(s)))
+      svg.innerHTML = is
+      resolve(svg)
+    }
   })
+}
+
+function iconDataUrl ({ icons, name, fill = 'rgba(0,0,0,1)', background = 'rgba(255,255,255,0)' }) {
+  const data = icons.find(d => d.name === name).data
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="background-color: ${background}">${
+    data[0] === '<'
+      ? `<g fill="${fill}">${data}</g>`
+      : `<path fill="${fill}" d="${data}"></path>`
+  }</svg>`
+
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
+fetch('./meta.json').then(res => res.json()).then(icons => {
+  const frame = 0
+  const base = 24
+  const tile = 22
+  const size = 34
+  const targetSize = 888
+  const allIcons = icons.filter(d => (d.link === undefined))
+  allIcons.sort((a, b) => a.pixels - b.pixels)
+  icons = allIcons.filter(d => (!d.tags || d.tags.indexOf('logo') === -1))
+  Promise.all([
+    createPoster({ logo: './logo-bw.svg', icons, frame, base, tile, size, targetSize }),
+    createPoster({ logo: './logo.svg', icons, frame, base, tile, size, targetSize }),
+    createPoster({
+      logo: iconDataUrl({
+        name: 'vector square',
+        background: 'rgba(63, 82, 181, .5)',
+        fill: 'rgba(251, 140, 0, 1)',
+        icons: allIcons
+      }),
+      icons,
+      frame: 0,
+      base,
+      tile: 26,
+      size: 36,
+      targetSize
+    }),
+    createPoster({
+      logo: iconDataUrl({ name: 'vector square', icons }),
+      icons,
+      frame,
+      base,
+      tile: 18,
+      size: 34,
+      targetSize
+    }),
+    createPoster({
+      logo: iconDataUrl({ name: 'spa', fill: '#000', icons }),
+      icons,
+      frame,
+      base,
+      tile: 18,
+      size,
+      targetSize
+    }),
+    createPoster({
+      logo: iconDataUrl({ name: 'emoticon cool', fill: 'rgba(251, 140, 0, 1)', icons }),
+      icons: allIcons,
+      frame,
+      base,
+      tile: 18,
+      size: 36,
+      targetSize
+    })
+  ]).then(svg => svg.forEach(s => document.body.appendChild(s))).catch(console.error)
+})
 </script>
 </body>
 </html>
