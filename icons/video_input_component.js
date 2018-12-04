@@ -1,1 +1,1 @@
-export {default} from './settings_input_component'
+export {default} from './settings_input_composite'
