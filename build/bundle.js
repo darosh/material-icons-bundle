@@ -106,7 +106,7 @@ const bundle = meta.map(m => {
 similar = similar.filter(d => d[2] > 0).filter(d => !(meta[d[0]].link >= 0) && !(meta[d[1]].link >= 0))
 
 bundle.forEach((d, i) => {
-  d.name = d.name.replace(/^(\d)/, ' $1')
+  d.name = d.name.replace(/^(\d)/, ' $1').replace(/^export$/, ' export').replace(/^import$/, ' import')
 
   if (d.source === 'Community' && d.author === 'Google') {
     d.author = 'Google legacy'
