@@ -320,6 +320,7 @@
               <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
               </v-toolbar-title>
               <v-spacer></v-spacer>
+              <v-btn :href="downloadFile" :download="`${google}.svg`" icon class="mr-0"><v-icon>file_download</v-icon></v-btn>
               <v-btn icon @click="fullScreen = true">
                 <v-icon>fullscreen</v-icon>
               </v-btn>
@@ -1578,6 +1579,12 @@
       }
     },
     computed: {
+      downloadFile () {
+        const size = 24
+        const path = this.linked.data
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${size}" height="${size}">${path[0] === '<' ? `<g>${path}</g>` : `<path d="${path}"></path>`}</svg>`
+        return `data:data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+      },
       fullSize () {
         return Math.floor((Math.min(this.$vuetify.breakpoint.width - 64, this.$vuetify.breakpoint.height - 64 * 2)) / 24) * 24
       },
