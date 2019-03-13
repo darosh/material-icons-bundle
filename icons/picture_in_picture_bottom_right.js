@@ -1,0 +1,1 @@
+export {default} from './picture_in_picture_alt'
