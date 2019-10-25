@@ -1,6 +1,15 @@
 {
   "name": "material-icons-bundle",
   "version": "1.0.1",
+  "author": {
+    "name": "Jan Forst",
+    "email": "ensonador@gmail.com"
+  },
+  "homepage": "https://github.com/darosh/material-icons-bundle",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:darosh/material-icons-bundle.git"
+  },
   "devDependencies": {
     "@mdi/svg": "3.5.95",
     "MaterialDesignLight": "Templarian/MaterialDesignLight",
@@ -25,7 +34,7 @@
     "similar-icons": "darosh/similar-icons",
     "xml2js": "0.4.19"
   },
-  "license": "MIT",
+  "license": "MIT+Apache-2.0",
   "module": "index.js",
   "scripts": {
     "build": "npm run build:1:download && npm run build:2:load && npm run build:3:render && npm run build:4:compare && npm run build:5:bundle && npm run build:6:unique",
