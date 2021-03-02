@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Material Icons Bundle</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/vuetify@0.17.0-beta.2/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@0.10.4/dist/vue-virtual-scroller.css">
+  <!--<link rel="stylesheet" href="https://unpkg.com/mdi@2.0.46/css/materialdesignicons.min.css">-->
+
+  <style>
+    svg.icon {
+      fill: rgba(0, 0, 0, .54);
+    }
+
+    .theme--dark svg.icon {
+      fill: rgba(255, 255, 255, .70);
+    }
+
+    svg.icon.active {
+      fill: rgba(25, 118, 210, .87);
+    }
+
+    .theme--dark svg.icon.active {
+      fill: rgba(25, 118, 210, 1);
+    }
+
+    .theme--dark .input-group--solo {
+      background-color: #212121;
+    }
+
+    .scroller {
+      height: calc(100vh - 48px);
+      width: 100%;
+    }
+
+    .no-scroll {
+      overflow: hidden;
+    }
+
+    .gpu {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    :focus {
+      outline: none;
+    }
+
+    .no, .no .content {
+      transition: none;
+    }
+
+    .click {
+      cursor: pointer;
+    }
+
+    .click:hover {
+      background-color: rgba(127, 127, 127, .5);
+    }
+
+    .focusable {
+      background-color: transparent;
+    }
+
+    .focusable:focus {
+      background-color: rgba(127, 127, 127, .25);
+    }
+
+    .focusable:focus:hover {
+      transition: background-color .2s linear .3s;
+    }
+
+    .checker {
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.08);
+      background-position: 0 0, 10px 10px;
+      background-origin: padding-box;
+      background-clip: border-box;
+      background-size: 20px 20px;
+    }
+
+    .theme--dark .checker {
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(0, 0, 0, 0.0980392) 0), rgba(128, 128, 128, 0.5);
+      background-position: 0 0, 10px 10px;
+      background-origin: padding-box;
+      background-clip: border-box;
+      background-size: 20px 20px;
+    }
+
+    .scrollbar-measure {
+      width: 100px;
+      height: 100px;
+      overflow: scroll;
+      position: absolute;
+      top: -9999px;
+    }
+
+    .expansion-panel__header {
+      padding: 12px 16px;
+    }
+
+    .navigation-drawer__border {
+      display: none;
+    }
+
+    .light {
+      opacity: .5;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a.black--text:hover {
+      text-decoration: underline;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .highlight svg.community {
+      fill: rgba(211, 47, 47, 0.87)
+    }
+
+    .highlight .community, .community-text {
+      color: #d32f2f
+    }
+
+    .highlight .theme--dark svg.community {
+      fill: rgba(211, 47, 47, 0.7)
+    }
+
+    .filtering .icon {
+      color: rgba(211, 47, 47, 0.87) !important;
+    }
+
+    .checkbox label {
+      margin-left: 8px;
+    }
+
+    table.table tbody td, table.table tbody th {
+      height: 32px;
+    }
+
+    table.table tbody td:first-child, table.table tbody td:not(:first-child), table.table tbody th:first-child, table.table tbody th:not(:first-child), table.table thead td:first-child, table.table thead td:not(:first-child), table.table thead th:first-child, table.table thead th:not(:first-child) {
+      padding: 0 8px;
+    }
+
+    table {
+      table-layout: fixed;
+      width: auto !important;
+    }
+
+    .translate-fade-enter-active {
+      transition: all 0.12s linear;
+    }
+
+    .translate-fade-enter {
+      opacity: 0.12;
+    }
+
+    .translate-fade-leave-active {
+      transition: none;
+    }
+
+    .swap-wrap {
+      position: relative;
+      width: 240px;
+      height: 240px;
+    }
+
+    .swap-item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .swap-item * {
+      transition: all 0.5s ease-out;
+    }
+
+    .swap-enter,
+    .swap-leave-to,
+    .swap-leave-to {
+      opacity: 0;
+    }
+
+    .swap-leave-to *,
+    .swap-leave-to-active * {
+      fill: #1976d2 !important;
+      fill-opacity: 0.5 !important;
+    }
+
+    .down-enter {
+      transform: translateY(-65%);
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .down-leave-to {
+      transform: translateY(-100%);
+      transition: all 0.2s ease-in;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .down-enter-active {
+      transition: all 0.2s ease-in;
+    }
+
+    .grid {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .grid rect {
+      stroke-width: 0.2;
+      stroke: #1976d2;
+      stroke-opacity: 0.6;
+      fill: none;
+    }
+
+    .grid line {
+      stroke-width: 0.05;
+      stroke: #1976d2;
+      stroke-opacity: 0.3;
+    }
+
+    .grid line.key {
+      stroke-width: 0.1;
+      stroke-opacity: 0.6;
+    }
+
+    .grid line.border {
+      stroke-width: 0.4;
+      stroke-opacity: 0.8;
+    }
+
+    .status-0 {
+      background-color: #ffebee;
+    }
+
+    .status-1 {
+      background-color: #fff3e0;
+    }
+
+    .status-2 {
+      background-color: #eceff1;
+    }
+
+    .status-3 {
+      background-color: #e3f2fd;
+    }
+
+    .status-4 {
+      background-color: #f3e5f5;
+    }
+
+    .status-5 {
+      background-color: #e0f2f1;
+    }
+
+    .points {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 777;
+    }
+
+    .points rect {
+      stroke: rgba(255, 0, 0, 0.9);
+      fill: rgba(255, 0, 0, 0.4);
+    }
+
+    .scrollbar {
+      overflow: hidden;
+    }
+
+    .scrollbar:hover {
+      overflow: auto;
+    }
+
+    .theme--light .input-group:not(.input-group--error) label {
+      color: rgba(0, 0, 0, .87);
+    }
+
+    .theme--dark .input-group:not(.input-group--error) label {
+      color: #fff
+    }
+  </style>
+</head>
+<body>
+<v-app id="app" v-cloak :dark="theme.includes('Dark')" :light="theme.includes('Light')">
+  <v-navigation-drawer ref="drawer" :width="288 + bar" app class="pa-0 elevation-1 scrollbar gpu"
+                       fixed
+                       :class="{no: no}"
+                       disable-route-watcher
+                       mobile-break-point="800"
+                       hide-overlay
+                       :persistent="($vuetify.breakpoint.width || width) > 800"
+                       :temporary="($vuetify.breakpoint.width || width) <= 800"
+                       v-model="drawer">
+    <div v-if="icons && similar">
+
+      <div ref="downwrap" class="downwrap" style="height: 0; transition: height 0.2s ease-in .325s">
+        <transition name="down">
+          <div v-if="icon !== null" ref="down">
+            <v-toolbar dense class="transparent elevation-0">
+              <v-toolbar-title class="title" style="line-height: 24px !important;"><span>{{meta.name}}</span>
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn :href="downloadFile" :download="`${google}.svg`" icon class="mr-0"><v-icon>file_download</v-icon></v-btn>
+              <v-btn icon @click="fullScreen = true">
+                <v-icon>fullscreen</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <div>
+              <div class="text-xs-center" @click="gridType = (gridType + 1) % 6">
+                <app-icon-preview :compare="compareIcons" style="display: inline-block" :icon="icon" :type="gridType"
+                                  :size="240"
+                                  :svg="linked.data"></app-icon-preview>
+              </div>
+            </div>
+            <div class="elevation-0 pb-2 pt-2" style="line-height: 32px">
+              <div class="pl-3 pr-3">
+                <div>Name: {{google}}</div>
+
+                <div>Author: <span :class="{'community-text': meta.source === 'Community'}">{{meta.source}}</span> / <a
+                  @click="groupBy = 'Authors', scroll(meta.author)"
+                  class="link primary--text">{{meta.author}}</a></div>
+                <div v-if="linked.id !== meta.id">Shape: <!--#{{linked.id}}: -->{{linked.source}} / <a
+                  @click="setIcon(linked.id, $event)"
+                  class="link primary--text"><b>{{linkedGoogle}}</b></a>
+                </div>
+                <div v-if="alternatives && alternatives.length">Alternatives: <span
+                  v-for="(t, i) in alternatives"><span
+                  v-if="i">, </span> <a
+                  @click="setIcon(t.id, $event)" class="link primary--text">{{t.name}}</a></span></div>
+                <div v-if="meta.tags">Tags: <span v-for="(t, i) in meta.tags"><span v-if="i">, </span> <a
+                  @click="groupBy = 'Tags', scroll(t)" class="link primary--text">{{t}}</a></span></div>
+                <!--<div v-if="meta.aliases">Description: {{meta.aliases.join(', ')}}</div>-->
+              </div>
+              <div class="pl-3 pr-3" :class="{highlight: highlight}">
+                    <span style="display: inline-block; width: 36px; height: 36px; padding: 2px"
+                          class="list__tile--link" @click="setIcon(i[0], $event)" v-for="i in similarIcons">
+                        <app-icon class="no" size="32" :name="i[0]"
+                                  :class="{community: communityShape(i[0])}"></app-icon>
+                    </span>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+      <div class="card elevation-0">
+        <div class="pa-3">
+          <v-text-field class="toolbar elevation-1" solo v-model="search" prepend-icon="search"
+                        :append-icon="search ? 'close' : null" :append-icon-cb="() => search = ''"></v-text-field>
+        </div>
+        <v-divider></v-divider>
+        <v-select class="elevation-0" v-ripple="true" solo :items="sources"
+                  v-model="source"
+                  prepend-icon="people_outline"
+                  :class="{'grey lighten-4 filtering': source !== sourceDefault}"></v-select>
+
+        <v-divider></v-divider>
+        <template v-if="showHome">
+          <v-select class="elevation-0" v-ripple="true" solo
+                    :items="groups"
+                    v-model="groupBy"
+                    prepend-icon="folder_open" :class="{'grey lighten-4 filtering': groupBy !== 'Tags'}"></v-select>
+          <v-divider></v-divider>
+          <v-select class="elevation-0" v-ripple="true" solo :items="sorts" v-model="sortBy"
+                    prepend-icon="sort" :class="{'grey lighten-4 filtering': sortBy !== 'Name'}"></v-select>
+          <v-divider></v-divider>
+          <v-select class="elevation-0" v-ripple="true" solo :items="sizes" v-model="size"
+                    prepend-icon="aspect_ratio"></v-select>
+          <v-divider></v-divider>
+          <!--<v-select class="elevation-0" v-ripple="true" solo-->
+          <!--:items="['Dark', 'Light', 'Dark colored', 'Light colored']" v-model="theme"-->
+          <!--prepend-icon="tonality"></v-select>-->
+          <!--<v-divider></v-divider>-->
+        </template>
+        <div class="pl-3 pt-2 pb-2" v-if="icon !== null || showHome">
+          <v-checkbox color="red darken-2" hide-details label="Highlight community" v-model="highlight"></v-checkbox>
+        </div>
+      </div>
+      <v-divider v-if="icon !== null || showHome"></v-divider>
+      <div class="card elevation-0" v-if="showHome">
+        <v-expansion-panel expand class="elevation-0">
+          <v-expansion-panel-content ripple>
+            <div slot="header">
+              <span><app-icon v-if="icons" size="24" name="cart outline" class="mr-3"></app-icon>Bundle <small
+                class="pl-1">({{selectedIcons.length}})</small></span>
+            </div>
+            <v-card :class="{highlight: highlight}">
+              <div v-ripple="true" @click="setIcon(i.id, $event)" v-for="i in selectedIcons"
+                   class="list__tile--link pt-2 pb-2" :class="{'primary--text': icon === i.id}">
+                <app-icon :class="{community: communityShape(i.id)}" class="ml-3 mr-3" :name="i.id"
+                          size="24"></app-icon>
+                {{i.name}}
+                <span style="float: right" class="pr-3"><v-icon @click.stop="deselect(i)">close</v-icon></span>
+              </div>
+              <div class="pl-3 pr-3">
+                <v-text-field
+                  solo
+                  class="mb-3 mt-3 toolbar"
+                  name="input-bundle"
+                  label="Selected icons"
+                  multi-line
+                  auto-grow
+                  rows="3"
+                  v-model="selectedText"
+                  hide-details></v-text-field>
+              </div>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-divider></v-divider>
+        <v-expansion-panel expand class="elevation-0">
+          <v-expansion-panel-content ripple>
+            <div slot="header">
+              <span><app-icon v-if="icons" size="24" name="folder multiple outline"
+                              class="mr-3"></app-icon>Groups <small class="pl-1">({{sorted.length}})</small></span>
+            </div>
+            <v-card>
+              <div v-for="(s, i) in sorted">
+                <div @click="scroll(s.name)" style="padding-left: 56px"
+                     class="body-2 list__tile--link pt-2 pb-2"
+                     v-ripple="true">{{s.name}}
+                  <small class="body-1 mr-4" style="float: right; margin-top: 2px">({{s.value.length}})
+                  </small>
+                </div>
+              </div>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-divider></v-divider>
+      </div>
+    </div>
+    <v-container v-else fluid fill-height>
+      <v-layout justify-center align-center>
+        <v-progress-circular indeterminate color="primary" :size="80" :width="3"></v-progress-circular>
+      </v-layout>
+    </v-container>
+
+  </v-navigation-drawer>
+  <v-toolbar fixed dense app class="elevation-1" :class="{no: no}">
+    <v-toolbar-side-icon v-show="!no" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar-title v-show="!no" class="ml-0"><span class="hidden-xs-only">Material Icons Bundle</span>
+      <small style="font-weight: normal" v-if="filtered">({{unique}}/{{filtered.length}})</small>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn v-if="icons" icon tag="a" :to="{path: '/'}" exact v-show="!no">
+      <app-icon name="home outline" size="24"></app-icon>
+    </v-btn>
+    <v-btn v-if="icons" icon tag="a" :to="{path: '/compare'}" v-show="!no">
+      <app-icon name="vector difference" size="24"></app-icon>
+    </v-btn>
+    <!--<v-btn icon tag="a" :to="{path: '/chart'}" v-show="!no">-->
+    <!--<v-icon>pie_chart_outlined</v-icon>-->
+    <!--</v-btn>-->
+    <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
+           rel="noopener" v-show="!no">
+      <app-icon name="github circle" size="24"></app-icon>
+    </v-btn>
+  </v-toolbar>
+  <v-content :class="{highlight : highlight}" class="no"
+             :style="{display: showLoading ? 'flex' : ''}">
+    <v-container v-if="showLoading" fluid fill-height>
+      <v-layout justify-center align-center>
+        <v-progress-circular style="margin-top: -48px" indeterminate color="primary" :size="80"
+                             :width="3"></v-progress-circular>
+      </v-layout>
+    </v-container>
+    <virtual-scroller id="page" v-if="showHome && icons && similar"
+                      ref="scroller" tabindex="1" :buffer="grid === 32 ? 2048 : 64" :pool-size="grid === 32 ? 2048 : 64"
+                      class="gpu scroller"
+                      :items="lines"
+                      style="width: auto"
+                      :style="{'margin-left': margin + 'px'}"
+                      :item-height="grid">
+      <template slot-scope="props">
+        <div v-if="!props.itemKey" :key="props.itemKey"></div>
+        <v-layout :key="props.itemKey" :style="{height: grid + 'px'}" class="pa-0" column>
+          <div v-if="props.item.name"
+               :class="{'headline pl-3 pt-3 pr-3': grid > 32, 'pt-2 pl-1 pr-1 body-2': grid === 32}">
+            <div :class="{'pt-3': grid > 64, 'pt-5': grid > 128}">{{props.item.name}}
+              <small>({{props.item.length}})</small>
+            </div>
+          </div>
+          <div v-else>
+            <div :class="{'pl-3 pr-3': grid > 64}"
+                 :style="{display: 'inline-block', height: grid + 'px', width: grid + 'px', 'vertical-align': 'text-top', 'text-align': 'center'}"
+                 :key="i"
+                 v-for="i in props.item">
+              <div tabindex="1" @click="setIcon(i, $event)" v-ripple="true" class="no click focusable"
+                   @keyup.13="setIcon(i, $event)">
+                <app-icon :size="grid > 128 ? 72 : grid > 64 ? 48 : grid > 32 ? 32 : 24" :name="i"
+                          class="no"
+                          :style="{fill: theme.includes('colored') ? colors[i % colors.length] : null, 'fill-opacity': theme.includes('colored') ? theme.includes('Light') ? .87 : .7 : 1}"
+                          :class="{active: icon === i, community: (icon !== i) && highlight && communityShape(i)}"></app-icon>
+              </div>
+              <div v-if="grid >= 128" style="font-size: 13px"
+                   :class="{'pt-1': grid > 128, 'pt-2': grid === 128, 'primary--text': icon === i}">
+                {{icons[i].name}}
+              </div>
+            </div>
+          </div>
+        </v-layout>
+      </template>
+    </virtual-scroller>
+    <v-container v-else-if="showCompare && compare" fluid>
+      <v-layout column style="max-width: 100%">
+        <v-radio-group hide-details v-model="compareFilter" row class="mt-2 ml-4 mr-4 pa-0 mb-3 wrap">
+          <v-layout row wrap>
+            <v-flex style="max-width: 160px" lg2 md3 sm6 xs12 v-for="i in compareStats" :key="i.name">
+              <v-radio color="primary" hide-details :label="i.display + ' (' + i.count + ')'" :value="i.name"></v-radio>
+            </v-flex>
+          </v-layout>
+        </v-radio-group>
+        <v-layout row>
+          <v-card class="mt-3 ml-4 mr-4 mb-4">
+            <v-data-table
+              expand
+              class="gpu"
+              :headers="headers"
+              :items="compareFiltered"
+              :pagination.sync="pagination"
+              :rows-per-page-items="rowsPerPage"
+              item-key="bundle">
+              <template slot="headers" slot-scope="props">
+                <tr>
+                  <th v-for="header in props.headers"
+                      :key="header.text"
+                      :style="{width: header.width}"
+                      class="text-xs-left"
+                      :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                      @click="changeSort(header.value)">
+                    <v-icon>arrow_upward</v-icon>
+                    {{ header.text }}
+                  </th>
+                </tr>
+              </template>
+              <template slot="items" slot-scope="props">
+                <tr>
+                  <td style="padding: 0 0 0 2px"
+                      @click="props.expanded = props.item.googleData && props.item.communityData ? props.expanded : !props.expanded">
+                    <v-btn class="ma-0" small @click="props.expanded = !props.expanded" icon
+                           v-if="props.item.googleData && props.item.communityData">
+                      <v-icon>arrow_drop_down</v-icon>
+                    </v-btn>
+                  </td>
+                  <td :class="props.item.googleClass">
+                    <app-icon :svg="props.item.googleData" v-if="props.item.googleData" size="24"></app-icon>
+                  </td>
+                  <td :class="props.item.googleClass">
+                    <a class="black--text"
+                       :href="'https://github.com/google/material-design-icons/blob/master/' + props.item.googleFolder + '/svg/production/ic_' + props.item.google + '_24px.svg'"
+                       target="_blank" role="noopener">{{props.item.google}}</a> <span
+                    class="grey--text text--darken-1">{{props.item.googleAliases}}</span>
+                  </td>
+                  <td :class="props.item.communityClass">
+                    <app-icon :svg="props.item.communityData" v-if="props.item.communityData" size="24"></app-icon>
+                  </td>
+                  <td :class="props.item.communityClass">
+                    <a class="black--text" :href="'https://materialdesignicons.com/icon/' + props.item.community"
+                       target="_blank" role="noopener">{{props.item.community}}</a>
+                  </td>
+                  <td>
+                    {{props.item.note}}
+                  </td>
+                  <td>
+                    <a @click="setIcon(props.item.icon, $event)" class="link">{{props.item.bundle}}</a>
+                    <span v-if="props.item.alternative">, </span>
+                    <a v-if="props.item.alternative" @click="setIcon(props.item.alternative[0], $event)"
+                       class="black--text link">{{props.item.community}}</a>
+                  </td>
+                  <td>
+                    <span
+                      v-if="props.item.alternative && props.item.alternative[1]">{{props.item.alternative[1]}}</span>
+                  </td>
+                </tr>
+              </template>
+              <template slot="expand" slot-scope="props">
+                <v-card flat>
+                  <div v-if="props.expanded"
+                       style="margin: 16px 0 16px 32px; position: relative; width: 240px; height: 240px"
+                       @click="gridType = (gridType + 1) % 5">
+                    <app-icon-preview :compare="[props.item.googleData || '', props.item.communityData || '']"
+                                      :icon="null" :type="gridType" :size="240"
+                                      :svg="null"></app-icon-preview>
+                  </div>
+                </v-card>
+              </template>
+            </v-data-table>
+          </v-card>
+        </v-layout>
+      </v-layout>
+    </v-container>
+    <v-container v-else-if="showChart" fill-height fluid>
+      <div>
+        <div class="pa-4">
+          Not implemented yet&hellip;
+        </div>
+        <div>
+          {{chart}}
+        </div>
+      </div>
+    </v-container>
+    <v-dialog v-model="fullScreen" :max-width="fullSize">
+      <v-card @click.native="gridType = (gridType + 1) % 6"
+              :style="{width: fullSize + 'px !important', height: fullSize + 'px !important'}">
+        <app-icon-preview :compare="compareIcons" v-if="icon !== null" :icon="icon" :type="gridType" :size="fullSize"
+                          :svg="linked.data"></app-icon-preview>
+      </v-card>
+    </v-dialog>
+  </v-content>
+</v-app>
+
+<script id="app-icon-preview" type="x-template">
+  <div v-if="icon !== null || compare" class="swap-wrap" :class="{checker: type === 1}" :style="checker">
+    <svg v-if="type > 1 && type < 5" viewBox="0 0 24 24" :width="size" :height="size"
+         v-html="type === 2 ? gridImage : type === 3 ? gridImageRich : gridImageFull"
+         class="grid"></svg>
+
+    <svg v-if="compare && !mode" viewBox="0 0 24 24" :width="size" :height="size"
+         style="position: absolute; fill: #00d; fill-opacity: 0.4; left: 0; top: 0">
+      <g v-if="compare[0][0] === '<'" v-html="compare[0]"></g>
+      <path v-else :d="compare[0]"></path>
+    </svg>
+
+    <svg v-if="compare && !mode" viewBox="0 0 24 24" :width="size" :height="size"
+         style="position: absolute; fill: #d00; fill-opacity: 0.4; left: 0; top: 0">
+      <g v-if="compare[1][0] === '<'" v-html="compare[1]"></g>
+      <path v-else :d="compare[1]"></path>
+    </svg>
+
+    <transition-group v-if="!compare && (icon !== null)" name="swap" mode="out-in">
+      <app-icon class="swap-item" v-for="icon in swap" :key="icon" :name="icon" :size="size"></app-icon>
+    </transition-group>
+
+    <div v-if="compare && mode" style="position: absolute; top: 0; left: 0;" :style="background"></div>
+
+    <svg v-if="points" viewBox="0 0 24 24" :width="size" :height="size" class="points">
+      <rect vector-effect="non-scaling-stroke"
+            stroke-width="1"
+            v-for="p in points"
+            :x="p[0] - marker * unit / 2" :y="p[1] - marker * unit / 2" :rx="round * unit" :ry="round * unit"
+            :width="marker * unit" :height="marker * unit"/>
+    </svg>
+
+    <!--<svg v-if="abs" viewBox="0 0 48 48" fill="rgba(0,255,0,1)">-->
+    <!--<path :d="abs"></path>-->
+    <!--</svg>-->
+  </div>
+</script>
+
+<script src="https://unpkg.com/vue@2.5.2/dist/vue.min.js"></script>
+<!--<script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>-->
+<script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
+<script src="https://unpkg.com/vuetify@0.17.0-beta.3/dist/vuetify.min.js"></script>
+<script src="https://unpkg.com/vue-virtual-scroller@0.10.5/dist/vue-virtual-scroller.min.js"></script>
+<script src="https://unpkg.com/vue-smoothscroll@0.1.1/dist/vue-smoothscroll.js"></script>
+<!--<script src="../build/duplicates.conf.js"></script>-->
+<script async>
+  /* eslint-disable no-unused-vars */
+  const ICONS = fetch('./meta.json')
+  const SIMILAR = fetch('./similar.json')
+  const BAR = getBarWidth()
+  const GRID_FULL = getIconGrid(2)
+  const GRID_RICH = getIconGrid(1)
+  const GRID = getIconGrid()
+
+  function getBarWidth () {
+    // Based on: https://davidwalsh.name/detect-scrollbar-width
+    const scrollDiv = document.createElement('div')
+    scrollDiv.className = 'scrollbar-measure'
+    document.body.appendChild(scrollDiv)
+    const bar = scrollDiv.offsetWidth - scrollDiv.clientWidth
+    document.body.removeChild(scrollDiv)
+    return bar
+  }
+
+  function getIconGrid (rich) {
+    const grid = 24
+    const keys = { 0: 'border', 8: 'key', 12: 'key', 16: 'key', 24: 'border' }
+    const arr = rich !== 1 ? new Array(grid + 1).fill(0).map((d, i) => i) : [0, 24]
+    const rects = [[20, 16, 2], [16, 20, 2], [18, 18, 2], [20, 20, 10], [10, 10, 5]]
+    return `${arr.map(i => `<line class="${keys[i] || ''}" x1="0" y1="${i}" x2="24" y2="${i}"/>`).join('')}` +
+      `${arr.map(i => `<line class="${keys[i] || ''}" y1="0" x1="${i}" y2="24" x2="${i}"/>`).join('')}` +
+      (rich > 0
+        ? `${rects.map(i => `<rect width="${i[0]}" height="${i[1]}" rx="${i[2]}" ry="${i[2]}" x="${(grid - i[0]) / 2}" y="${(grid - i[1]) / 2}"/>`).join('')}`
+        : '') +
+      (rich > 1
+        ? '<line class="key" x1="0" y1="0" x2="24" y2="24"/>' +
+        '<line class="key" x1="24" y1="0" x2="0" y2="24"/>'
+        : '')
+  }
+</script>
+<script>
+  // eslint-disable-next-line no-unused-vars
+  const parsePath = (function () {
+    const length = {
+      m: ['x', 'y'],
+      l: ['x', 'y'],
+      h: ['x'],
+      v: ['y'],
+      c: ['x1', 'y1', 'x2', 'y2', 'x', 'y'],
+      s: ['x2', 'y2', 'x', 'y'],
+      q: ['x1', 'y1', 'x', 'y'],
+      t: ['x', 'y'],
+      a: ['rx', 'ry', 'xAxisRotation', 'largeArcFlag', 'sweepFlag', 'x', 'y'],
+      z: []
+    }
+
+    const segment = /([astvzqmhlc])([^astvzqmhlc]*)/ig
+
+    const number = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
+
+    function parseValues (args) {
+      const numbers = args.match(number)
+      return numbers ? numbers.map(Number) : []
+    }
+
+    // https://github.com/jkroso/parse-svg-path/blob/master/index.js
+    function parse (path) {
+      var data = []
+      path.replace(segment, function (_, command, args) {
+        var type = command.toLowerCase()
+        args = parseValues(args)
+
+        // overloaded moveTo
+        if (type === 'm' && args.length > 2) {
+          data.push([command].concat(args.splice(0, 2)))
+          type = 'l'
+          command = command === 'm' ? 'l' : 'L'
+        }
+
+        while (true) {
+          if (args.length === length[type].length) {
+            args.unshift(command)
+            return data.push(args)
+          }
+          if (args.length < length[type].length) throw new Error('malformed path data')
+          data.push([command].concat(args.splice(0, length[type].length)))
+        }
+      })
+      return data
+    }
+
+    function getAst (d) {
+      const p = parse(d)
+
+      return p.map(d => {
+        const type = d.shift()
+        const t = type.toLowerCase()
+
+        return {
+          type,
+          params: d.reduce((r, v, i) => {
+            r[length[t][i]] = v
+            return r
+          }, {})
+        }
+      })
+    }
+
+    // https://github.com/jxnblk/path-ast/blob/master/lib/to-absolute.js
+    function abs (d) {
+      const ast = getAst(d)
+      let lastX = 0
+      let lastY = 0
+      let firstX = 0
+      let firstY = 0
+      let first = true
+
+      return ast.map(function (command) {
+        const params = command.params
+
+        if (command.type.toLowerCase() === 'z') {
+          lastX = firstX
+          lastY = firstY
+        }
+
+        if (command.type.match(/[A-Z]/)) {
+          lastX = isNaN(params.x) ? lastX : params.x
+          lastY = isNaN(params.y) ? lastY : params.y
+
+          if (command.type === 'M') {
+            first = true
+          }
+        } else {
+          command.type = command.type.toUpperCase()
+          length[command.type.toLowerCase()].forEach(function (key) {
+            const param = params[key]
+
+            if (key[0] === 'x') {
+              params[key] = lastX + param
+            }
+
+            if (key[0] === 'y') {
+              params[key] = lastY + param
+            }
+          })
+
+          lastX = isNaN(params.x) ? lastX : params.x
+          lastY = isNaN(params.y) ? lastY : params.y
+        }
+
+        if (first) {
+          firstX = lastX
+          firstY = lastY
+          first = false
+        }
+
+        if (command.type.toLowerCase() === 'z') {
+          first = true
+        }
+
+        return command
+      })
+    }
+
+    // abs path test
+    // function toString (ast) {
+    //   return ast.map(d => d.type + ' ' + length[d.type.toLowerCase()].map(k => d.params[k]).join(' ')).join(' ')
+    // }
+
+    return function points (o) {
+      let d = ''
+
+      if (o[0] === '<') {
+        const rx = /d="([^"]+)"/gi
+        let m
+
+        do {
+          m = rx.exec(o)
+
+          if (m) {
+            d += m[1]
+          }
+        } while (m)
+      } else {
+        d = o
+      }
+
+      const ast = abs(d)
+      let prev = [0, 0]
+
+      const points = Object.keys(ast
+        .filter(function (command) {
+          return Object.keys(command.params).length
+        })
+        .map(function ({ params: { x, y } }) {
+          return (prev = [isNaN(x) ? prev[0] : x, isNaN(y) ? prev[1] : y])
+        }).reduce((r, i) => {
+          r[i] = true
+          return r
+        }, {})).map(d => d.split(','))
+
+      return {
+        // ast,
+        points
+        // abs: toString(ast)
+      }
+    }
+  })()
+</script>
+<script>
+  /* global ICONS, SIMILAR, BAR, GRID_FULL, GRID_RICH, GRID */
+  /* global parsePath */
+  /* global Vue, VueRouter, VueSmoothScroll */
+
+  Vue.use(VueSmoothScroll)
+
+  const router = new VueRouter({
+    routes: [
+      { path: '/' },
+      { path: '/compare' },
+      { path: '/chart' }
+    ]
+  })
+
+  Vue.component('app-icon', {
+    template: '<svg class="icon" :width="size || 24" :height="size || 24" viewBox="0 0 24 24" v-html="code"></svg>',
+    props: ['name', 'svg', 'size'],
+    computed: {
+      code () {
+        let d
+
+        if (!this.svg) {
+          const i = !Vue.$icons[this.name]
+            ? Vue.$icons.find(d => d.name === this.name)
+            : Vue.$icons[this.name]
+
+          if (!i) {
+            return ''
+          }
+          d = i.link >= 0
+            ? Vue.$icons[i.link].data
+            : i.data
+        } else {
+          d = this.svg
+        }
+
+        return d[0] === '<' ? d : `<path d="${d}"/>`
+      }
+    }
+  })
+
+  Vue.component('app-icon-preview', {
+    template: '#app-icon-preview',
+    props: ['icon', 'type', 'size', 'svg', 'compare', 'xmode'],
+    data () {
+      return {
+        gridImage: GRID,
+        gridImageRich: GRID_RICH,
+        gridImageFull: GRID_FULL,
+        marker: 9,
+        round: 3,
+        compare: null,
+        mode: 1,
+        svg: null
+      }
+    },
+    methods: {
+      url (i, c, o) {
+        const image = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${this.size}" height="${this.size}" fill="${c}" fill-opacity="${o}">${this.compare[i][0] === '<' ? `<g>${this.compare[i]}</g>` : `<path d="${this.compare[i]}"></path>`}</svg>`
+        return `url('data:image/svg+xml;utf8,${encodeURIComponent(image)}')`
+      }
+    },
+    computed: {
+      swap () {
+        return [this.icon]
+      },
+      unit () {
+        return 24 / this.size
+      },
+      // abs () {
+      //   return this.svg && (this.type === 5) ? parsePath(this.svg).abs : null
+      // },
+      points () {
+        return this.svg && (this.type === 5) ? parsePath(this.svg).points : null
+      },
+      checker () {
+        return {
+          backgroundSize: (this.size / 12) + 'px ' + (this.size / 12) + 'px',
+          backgroundPosition: '0 0, ' + (this.size / 24) + 'px ' + (this.size / 24) + 'px',
+          width: this.size + 'px',
+          height: this.size + 'px'
+        }
+      },
+      background () {
+        if (this.compare && (this.mode === 1)) {
+          return {
+            background: `${this.url(0, '#00f', 0.97)}, ${this.url(1, '#f00', 0.97)}`,
+            backgroundBlendMode: 'darken',
+            width: `${this.size}px`,
+            height: `${this.size}px`,
+            opacity: 0.66
+          }
+        }
+      }
+    }
+  })
+
+  let RESOLVE
+  const ready = new Promise(resolve => { RESOLVE = resolve })
+
+  // eslint-disable-next-line no-new
+  new Vue({
+    el: '#app',
+    router,
+    data () {
+      const groups = ['All', 'Authors', 'Tags', 'Versions', 'Text', 'Distance', 'Density', 'Shapes', 'Complexity', 'Points', 'Uniqueness', 'Similar', 'Frame', 'Detail']
+
+      if (window.IconDuplicates) {
+        groups.push('Duplicates?')
+      }
+
+      const sourceDefault = 'All'
+      const groupByDefault = 'Tags'
+      const sortByDefault = 'Name'
+      const sizeDefault = 'Medium'
+
+      return {
+        ready,
+        icons: null,
+        similar: null,
+        lines: [],
+        icon: null,
+        compareIcons: null,
+        search: '',
+        fullScreen: false,
+        compareFilter: 'all',
+        groupBy: groupByDefault,
+        groupByDefault,
+        sorts: ['Name', 'Shape', 'Density'],
+        sortBy: sortByDefault,
+        sortByDefault,
+        sources: ['All', 'Community', 'Google'],
+        source: sourceDefault,
+        sourceDefault,
+        theme: 'Light',
+        sizes: ['Tiny', 'Small', 'Medium', 'Large'],
+        size: sizeDefault,
+        sizeDefault,
+        highlight: false,
+        no: true,
+        drawer: window.innerWidth > 800,
+        width: window.innerWidth,
+        bar: BAR,
+        selectedText: '',
+        groups,
+        compare: null,
+        gridImage: GRID,
+        gridImageRich: GRID_RICH,
+        gridImageFull: GRID_FULL,
+        gridType: 1,
+        colors: [
+          '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'
+        ],
+        headers: [
+          { width: '32px', align: 'left', text: '', value: 'detail' },
+          { width: '32px', align: 'left', text: '', value: 'googleData' },
+          { width: '280px', align: 'left', text: 'Google', value: 'google' },
+          { width: '32px', align: 'left', text: '', value: 'communityData' },
+          { width: '280px', align: 'left', text: 'Community', value: 'community' },
+          { width: '80px', align: 'left', text: 'Status', value: 'status' },
+          { width: '280px', align: 'left', text: 'Bundle', value: 'bundle' },
+          { width: '280px', align: 'left', text: 'Comment', value: 'alternative.0' }
+        ],
+        pagination: { sortBy: 'bundle', page: 1, rowsPerPage: 100, descending: false },
+        rowsPerPage: [100, 500, { text: 'All', value: -1 }],
+        sorter: {
+          Name: (a, b) => this.icons[a].name.localeCompare(this.icons[b].name),
+          Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id) -
+            (this.icons[b].link >= 0 ? this.icons[b].link : this.icons[b].id),
+          Density: (a, b) => {
+            let aa = (this.icons[a].link >= 0 ? this.icons[this.icons[a].link] : this.icons[a])
+            let bb = (this.icons[b].link >= 0 ? this.icons[this.icons[b].link] : this.icons[b])
+
+            if (aa === bb) {
+              return 0
+            }
+
+            if (aa.pixels >= bb.pixels) {
+              return 1 + (aa.pixels - bb.pixels)
+            }
+
+            return (aa.pixels - bb.pixels)
+          }
+        },
+        reducer: {
+          'Detail': (r, icon) => {
+            if (icon.link !== undefined) {
+              return r
+            }
+
+            const points = parsePath(icon.data).points
+            let distances = []
+
+            for (let x = 0; x < points.length; x++) {
+              for (let y = x + 1; y < points.length; y++) {
+                const d0 = points[x][0] - points[y][0]
+                const d1 = points[x][1] - points[y][1]
+                distances.push(d0 * d0 + d1 * d1)
+              }
+            }
+
+            distances.sort()
+            distances = distances.filter(d => d !== 0).filter(d => d < 1)
+
+            if (distances.length) {
+              // const c = Math.round(distances[0])
+              const c = distances.length
+
+              r[c] = r[c] || []
+              r[c].push(icon.id)
+            }
+
+            return r
+          },
+          'Tags': (r, icon) => {
+            [].concat(icon.tags || [])
+              .concat(!icon.tags ? ['other'] : [])
+              .forEach(c => {
+                r[c] = r[c] || []
+
+                if (r[c].indexOf(icon.id) === -1) {
+                  r[c].push(icon.id)
+                }
+              })
+
+            return r
+          },
+          'Text': (r, icon) => {
+            [].concat((icon.tags || []).reduce((r, a) => {
+              return r.concat(a.split(' '))
+            }, []))
+              .concat((icon.aliases || []).reduce((r, a) => {
+                return r.concat(a.split(' '))
+              }, []))
+              .concat(icon.name.split(' '))
+              .forEach(c => {
+                if (!c) {
+                  return
+                }
+
+                c = c.trim()
+
+                if (!c || (c.length < 3)) {
+                  return
+                }
+
+                r[c] = r[c] || []
+
+                if (r[c].indexOf(icon.id) === -1) {
+                  r[c].push(icon.id)
+                }
+              })
+
+            return r
+          },
+          'Authors': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.author
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Frame': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.frame
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Versions': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.version
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Density': (r, icon) => {
+            const i = icon.link >= 0 ? this.icons[icon.link] : icon
+            const c = i.pixels
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Shapes': (r, icon) => {
+            r['Shapes'] = r['Shapes'] || []
+            if (!(icon.link >= 0)) {
+              r['Shapes'].push(icon.id)
+            }
+            return r
+          },
+          'Distance': (r, item) => {
+            const c = item[2]
+
+            r[c] = r[c] || []
+            r[c].push(item[0])
+            r[c].push(item[1])
+
+            return r
+          },
+          'Duplicates': (r, item) => {
+            const c = item[2]
+            const a = this.icons[item[0]]
+            const b = this.icons[item[1]]
+
+            if (window.IconDuplicates ? window.IconDuplicates(a, b, c) : (a.source !== b.source && b.author.startsWith('Google') && a.author.startsWith('Google'))) {
+              r[c] = r[c] || []
+              r[c].push(item[0])
+              r[c].push(item[1])
+            }
+
+            return r
+          },
+          'All': (r, icon) => {
+            r['All'] = r['All'] || []
+            r['All'].push(icon.id)
+
+            return r
+          },
+          'Similar': (r, group) => {
+            r[this.icons[group.icon].name] = [group.icon, ...group.icons]
+            return r
+          },
+          'Complexity': (r, icon) => {
+            if (icon.link >= 0) {
+              return r
+            }
+
+            const breakPoints = [1, 50, 100, 250, 500, 1000, 2000]
+            let i = 0
+
+            while (i < breakPoints.length && icon.data.length > breakPoints[i]) {
+              i++
+            }
+
+            const c = icon.data[0] === '<'
+              ? 'Multi-shape'
+              : breakPoints[i - 1] + (breakPoints[i] ? '\u2009–\u2009' + (breakPoints[i] - 1) : '+')
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Points': (r, icon) => {
+            if (icon.link >= 0) {
+              return r
+            }
+
+            const l = parsePath(icon.data[0] === '<' ? '' : icon.data).points.length
+
+            const breakPoints = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+            let i = 0
+
+            while (i < breakPoints.length && l > breakPoints[i]) {
+              i++
+            }
+
+            const c = icon.data[0] === '<'
+              ? 'Multi-shape'
+              : breakPoints[i - 1] + (breakPoints[i] ? '\u2009–\u2009' + (breakPoints[i] - 1) : '+')
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          },
+          'Uniqueness': (r, icon) => {
+            if (icon.link >= 0) {
+              return r
+            }
+
+            // const l = this.similar.filter(d => d[0] === icon.id || d[1] === icon.id).length
+            const l = this.similarLookup[icon.id] || 0
+            let c
+
+            if (l === 0 || l === 1) {
+              c = l
+            } else {
+              const breakPoints = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+              let i = 0
+
+              while (i < breakPoints.length && l > breakPoints[i]) {
+                i++
+              }
+              breakPoints[0] = 2
+              c = breakPoints[i - 1] + (breakPoints[i] ? '\u2009–\u2009' + (breakPoints[i] - 1) : '+')
+            }
+
+            r[c] = r[c] || []
+            r[c].push(icon.id)
+
+            return r
+          }
+        },
+        groupSort: {
+          'All': (d) => d.sort(),
+          'Tags': (d) => d.sort(),
+          'Frame': (d) => d.sort(),
+          'Text': (d) => d.sort(),
+          'Authors': (d) => d.sort(),
+          'Versions': (d) => d.sort().reverse(),
+          'Density': (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
+          'Shapes': (d) => d,
+          'Similar': (d) => d,
+          'Detail': (d) => d.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0)),
+          'Distance': (d) => d,
+          'Duplicates': (d) => d,
+          'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
+          'Points': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
+          'Uniqueness': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
+        },
+        reduceSource: {
+          'Distance': 'similar',
+          'Similar': 'chart'
+        },
+        reducerSorter: {
+          'Similar': false,
+          'Distance': false,
+          'Uniqueness': false
+        }
+      }
+    },
+    created () {
+      this.scrolling()
+      this.fromRoute()
+    },
+    mounted () {
+      this.focusing()
+
+      window.addEventListener('keyup', (event) => {
+        if (event.keyCode === 27 && this.icon !== null) {
+          this.fullScreen = !this.fullScreen
+        }
+      })
+
+      Vue.nextTick(() => {
+        setTimeout(() => {
+          this.no = false
+          this.transit = true
+        }, 300)
+      })
+
+      ICONS.then(res => res.json()).then(data => {
+        data.forEach(d => Object.freeze(d))
+        Vue.$icons = this.icons = Object.freeze(data)
+
+        if (this.similar) {
+          RESOLVE(true)
+        }
+      })
+
+      SIMILAR.then(res => res.json()).then(data => {
+        this.similar = Object.freeze(data)
+        if (this.icons) {
+          RESOLVE(true)
+        }
+      })
+    },
+    methods: {
+      enterIcon (el) {
+        if (this.$refs.downwrap.style.height === (el.clientHeight + 'px')) {
+          return
+        }
+
+        if (this.transit) {
+          if (this.$refs.downwrap.style.height === '0px') {
+            this.$refs.downwrap.style.transition = 'height 0.2s ease-in'
+          } else {
+            this.$refs.downwrap.style.transition = 'height 0.12s ease'
+          }
+        } else {
+          this.transit = true
+        }
+
+        this.$refs.downwrap.style.height = el.clientHeight + 'px'
+      },
+      leaveIcon () {
+        this.$refs.downwrap.style.height = '0px'
+      },
+      changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
+      },
+      scrolling () {
+        document.getElementsByTagName('html')[0].className = this.$route.path === '/' ? 'no-scroll' : ''
+      },
+      focusing () {
+        (document.querySelector('#page') || document.querySelector('html')).focus()
+      },
+      scroll (name) {
+        this.$refs.scroller.scrollToItem(this.lines.indexOf(this.lines.find(d => d.name === name)))
+      },
+      communityShape (i) {
+        let ic = this.icons[i]
+        ic = (ic.link >= 0) ? this.icons[ic.link] : ic
+        return ic.source !== 'Google'
+      },
+      spaced (t) {
+        return t.replace(/_/g, ' ')
+      },
+      underscored (t) {
+        return t.replace(/ /g, '_')
+      },
+      dashed (t) {
+        return t.replace(/ /g, '-')
+      },
+      deselect (i) {
+        let items = this.selectedText.split(/[\n,]/).map(d => d.trim()).filter(d => d)
+        items.splice(items.indexOf(this.underscored(i.name)), 1)
+        this.selectedText = items.join(',\n')
+      },
+      getLines () {
+        if (!this.icons || !this.similar) {
+          return []
+        }
+
+        const lines = this.sorted.reduce((r, group) => {
+          r.push({ name: group.name, length: group.value.length, id: group.name })
+
+          for (let i = 0; i < group.value.length; i += this.columns) {
+            const v = group.value.slice(i, Math.min(i + this.columns, group.value.length))
+            v.id = group.name + i
+            r.push(v)
+          }
+
+          return r
+        }, [])
+
+        this.lines = []
+
+        Vue.nextTick(() => {
+          this.lines = lines
+        })
+      },
+      getCompare () {
+        if (!this.icons || !this.showCompare) {
+          this.compare = null
+          return null
+        }
+
+        // this.compare = null
+
+        Vue.nextTick(() => {
+          setTimeout(() => {
+            const google = this.filtered.filter(d => {
+              return d.author.startsWith('Google') && d.data && !(d.link >= 0)
+            })
+
+            const linkedBy = {}
+
+            this.filtered.filter(d => {
+              return (d.source === 'Google') && (d.link >= 0)
+            }).forEach(d => {
+              linkedBy[d.link] = linkedBy[d.link] || []
+              linkedBy[d.link].push(this.underscored(d.name.trim()))
+            })
+
+            const compare = google.map(d => {
+              const r = {
+                bundle: this.underscored(d.name),
+                icon: d.id
+              }
+
+              if (d.source === 'Google') {
+                r.google = this.underscored(d.name.trim())
+                r.googleAliases = linkedBy[d.id] ? '(' + linkedBy[d.id].join(', ') + ')' : ''
+                r.googleData = d.data
+                r.googleFolder = d.tags[0]
+
+                if (d.merged) {
+                  r.community = this.dashed(d.merged.name.trim())
+                  r.communityData = d.merged.data
+                  r.exact = d.merged.exact
+                } else {
+                  let f = this.icons.find(v => v.link === d.id && ((v.source !== 'Google') || v.merged))
+                  let m = f ? f.merged || f : null
+
+                  if (m) {
+                    r.community = this.dashed(m.name.trim())
+                    r.exact = f.exact
+                    r.communityData = f.data
+                  } else if (d.alternative) {
+                    const i = this.icons[d.alternative[0]]
+                    r.community = this.dashed(i.name.trim())
+                    r.communityData = i.data || this.icons[i.link].data
+                    r.alternative = d.alternative
+                  }
+                }
+              } else {
+                if (d.exact) {
+                  return null
+                }
+
+                r.community = this.dashed((d.original || d.name).trim())
+                r.communityData = d.data
+              }
+
+              r.status = r.alternative
+                ? 2
+                : r.exact === true
+                  ? 5
+                  : r.exact === 1
+                    ? 1
+                    : r.exact === -1
+                      ? 0
+                      : !r.community && r.google
+                        ? 3
+                        : 4
+
+              if (r.status === 4) {
+                const x = r.community.replace(/-/g, ' ')
+                const f = this.icons.find(d => {
+                  const a = d.alternative && this.icons[d.alternative[0]]
+                  return a && (x === a.name || x === a.original)
+                })
+
+                if (f) {
+                  return null
+                }
+              }
+
+              r.googleClass = r.community && !r.google ? '' : ('status-' + (r.alternative ? 3 : r.status))
+              r.communityClass = !r.community && r.google ? '' : ('status-' + r.status)
+
+              r.note = {
+                0: 'manual',
+                1: 'similar',
+                2: 'alternative',
+                3: 'missing',
+                4: 'added',
+                5: 'exact'
+              }[r.status]
+
+              return r
+            }).filter(d => d)
+
+            this.compare = Object.freeze(compare)
+          })
+        })
+      },
+      route () {
+        this.$router.push({
+          path: this.$route.path,
+          query: {
+            icon: this.meta ? this.underscored(this.meta.name) : undefined,
+            source: this.source !== this.sourceDefault ? this.source : undefined,
+            group: this.groupBy !== this.groupByDefault ? this.groupBy : undefined,
+            sort: this.sortBy !== this.sortByDefault ? this.sortBy : undefined,
+            search: this.search ? this.search : undefined,
+            grid: this.gridType !== 1 ? this.gridType.toString() : undefined,
+            community: this.highlight ? this.highlight : undefined,
+            size: this.size !== this.sizeDefault ? this.size : undefined,
+            filter: this.compareFilter !== 'all' ? this.compareFilter : undefined
+          }
+        })
+      },
+      fromRoute () {
+        const q = this.$route.query
+
+        this.ready.then(() => {
+          if (q.icon) {
+            const n = q.icon.replace(/_/g, ' ')
+            const f = this.icons.find(d => d.name === n)
+            this.icon = f ? f.id : null
+          } else {
+            this.icon = null
+          }
+          this.source = q.source || this.sourceDefault
+          this.groupBy = q.group || this.groupByDefault
+          this.sortBy = q.sort || this.sortByDefault
+          this.search = q.search || ''
+          this.gridType = q.grid ? parseInt(q.grid) : 1
+          this.highlight = !!q.community
+          this.size = q.size || this.sizeDefault
+          this.compareFilter = q.filter || 'all'
+        })
+      },
+      setIcon (icon, event) {
+        if (event && event.ctrlKey) {
+          const i = this.icons[icon]
+          this.compareIcons = [this.linked.data, (i.link >= 0 ? this.icons[i.link] : i).data]
+        } else {
+          this.icon = this.icon !== icon ? icon : null
+          this.compareIcons = null
+        }
+      }
+    },
+    computed: {
+      downloadFile () {
+        const size = 24
+        const path = this.linked.data
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${size}" height="${size}">${path[0] === '<' ? `<g>${path}</g>` : `<path d="${path}"></path>`}</svg>`
+        return `data:data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+      },
+      fullSize () {
+        return Math.floor((Math.min(this.$vuetify.breakpoint.width - 64, this.$vuetify.breakpoint.height - 64 * 2)) / 24) * 24
+      },
+      iconSwap () {
+        return [this.icon]
+      },
+      columns () {
+        return Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left - this.bar) / this.grid)
+      },
+      margin () {
+        return Math.max(0, Math.floor(Math.floor((this.$vuetify.breakpoint.width - this.$vuetify.application.left) - this.grid * this.columns) / 2) - this.bar / 2)
+      },
+      google () {
+        return this.meta ? this.underscored(this.meta.name) : null
+      },
+      linkedGoogle () {
+        return this.underscored(this.linked.name)
+      },
+      community () {
+        return this.meta.name.replace(/ /g, '-')
+      },
+      grid () {
+        return { Tiny: 32, Small: 64, Medium: 128, Large: 160 }[this.size]
+      },
+      meta () {
+        return this.icons ? this.icons[this.icon] : null
+      },
+      linked () {
+        return this.icons[this.icon].link >= 0 ? this.icons[this.icons[this.icon].link] : this.icons[this.icon]
+      },
+      unique () {
+        if (!this.filtered) {
+          return null
+        }
+
+        return this.filtered.filter(d => !(d.link >= 0)).length
+      },
+      filtered () {
+        if (!this.icons) {
+          return null
+        }
+
+        let icons = this.icons
+
+        if (this.source !== 'All') {
+          const source = this.source === 'Google' ? 'Google' : 'Community'
+          icons = icons.filter(d => d.source === source)
+        }
+
+        if (!this.search) {
+          return icons
+        }
+
+        const s = this.search.toLowerCase().replace(/_/g, ' ')
+
+        let rx = null
+
+        try {
+          rx = new RegExp(s)
+        } catch (ign) {
+        }
+
+        return icons.filter(d => {
+          return (rx ? rx.test(d.name) : d.name.includes(s)) ||
+            // (d.category && d.category.includes(s)) ||
+            // (!d.category && !d.tags && (s === 'other')) ||
+            (!d.tags && (s === 'other')) ||
+            (d.tags && d.tags.filter(d => d.includes(s)).length) ||
+            (d.aliases && d.aliases.filter(d => d.includes(s)).length)
+        })
+      },
+      sorted () {
+        if (!this.icons) {
+          return null
+        }
+
+        let s
+
+        if (this.reduceSource[this.groupBy]) {
+          s = this[this.reduceSource[this.groupBy]]
+
+          if (!s) {
+            return null
+          }
+        } else {
+          s = this.filtered
+        }
+
+        const reduced = s.reduce(this.reducer[this.groupBy], {})
+
+        if (this.groupBy === 'Text') {
+          Object.keys(reduced).forEach(d => {
+            if (reduced[d].length < 12) {
+              delete reduced[d]
+            }
+          })
+        }
+
+        if (this.reducerSorter[this.groupBy] !== false) {
+          Object.keys(reduced).forEach((c) => {
+            reduced[c].sort(this.sorter[this.sortBy])
+          })
+        }
+
+        return this.groupSort[this.groupBy](Object.keys(reduced)).map(key => ({ name: key, value: reduced[key] }))
+      },
+      similarIcons () {
+        if (!this.linked || !this.similar) {
+          return null
+        }
+
+        const i = this.linked.id
+
+        return this.similar
+          .filter(d => d[0] === i || d[1] === i)
+          .map(d => d[0] === i ? [d[1], d[2]] : [d[0], d[2]])
+          .sort((a, b) => a[1] - b[1])
+          .filter((d, i) => i < 21)
+      },
+      alternatives () {
+        if (!this.linked) {
+          return null
+        }
+
+        return this.icons.filter(d => (d.link === this.linked.id && d.id !== this.meta.id)).map(d => ({
+          id: d.id,
+          name: this.underscored(d.name)
+        }))
+      },
+      selectedIcons () {
+        if (!this.icons || !this.selectedText) {
+          return []
+        }
+
+        return this.selectedText.split(/[\n,]/)
+          .map(d => this.spaced(d.trim()))
+          .filter(d => d)
+          .map(d => this.icons.find(i => i.name === d))
+      },
+      compareStats () {
+        if (!this.compare) {
+          return null
+        }
+
+        const stats = this.compare.reduce((r, i) => {
+          r[i.note] = r[i.note] || 0
+          r[i.note]++
+          return r
+        }, { all: this.compare.length })
+
+        return Object.keys(stats).map(k => ({
+          name: k,
+          display: k[0].toUpperCase() + k.substr(1),
+          count: stats[k]
+        })).sort((a, b) => b.count - a.count)
+      },
+      compareFiltered () {
+        return this.compareFilter === 'all' ? this.compare : this.compare.filter(d => d.note === this.compareFilter)
+      },
+      showHome () {
+        return (this.$route.path === '/') && this.icons && !!this.similar
+      },
+      showChart () {
+        return (this.$route.path === '/chart') && this.icons && !!this.similar
+      },
+      showCompare () {
+        return (this.$route.path === '/compare') && !!this.icons
+      },
+      showLoading () {
+        return !(this.icons && this.similar) || (this.showCompare && !this.compare)
+      },
+      points () {
+        if (this.icon !== null) {
+          return parsePath(this.linked.data)
+        }
+      },
+      similarLookup () {
+        return this.similar.reduce((r, i) => {
+          r[i[0]] = r[i[0]] || 0
+          r[i[0]]++
+          r[i[1]] = r[i[1]] || 0
+          r[i[1]]++
+          return r
+        }, {})
+      },
+      similarLookupIcons () {
+        return this.similar.reduce((r, i) => {
+          r[i[0]] = r[i[0]] || []
+          r[i[0]].push({ icon: i[1], match: i[2] })
+          r[i[1]] = r[i[1]] || []
+          r[i[1]].push({ icon: i[0], match: i[2] })
+          return r
+        }, {})
+      },
+      chart () {
+        if (!this.similar) {
+          return null
+        }
+
+        const w = Object.keys(this.similarLookupIcons).map(k => ({
+          icon: k,
+          icons: this.similarLookupIcons[k]
+        })).sort((a, b) => b.icons.length - a.icons.length)
+
+        const icons = this.icons.map(() => true)
+        const groups = []
+        const groupKeys = {}
+
+        while (w.length) {
+          const g = w.shift()
+
+          groupKeys[g.icon] = true
+
+          g.icons.sort((a, b) => a.match - b.match)
+
+          groups.push({
+            icon: g.icon,
+            icons: g.icons.reduce((r, ic) => {
+              if (r.length > 22 || ic.icon.match > 32) {
+                return r
+              }
+
+              const i = ic.icon
+              if (!groupKeys[i] && icons[i]) {
+                r.push(i)
+                icons[i] = false
+              }
+
+              return r
+            }, [])
+          })
+        }
+
+        return groups.sort((a, b) => b.icons.length - a.icons.length).filter(d => d.icons.length > 1)
+      }
+    },
+    watch: {
+      icon (value) {
+        if (value !== null) {
+          if (this.selectedText.split(/[\n,]/).map(d => d.trim()).indexOf(this.google) === -1) {
+            this.selectedText += (this.selectedText ? ',\n' : '') + this.google
+          }
+
+          this.drawer = true
+
+          Vue.nextTick(() => {
+            this.enterIcon(this.$refs.down)
+            this.$SmoothScroll(0, 250, null, this.$refs.drawer.$el)
+          })
+        } else {
+          Vue.nextTick(() => {
+            this.leaveIcon()
+          })
+        }
+
+        this.route()
+      },
+      compareFilter () {
+        this.route()
+      },
+      gridType () {
+        this.route()
+      },
+      highlight () {
+        this.route()
+      },
+      groupBy () {
+        this.route()
+        this.getLines()
+      },
+      sortBy () {
+        this.route()
+        this.getLines()
+      },
+      source () {
+        this.route()
+        this.getLines()
+        this.getCompare()
+      },
+      size () {
+        this.route()
+        this.getLines()
+      },
+      search () {
+        this.route()
+        this.getLines()
+        this.getCompare()
+      },
+      icons () {
+        // this.fromRoute()
+        this.getLines()
+      },
+      similar () {
+        // this.fromRoute()
+        this.getLines()
+      },
+      showCompare () {
+        this.scrolling()
+        this.getCompare()
+      },
+      showHome () {
+        Vue.nextTick(() => {
+          this.focusing()
+        })
+      },
+      fullScreen (value) {
+        if (!value) {
+          this.focusing()
+        }
+      },
+      $vuetify: {
+        handler () { this.getLines() },
+        deep: true
+      },
+      $route: {
+        handler () { this.fromRoute() },
+        deep: true
+      }
+    }
+  })
+</script>
+</body>
+</html>

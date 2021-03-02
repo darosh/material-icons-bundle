@@ -1,0 +1,38 @@
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   viewBox="0 0 24 24">
+    <path
+       d="M 0,0 V 12 A 12,12 0 0 1 12,0 Z"
+       style="fill:#444;fill-opacity:0.1" />
+    <path
+       d="M 12,0 A 12,12 0 0 1 24,12 V 0 Z"
+       style="fill:#444;fill-opacity:0.1" />
+    <path
+       d="M 24,12 A 12,12 0 0 1 12,24 h 12 z"
+       style="fill:#444;fill-opacity:0.1" />
+    <path
+       d="M 12,24 A 12,12 0 0 1 0,12 v 12 z"
+       style="fill:#444;fill-opacity:0.1" />
+    <path
+       d="M 12,0 A 12,12 0 0 0 3.5253906,3.515625 H 20.476562 A 12,12 0 0 0 12,0 Z"
+       style="fill:#9C27B0;fill-opacity:.8" />
+    <path
+       d="M 3.515625,3.5234375 A 12,12 0 0 0 0,12 12,12 0 0 0 3.515625,20.474609 Z"
+       style="fill:#9C27B0;fill-opacity:.8" />
+    <path
+       d="M 20.484375,3.5253906 V 20.476562 A 12,12 0 0 0 24,12 12,12 0 0 0 20.484375,3.5253906 Z"
+       style="fill:#9C27B0;fill-opacity:.8" />
+    <path
+       d="M 3.5234375,20.484375 A 12,12 0 0 0 12,24 12,12 0 0 0 20.474609,20.484375 Z"
+       style="fill:#9C27B0;fill-opacity:.8" />
+    <path
+       d="m 3.515625,3.515625 v 16.96875 H 12 Z"
+       style="fill:#3f51b5;fill-opacity:.7" />
+    <path
+       d="m 12,20.484375 h 8.484375 V 3.515625 Z"
+       style="fill:#3f51b5;fill-opacity:.7" />
+    <path
+       d="M 20.484887,3.51511 12.000001,20.48489 3.5151135,3.51511 Z"
+       style="fill:#fb8c00;fill-opacity:.7" />
+</svg>
