@@ -1,0 +1,1 @@
+export {default} from './poll_box_outline'

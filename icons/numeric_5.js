@@ -1,1 +1,1 @@
-export {default} from './alpha_s'
+export {default} from './size_s'

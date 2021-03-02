@@ -137,7 +137,8 @@ function merge (m, t) {
   }
 
   if (t.merged) {
-    throw new Error('!!!!')
+    console.log('!!!!', t.merged.name, m.name)
+    // throw new Error('!!!!')
   }
 
   t.merged = {

@@ -1,0 +1,1 @@
+export {default} from './perm_device_information'

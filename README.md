@@ -45,7 +45,7 @@ will produce object like:
 
 where most of values are `<path>` `d` attribute data. Some data starting with `<` are svg inner elements, such icons are tagged as `multi-shape` in the [browser](https://darosh.github.io/material-icons-bundle/#/?group=All&search=multi-shape).
 
-Icon aliases points to same `*.js` file for minimal build. 
+Icon aliases points to same `*.js` file for minimal build.
 
 Tree-shaking [rollup.js](https://rollupjs.org/#tree-shaking) or [webpack](https://webpack.js.org/guides/tree-shaking/) recommended.
 
@@ -70,7 +70,7 @@ Used by [Icon Browser](https://darosh.github.io/material-icons-bundle/):
 
 Leverages `pixels` and `frame` metadata in [meta.json](https://darosh.github.io/material-icons-bundle/meta.json).
 
-- [online](https://darosh.github.io/material-icons-bundle/poster.html) 
+- [online](https://darosh.github.io/material-icons-bundle/poster.html)
 - [source](./meta/poster.html)
 
 ## Development
@@ -78,7 +78,8 @@ Leverages `pixels` and `frame` metadata in [meta.json](https://darosh.github.io/
 __Note__: you may experience issues with installing material-design-icons package, it may be easier to download & unpack it manually
 
 ```text
-yarn
+npm install --ignore-scripts
+npm run install
 yarn build
 yarn export
 ```

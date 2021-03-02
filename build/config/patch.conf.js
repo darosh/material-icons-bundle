@@ -156,28 +156,28 @@ const logo = [
 ]
 
 module.exports = {
-  'tags': {
-    'edit': 'editor',
-    'camera': 'image',
-    'cart': null,
-    'form': 'toggle',
-    'vote': 'toggle',
-    'user': 'account',
-    'square': 'box',
-    'map': 'maps',
-    'octagon': null,
-    'helper': null,
-    'local': 'maps',
-    'error': 'alert',
-    'shape': null,
-    'movie': 'video',
-    'authentication': 'account',
-    'vector': null,
-    'text': null,
-    'store': null,
-    'drawing': 'editor'
+  tags: {
+    edit: 'editor',
+    camera: 'image',
+    cart: null,
+    form: 'toggle',
+    vote: 'toggle',
+    user: 'account',
+    square: 'box',
+    map: 'maps',
+    octagon: null,
+    helper: null,
+    local: 'maps',
+    error: 'alert',
+    shape: null,
+    movie: 'video',
+    authentication: 'account',
+    vector: null,
+    text: null,
+    store: null,
+    drawing: 'editor'
   },
-  'extract': {
+  extract: {
     '*': [
       (name) => {
         return logo.indexOf(name) === -1 ? false : 'logo'

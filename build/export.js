@@ -7,11 +7,11 @@ mkdirp.sync('icons')
 console.log('Underscoring names')
 meta.forEach(m => { m.name = m.name.replace(/ /g, '_') })
 
-let ind = ['/* eslint-disable camelcase */']
+const ind = ['/* eslint-disable camelcase */']
 
 meta.forEach(m => {
-  let n = m.name
-  let f = `icons/${n}.js`
+  const n = m.name
+  const f = `icons/${n}.js`
 
   if (m.link >= 0) {
     const o = meta[m.link].name
@@ -25,5 +25,5 @@ meta.forEach(m => {
   ind.push(`export {default as ${n}} from './icons/${n}'`)
 })
 
-console.log(`Writing: index.js`)
+console.log('Writing: index.js')
 fs.writeFile('index.js', ind.join('\n'), () => {})

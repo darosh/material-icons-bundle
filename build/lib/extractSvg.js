@@ -16,7 +16,7 @@ module.exports = function (svg) {
           delete parsed.svg.path[0].$['fill-opacity']
           delete parsed.svg.path[0].$['stroke-width']
           delete parsed.svg.path[0].$['stroke-linejoin']
-          delete parsed.svg.path[0].$['fill']
+          delete parsed.svg.path[0].$.fill
 
           if (Object.keys(parsed.svg.path[0].$).length === 1) {
             data = parsed.svg.path[0].$.d.trim()

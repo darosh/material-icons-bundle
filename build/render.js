@@ -24,6 +24,8 @@ function pathToSVG (pathOrSvg) {
   }</svg>`
 }
 
-function toSVG ({ data }) {
+function toSVG ({ data, name }) {
+  console.log(name)
+
   return pathToSVG(data)
 }

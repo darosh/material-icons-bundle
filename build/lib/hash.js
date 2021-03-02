@@ -1,6 +1,6 @@
 exports.rotate = function (hash, size = 24) {
   hash = hash.split('').reverse().join('')
-  let r = new Array(24 * 24 / 4).fill(0)
+  const r = new Array(24 * 24 / 4).fill(0)
   let c = 0
 
   for (let y = 0; y < size; y++) {
@@ -9,9 +9,9 @@ exports.rotate = function (hash, size = 24) {
 
       for (let z = 0; z < 4; z++) {
         if (t & 8) {
-          let x2 = y
-          let y2 = x + z
-          let ind = x2 + y2 * size
+          const x2 = y
+          const y2 = x + z
+          const ind = x2 + y2 * size
 
           r[Math.floor(ind / 4)] += Math.pow(2, ind % 4)
         }

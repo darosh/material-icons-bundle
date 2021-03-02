@@ -1,0 +1,1 @@
+export {default} from './tap_and_play'

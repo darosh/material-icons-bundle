@@ -1,1 +1,1 @@
-export default "M20,14H4V10H20"
+export {default} from './minus_thick'
