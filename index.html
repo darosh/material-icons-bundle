@@ -473,7 +473,7 @@
     <!--</v-btn>-->
     <v-btn v-if="icons" icon tag="a" href="https://github.com/darosh/material-icons-bundle/" target="_blank"
            rel="noopener" v-show="!no">
-      <app-icon name="github circle" size="24"></app-icon>
+      <app-icon name="github" size="24"></app-icon>
     </v-btn>
   </v-toolbar>
   <v-content :class="{highlight : highlight}" class="no"
@@ -736,9 +736,9 @@
 
     // https://github.com/jkroso/parse-svg-path/blob/master/index.js
     function parse (path) {
-      var data = []
+      const data = []
       path.replace(segment, function (_, command, args) {
-        var type = command.toLowerCase()
+        let type = command.toLowerCase()
         args = parseValues(args)
 
         // overloaded moveTo
@@ -1049,8 +1049,8 @@
           Shape: (a, b) => (this.icons[a].link >= 0 ? this.icons[a].link : this.icons[a].id) -
             (this.icons[b].link >= 0 ? this.icons[b].link : this.icons[b].id),
           Density: (a, b) => {
-            let aa = (this.icons[a].link >= 0 ? this.icons[this.icons[a].link] : this.icons[a])
-            let bb = (this.icons[b].link >= 0 ? this.icons[this.icons[b].link] : this.icons[b])
+            const aa = (this.icons[a].link >= 0 ? this.icons[this.icons[a].link] : this.icons[a])
+            const bb = (this.icons[b].link >= 0 ? this.icons[this.icons[b].link] : this.icons[b])
 
             if (aa === bb) {
               return 0
@@ -1064,7 +1064,7 @@
           }
         },
         reducer: {
-          'Detail': (r, icon) => {
+          Detail: (r, icon) => {
             if (icon.link !== undefined) {
               return r
             }
@@ -1093,7 +1093,7 @@
 
             return r
           },
-          'Tags': (r, icon) => {
+          Tags: (r, icon) => {
             [].concat(icon.tags || [])
               .concat(!icon.tags ? ['other'] : [])
               .forEach(c => {
@@ -1106,7 +1106,7 @@
 
             return r
           },
-          'Text': (r, icon) => {
+          Text: (r, icon) => {
             [].concat((icon.tags || []).reduce((r, a) => {
               return r.concat(a.split(' '))
             }, []))
@@ -1134,7 +1134,7 @@
 
             return r
           },
-          'Authors': (r, icon) => {
+          Authors: (r, icon) => {
             const i = icon.link >= 0 ? this.icons[icon.link] : icon
             const c = i.author
 
@@ -1143,7 +1143,7 @@
 
             return r
           },
-          'Frame': (r, icon) => {
+          Frame: (r, icon) => {
             const i = icon.link >= 0 ? this.icons[icon.link] : icon
             const c = i.frame
 
@@ -1152,7 +1152,7 @@
 
             return r
           },
-          'Versions': (r, icon) => {
+          Versions: (r, icon) => {
             const i = icon.link >= 0 ? this.icons[icon.link] : icon
             const c = i.version
 
@@ -1161,7 +1161,7 @@
 
             return r
           },
-          'Density': (r, icon) => {
+          Density: (r, icon) => {
             const i = icon.link >= 0 ? this.icons[icon.link] : icon
             const c = i.pixels
 
@@ -1170,14 +1170,14 @@
 
             return r
           },
-          'Shapes': (r, icon) => {
-            r['Shapes'] = r['Shapes'] || []
+          Shapes: (r, icon) => {
+            r.Shapes = r.Shapes || []
             if (!(icon.link >= 0)) {
-              r['Shapes'].push(icon.id)
+              r.Shapes.push(icon.id)
             }
             return r
           },
-          'Distance': (r, item) => {
+          Distance: (r, item) => {
             const c = item[2]
 
             r[c] = r[c] || []
@@ -1186,7 +1186,7 @@
 
             return r
           },
-          'Duplicates': (r, item) => {
+          Duplicates: (r, item) => {
             const c = item[2]
             const a = this.icons[item[0]]
             const b = this.icons[item[1]]
@@ -1199,17 +1199,17 @@
 
             return r
           },
-          'All': (r, icon) => {
-            r['All'] = r['All'] || []
-            r['All'].push(icon.id)
+          All: (r, icon) => {
+            r.All = r.All || []
+            r.All.push(icon.id)
 
             return r
           },
-          'Similar': (r, group) => {
+          Similar: (r, group) => {
             r[this.icons[group.icon].name] = [group.icon, ...group.icons]
             return r
           },
-          'Complexity': (r, icon) => {
+          Complexity: (r, icon) => {
             if (icon.link >= 0) {
               return r
             }
@@ -1230,7 +1230,7 @@
 
             return r
           },
-          'Points': (r, icon) => {
+          Points: (r, icon) => {
             if (icon.link >= 0) {
               return r
             }
@@ -1253,7 +1253,7 @@
 
             return r
           },
-          'Uniqueness': (r, icon) => {
+          Uniqueness: (r, icon) => {
             if (icon.link >= 0) {
               return r
             }
@@ -1282,30 +1282,30 @@
           }
         },
         groupSort: {
-          'All': (d) => d.sort(),
-          'Tags': (d) => d.sort(),
-          'Frame': (d) => d.sort(),
-          'Text': (d) => d.sort(),
-          'Authors': (d) => d.sort(),
-          'Versions': (d) => d.sort().reverse(),
-          'Density': (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
-          'Shapes': (d) => d,
-          'Similar': (d) => d,
-          'Detail': (d) => d.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0)),
-          'Distance': (d) => d,
-          'Duplicates': (d) => d,
-          'Complexity': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
-          'Points': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
-          'Uniqueness': (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
+          All: (d) => d.sort(),
+          Tags: (d) => d.sort(),
+          Frame: (d) => d.sort(),
+          Text: (d) => d.sort(),
+          Authors: (d) => d.sort(),
+          Versions: (d) => d.sort().reverse(),
+          Density: (d) => d.sort((a, b) => parseInt(a) - parseInt(b)),
+          Shapes: (d) => d,
+          Similar: (d) => d,
+          Detail: (d) => d.sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0)),
+          Distance: (d) => d,
+          Duplicates: (d) => d,
+          Complexity: (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
+          Points: (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0)),
+          Uniqueness: (d) => d.sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
         },
         reduceSource: {
-          'Distance': 'similar',
-          'Similar': 'chart'
+          Distance: 'similar',
+          Similar: 'chart'
         },
         reducerSorter: {
-          'Similar': false,
-          'Distance': false,
-          'Uniqueness': false
+          Similar: false,
+          Distance: false,
+          Uniqueness: false
         }
       }
     },
@@ -1398,7 +1398,7 @@
         return t.replace(/ /g, '-')
       },
       deselect (i) {
-        let items = this.selectedText.split(/[\n,]/).map(d => d.trim()).filter(d => d)
+        const items = this.selectedText.split(/[\n,]/).map(d => d.trim()).filter(d => d)
         items.splice(items.indexOf(this.underscored(i.name)), 1)
         this.selectedText = items.join(',\n')
       },
@@ -1465,8 +1465,8 @@
                   r.communityData = d.merged.data
                   r.exact = d.merged.exact
                 } else {
-                  let f = this.icons.find(v => v.link === d.id && ((v.source !== 'Google') || v.merged))
-                  let m = f ? f.merged || f : null
+                  const f = this.icons.find(v => v.link === d.id && ((v.source !== 'Google') || v.merged))
+                  const m = f ? f.merged || f : null
 
                   if (m) {
                     r.community = this.dashed(m.name.trim())
@@ -1497,8 +1497,8 @@
                     : r.exact === -1
                       ? 0
                       : !r.community && r.google
-                        ? 3
-                        : 4
+                          ? 3
+                          : 4
 
               if (r.status === 4) {
                 const x = r.community.replace(/-/g, ' ')

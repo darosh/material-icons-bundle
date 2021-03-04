@@ -16,7 +16,7 @@ function createPoster ({ icons, logo, base, tile, frame, size, targetSize }) {
     icons = icons.filter(d => d.frame >= frame)
     const copy = icons.slice()
     const canvas = document.createElement('canvas')
-    let ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d')
     canvas.width = size
     canvas.height = size
     const image = new Image()
