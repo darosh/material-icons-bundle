@@ -23,7 +23,7 @@
     "napa": "^3.0.0",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.2",
-    "sharp": "0.27.2",
+    "sharp": "0.32.6",
     "shelljs": "0.8.4",
     "similar-icons": "darosh/similar-icons#1b1ed867bfa89ed736a28110267cc7d671bfcd86",
     "xml2js": "0.4.23"
